@@ -1,12 +1,19 @@
 import {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 
 import StateContext from '../contexts/StateContext.js';
 
 export default function SignUp() {
     const {setVisible} = useContext(StateContext);
     const [disable, setDisable] = useState(false);
+    const [data, setData] = useState({
+        email: '',
+        password: '',
+        username: '',
+        picture: ''
+    });
     const navigate = useNavigate();
 
     setVisible(false);
@@ -14,7 +21,14 @@ export default function SignUp() {
     async function register(e) {
         e.preventDefault();
         setDisable(true);
-        navigate('/sign-in');
+
+        try {
+            await axios.post('http://localhost:4000/sign-up', data);
+            navigate('/sign-in');
+        } catch(e) {
+            setDisable(false);
+            alert(e.response.data.error);
+        }
     } 
     
     return (
@@ -24,10 +38,10 @@ export default function SignUp() {
                 <P>save, share and discover the best links on the web</P>
             </Text>
             <Form onSubmit={register}>
-                <Input placeholder='e-mail' type='email' required/>
-                <Input placeholder='password' type='password' required/>
-                <Input placeholder='username' type='text' required/>
-                <Input placeholder='picture url' type='url' required/>
+                <Input placeholder='e-mail' type='email' required value={data.email} onChange={e => setData({...data, email: e.target.value})}/>
+                <Input placeholder='password' type='password' required value={data.password} onChange={e => setData({...data, password: e.target.value})}/>
+                <Input placeholder='username' type='text' required value={data.username} onChange={e => setData({...data, username: e.target.value})}/>
+                <Input placeholder='picture url' type='url' required value={data.picture} onChange={e => setData({...data, picture: e.target.value})}/>
                 {disable ? 
                     <ButtonDisable>Sign Up</ButtonDisable>
                     : <Button type='submit'>Sign Up</Button>
@@ -167,6 +181,10 @@ const ButtonDisable = styled.button`
     background: #1877F2;
     font-family: 'Oswald', sans-serif;
     opacity: 0.5;
+
+    @media (max-width: 700px) {
+        height: 11%;
+    }
 `;
 
 const More = styled.p`
