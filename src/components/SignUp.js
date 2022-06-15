@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -6,13 +6,15 @@ import StateContext from '../contexts/StateContext.js';
 
 export default function SignUp() {
     const {setVisible} = useContext(StateContext);
+    const [disable, setDisable] = useState(false);
     const navigate = useNavigate();
 
     setVisible(false);
 
     async function register(e) {
         e.preventDefault();
-        alert('ok');
+        setDisable(true);
+        navigate('/sign-in');
     } 
     
     return (
@@ -26,7 +28,10 @@ export default function SignUp() {
                 <Input placeholder='password' type='password' required/>
                 <Input placeholder='username' type='text' required/>
                 <Input placeholder='picture url' type='url' required/>
-                <Button type='submit'>Sign Up</Button>
+                {disable ? 
+                    <ButtonDisable>Sign Up</ButtonDisable>
+                    : <Button type='submit'>Sign Up</Button>
+                }
                 <More onClick={() => navigate('/sign-in')}>Switch back to log in</More>
             </Form>
         </Container>
@@ -148,6 +153,20 @@ const Button = styled.button`
     @media (max-width: 700px) {
         height: 11%;
     }
+`;
+
+const ButtonDisable = styled.button`
+    width: 70%;
+    height: 8%;
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 40px;
+    border-radius: 6px; 
+    border: none;
+    color: #FFFFFF;
+    background: #1877F2;
+    font-family: 'Oswald', sans-serif;
+    opacity: 0.5;
 `;
 
 const More = styled.p`
