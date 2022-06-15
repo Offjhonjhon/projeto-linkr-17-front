@@ -50,7 +50,7 @@ const Text = styled.div`
     @media (max-width: 700px) {
         top: 0;
         width: 70%;
-        height: 35%;
+        height: 30%;
         margin: 0;
         display: flex;
         flex-direction: column;
@@ -98,7 +98,7 @@ const Form = styled.div`
     @media (max-width: 700px) {
         bottom: 0;
         width: 100vw;
-        height: 60%;
+        height: 70%;
     }
 `;
 
