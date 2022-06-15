@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -6,9 +6,20 @@ import StateContext from '../contexts/StateContext.js';
 
 export default function SignIn() {
     const {setVisible} = useContext(StateContext);
+    const [disable, setDisable] = useState(false);
+    const [data, setData] = useState({
+        email: '',
+        password: ''
+    });
     const navigate = useNavigate();
 
     setVisible(false);
+
+    async function login(e) {
+        e.preventDefault();
+        setDisable(true);
+        console.log(data);
+    }
     
     return (
         <Container>
@@ -16,10 +27,13 @@ export default function SignIn() {
                 <H1>linkr</H1>
                 <P>save, share and discover the best links on the web</P>
             </Text>
-            <Form>
-                <Input placeholder='e-mail' />
-                <Input placeholder='password' />
-                <Button>Log In</Button>
+            <Form onSubmit={login}>
+                <Input placeholder='e-mail' type='email' required value={data.email} onChange={e => setData({...data, email: e.target.value})}/>
+                <Input placeholder='password' type='password' required value={data.password} onChange={e => setData({...data, password: e.target.value})}/>
+                {disable ?
+                    <ButtonDisable>Log In</ButtonDisable>
+                    : <Button type='submit'>Log In</Button>
+                }
                 <More onClick={() => navigate('/sign-up')}>First time? Create an account!</More>
             </Form>
         </Container>
@@ -82,7 +96,7 @@ const P = styled.div`
     }
 `;
 
-const Form = styled.div`
+const Form = styled.form`
     right: 0;
     width: 40%;
     height: 100vh;
@@ -137,6 +151,27 @@ const Button = styled.button`
     :hover {
         cursor: pointer;
     }
+
+    @media (max-width: 700px) {
+        height: 11%;
+    }
+`;
+
+const ButtonDisable = styled.div`
+    width: 70%;
+    height: 8%;
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 40px;
+    border-radius: 6px; 
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    background: #1877F2;
+    font-family: 'Oswald', sans-serif;
+    opacity: 0.5;
 
     @media (max-width: 700px) {
         height: 11%;
