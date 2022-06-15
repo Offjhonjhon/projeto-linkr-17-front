@@ -155,4 +155,8 @@ const More = styled.p`
     :hover {
         cursor: pointer;
     }
+
+    @media (max-width: 700px) {
+        font-size: 17px;
+    }
 `;

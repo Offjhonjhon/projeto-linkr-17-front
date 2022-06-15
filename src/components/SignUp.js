@@ -9,6 +9,11 @@ export default function SignUp() {
     const navigate = useNavigate();
 
     setVisible(false);
+
+    async function register(e) {
+        e.preventDefault();
+        alert('ok');
+    } 
     
     return (
         <Container>
@@ -16,12 +21,12 @@ export default function SignUp() {
                 <H1>linkr</H1>
                 <P>save, share and discover the best links on the web</P>
             </Text>
-            <Form>
-                <Input placeholder='e-mail' />
-                <Input placeholder='password' />
-                <Input placeholder='username' />
-                <Input placeholder='picture url' />
-                <Button>Sign Up</Button>
+            <Form onSubmit={register}>
+                <Input placeholder='e-mail' type='email' required/>
+                <Input placeholder='password' type='password' required/>
+                <Input placeholder='username' type='text' required/>
+                <Input placeholder='picture url' type='url' required/>
+                <Button type='submit'>Sign Up</Button>
                 <More onClick={() => navigate('/sign-in')}>Switch back to log in</More>
             </Form>
         </Container>
@@ -84,7 +89,7 @@ const P = styled.div`
     }
 `;
 
-const Form = styled.div`
+const Form = styled.form`
     right: 0;
     width: 40%;
     height: 100vh;
@@ -156,5 +161,9 @@ const More = styled.p`
 
     :hover {
         cursor: pointer;
+    }
+
+    @media (max-width: 700px) {
+        font-size: 17px;
     }
 `;
