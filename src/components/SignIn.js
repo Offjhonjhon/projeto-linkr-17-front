@@ -1,10 +1,13 @@
 import {useContext} from 'react';
+import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 
 import StateContext from '../contexts/StateContext.js';
 
 export default function SignIn() {
     const {setVisible} = useContext(StateContext);
+    const navigate = useNavigate();
+
     setVisible(false);
     
     return (
@@ -17,7 +20,7 @@ export default function SignIn() {
                 <Input placeholder='e-mail' />
                 <Input placeholder='password' />
                 <Button>Log In</Button>
-                <More>First time? Create an account!</More>
+                <More onClick={() => navigate('/sign-up')}>First time? Create an account!</More>
             </Form>
         </Container>
     );
