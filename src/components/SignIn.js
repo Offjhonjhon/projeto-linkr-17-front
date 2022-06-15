@@ -32,6 +32,10 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     background-color: #151515;
+
+    @media (max-width: 700px) {
+        justify-content: center;
+    }
 `;
 
 const Text = styled.div`
@@ -40,6 +44,18 @@ const Text = styled.div`
     display: flex;
     flex-direction: column;
     color: #FFFFFF;
+
+    @media (max-width: 700px) {
+        top: 0;
+        width: 70%;
+        height: 35%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+    }
 `;
 
 const H1 = styled.div`
@@ -48,6 +64,10 @@ const H1 = styled.div`
     font-weight: 700;
     line-height: 117px;
     font-family: 'Passion One', cursive;
+    
+    @media (max-width: 700px) {
+        font-size: 76px;
+    }
 `;
 
 const P = styled.div`
@@ -55,6 +75,11 @@ const P = styled.div`
     font-weight: 700;
     line-height: 64px;
     font-family: 'Oswald', sans-serif;
+    
+    @media (max-width: 700px) {
+        font-size: 25px;
+        line-height: 34px;
+    }
 `;
 
 const Form = styled.div`
@@ -67,6 +92,12 @@ const Form = styled.div`
     align-items: center;
     position: absolute;
     background-color: #333333;
+
+    @media (max-width: 700px) {
+        bottom: 0;
+        width: 100vw;
+        height: 60%;
+    }
 `;
 
 const Input = styled.input`
@@ -85,6 +116,10 @@ const Input = styled.input`
     ::placeholder {
         color: #9F9F9F;
     }
+
+    @media (max-width: 700px) {
+        height: 11%;
+    }
 `;
 
 const Button = styled.button`
@@ -101,6 +136,10 @@ const Button = styled.button`
 
     :hover {
         cursor: pointer;
+    }
+
+    @media (max-width: 700px) {
+        height: 11%;
     }
 `;
 
