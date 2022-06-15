@@ -5,22 +5,37 @@ import styled from "styled-components";
 
 function Likes() {
     const [icon, setIcon] = useState(false);
+
+    async function getUserLikes() {
+        try {
+            const {request} = await axios.post("http://localhost:8000/userLikes", { publicationId: 1 });
+            const {response} = request;
+            const object = JSON.parse(response);
+    
+            if (object.isLiked) {
+                setIcon(true);
+            } else {
+                setIcon(false);
+            }
+        }catch(e) {
+            console.log(e);
+        }
+    }
+    getUserLikes();
+
     async function likePost() {
         try {
-            const {request} = await axios.post("http://localhost:8000/likes", { publicationId: 1 }) 
-            const {response} = request
+            const {request} = await axios.post("http://localhost:8000/likes", { publicationId: 1 });
+            const {response} = request;
 
-            console.log(response, request)
+            console.log(response)
 
             if (response === "likeSuccess") {
-                console.log("like")
-                setIcon(!icon)
-                
+                setIcon(!icon);                
             }
 
             if (response === "deslikeSuccess") {
-                console.log("deslike")
-                setIcon(!icon)
+                setIcon(!icon);
             }
         } catch (e) {
             console.log(e);
@@ -48,9 +63,17 @@ export default Likes;
 const Container = styled.div`
     margin-left: 50px;
     width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
     svg {
         width: 20px;
         height: 18px;
+    }
+
+    p {
+        color: #fff;
     }
 `;
