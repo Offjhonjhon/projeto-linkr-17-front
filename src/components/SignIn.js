@@ -1,6 +1,7 @@
 import {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 
 import StateContext from '../contexts/StateContext.js';
 
@@ -18,7 +19,14 @@ export default function SignIn() {
     async function login(e) {
         e.preventDefault();
         setDisable(true);
-        console.log(data);
+
+        try {
+            const user = await axios.post('http://localhost:4000/sign-in', data);
+            console.log(user);
+        } catch(e) {
+            setDisable(false);
+            alert(e.response.data.error);
+        }
     }
     
     return (
