@@ -1,10 +1,3 @@
-// import axios from "axios";
-// import { useState } from "react";
-// import { FaRegHeart, FaHeart } from "react-icons/fa";
-// import styled from "styled-components";
-// import React from "react";
-// import Tippy from '@tippyjs/react/headless';
-
 import axios from "axios";
 import { useState } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
@@ -15,35 +8,41 @@ import Tippy from '@tippyjs/react/headless';
 function Likes() {
     const [icon, setIcon] = useState(false);
     const [totalLikes, settotalLikes] = useState("");
+    let users = [""];
 
     async function getAllLikes() {
         try {
-            const {request} = await axios.post("http://localhost:5000/userLikes", { publicationId: 1 });
+            const {request} = await axios.post("http://localhost:12000/userLikes", { publicationId: 1 });
             const {response} = request;
             const object = JSON.parse(response);
-            
+
             if (object.allLikes.length > 0) {
                 settotalLikes(object.allLikes.length);
             } else {
                 settotalLikes("");
             }            
             
-            if (object.isLiked) {
+            if (object.userName) {
                 setIcon(true);
             } else {
                 setIcon(false);
             }
-            
+
+            object.allLikes.forEach(item => {
+                if (item) {
+                    users.push(item);
+                }
+            });           
         }catch(e) {
             console.log(e);
         }
         
     }
-    getAllLikes();
+    getAllLikes();  
 
     async function likePost() {
         try {
-            const {request} = await axios.post("http://localhost:5000/likes", { publicationId: 1 });
+            const {request} = await axios.post("http://localhost:12000/likes", { publicationId: 1 });
             const {response} = request;
 
             console.log(response)
@@ -70,13 +69,41 @@ function Likes() {
         )
     }
 
+    function getTooltipBoxLikes() {
+        if (totalLikes === 0) {
+            return "";
+        } 
+        
+        if (icon) {
+            if (totalLikes === 1) {
+                return "Você";
+            } else if (totalLikes === 2) {
+                return `Você e outra pessoa`;
+            } else if (totalLikes === 3) {
+                return "Você e outras 2 pessoas";
+            } else  {
+                return `Você, ${users[1]} e outras ${users.length - 2} pessoas`;
+            }
+        } else {
+            if (totalLikes === 1) {
+                return `${users[1]}`;
+            } else if (totalLikes === 2) {
+                return `${users[1]} e outra pessoa`;
+            } else if (totalLikes === 3) {
+                return `${users[1]} e outras 2 pessoas`;
+            } else  {
+                return `${users[1]} e outras ${users.length - 2} pessoas`;
+            }
+        }
+    }
+      
     return (
-        <Container style={{background: "#000"}}>         
+        <Container style={{background: "#000"}}> 
             {getIcon()}
             <Tippy 
                 render={attrs => (
                     <Tooltip className="p" {...attrs}>
-                      <p>likes info</p>
+                      <p>{getTooltipBoxLikes()}</p>
                       <div className="arrow" data-popper-arrow></div>
                     </Tooltip>
                 )} >
@@ -119,7 +146,7 @@ const Tooltip = styled.div`
     width: 169px;
     height: 24px;
     border-radius: 3px;
-    background: rgba(0, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.9);
     font-family: 'Lato';
     font-weight: 400;
     font-size: 11px;
