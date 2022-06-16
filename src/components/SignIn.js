@@ -22,7 +22,7 @@ export default function SignIn() {
 
         try {
             await axios.post('http://localhost:4000/sign-in', data);
-            navigate('/');
+            navigate('/timeline');
         } catch(e) {
             setDisable(false);
             alert(e.response.data.error);
