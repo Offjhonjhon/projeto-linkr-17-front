@@ -21,8 +21,8 @@ export default function SignIn() {
         setDisable(true);
 
         try {
-            const user = await axios.post('http://localhost:4000/sign-in', data);
-            console.log(user);
+            await axios.post('http://localhost:4000/sign-in', data);
+            navigate('/');
         } catch(e) {
             setDisable(false);
             alert(e.response.data.error);
