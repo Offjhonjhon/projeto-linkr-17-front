@@ -4,6 +4,7 @@ import {useState} from 'react';
 import Header from './Header.js';
 import SignIn from './SignIn.js';
 import SignUp from './SignUp.js';
+import Likes from "./Likes.js";
 import StateContext from '../contexts/StateContext.js';
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
             <Routes>
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/likes" element={<Likes />} />
             </Routes>
         </BrowserRouter>
         </StateContext.Provider>
