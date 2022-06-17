@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import Likes from "./Likes.js";
 import Header from './Header.js';
-import SearchBar from './SearchBar.js';
+import SearchBar from './SearchBar';
 import SignIn from './SignIn.js';
 import SignUp from './SignUp.js';
 import StateContext from '../contexts/StateContext.js';
@@ -15,6 +15,7 @@ export default function App() {
         <StateContext.Provider value={{ visible, setVisible }}>
             <BrowserRouter>
                 <Header />
+                <SearchBar />
                 <Routes>
                     <Route path="/likes" element={<Likes />} />
                     <Route path="/sign-in" element={<SignIn />} />
