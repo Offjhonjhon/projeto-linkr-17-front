@@ -73,7 +73,7 @@ function Likes() {
         setUsersAux([...usersAux, users]);
     }, []);
 
-    console.log(usersAux)
+
     function getTooltipBoxLikes() {
         if (totalLikes === 0) {
             return "";
@@ -106,8 +106,9 @@ function Likes() {
         <Container style={{background: "#000"}}> 
             {getIcon()}
             <Tippy 
+                placement="bottom"
                 render={attrs => (
-                    <Tooltip className="p" placement="bottom" {...attrs}>
+                    <Tooltip {...attrs}>
                       <p>{getTooltipBoxLikes()}</p>
                       <div className="arrow" data-popper-arrow></div>
                     </Tooltip>
@@ -134,6 +135,7 @@ const Container = styled.div`
     height: 100px;
     padding: 10px;
 
+
     svg {
         width: 20px;
         height: 18px;
@@ -143,6 +145,7 @@ const Container = styled.div`
     p {
         color: #FFFFFF;
         margin-top: 4px;
+        cursor: default;
     } 
 `;
 
