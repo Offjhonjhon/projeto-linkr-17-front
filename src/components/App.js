@@ -6,6 +6,7 @@ import Header from './Header.js';
 import SignIn from './SignIn.js';
 import SignUp from './SignUp.js';
 import StateContext from '../contexts/StateContext.js';
+import Timeline from '../pages/Timeline.js';
 
 export default function App() {
     const [visible, setVisible] = useState(true);
@@ -15,6 +16,7 @@ export default function App() {
             <BrowserRouter>
                 <Header />
                 <Routes>
+                    <Route path="/" element={<Timeline />} />
                     <Route path="/likes" element={<Likes />} />
                     <Route path="/sign-in" element={<SignIn />} />
                     <Route path="/sign-up" element={<SignUp />} />

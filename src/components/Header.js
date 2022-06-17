@@ -1,18 +1,18 @@
-import {FaAngleDown} from 'react-icons/fa';
-import {useContext} from 'react';
+import { FaAngleDown } from 'react-icons/fa';
+import { useContext } from 'react';
 import styled from 'styled-components';
 
 import StateContext from '../contexts/StateContext.js';
 
 export default function Header() {
-    const {visible} = useContext(StateContext);
+    const { visible } = useContext(StateContext);
     const image = 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg';
 
     return visible ? (
         <Container>
             <Nav>
                 <Title>linkr</Title>
-                <Block> 
+                <Block>
                     <Icon><FaAngleDown /></Icon>
                     <Image src={image}></Image>
                 </Block>
@@ -23,7 +23,6 @@ export default function Header() {
 
 const Container = styled.div`
     width: 100vw;
-    height: 100vh;
     background-color: #333333;
 `;
 

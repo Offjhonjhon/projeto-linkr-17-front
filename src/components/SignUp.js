@@ -1,12 +1,12 @@
-import {useContext, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 
 import StateContext from '../contexts/StateContext.js';
 
 export default function SignUp() {
-    const {setVisible} = useContext(StateContext);
+    const { setVisible } = useContext(StateContext);
     const [disable, setDisable] = useState(false);
     const [data, setData] = useState({
         email: '',
@@ -25,12 +25,12 @@ export default function SignUp() {
         try {
             await axios.post('http://localhost:4000/sign-up', data);
             navigate('/sign-in');
-        } catch(e) {
+        } catch (e) {
             setDisable(false);
             alert(e.response.data.error);
         }
-    } 
-    
+    }
+
     return (
         <Container>
             <Text>
@@ -38,11 +38,11 @@ export default function SignUp() {
                 <P>save, share and discover the best links on the web</P>
             </Text>
             <Form onSubmit={register}>
-                <Input placeholder='e-mail' type='email' required value={data.email} onChange={e => setData({...data, email: e.target.value})}/>
-                <Input placeholder='password' type='password' required value={data.password} onChange={e => setData({...data, password: e.target.value})}/>
-                <Input placeholder='username' type='text' required value={data.username} onChange={e => setData({...data, username: e.target.value})}/>
-                <Input placeholder='picture url' type='url' required value={data.picture} onChange={e => setData({...data, picture: e.target.value})}/>
-                {disable ? 
+                <Input placeholder='e-mail' type='email' required value={data.email} onChange={e => setData({ ...data, email: e.target.value })} />
+                <Input placeholder='password' type='password' required value={data.password} onChange={e => setData({ ...data, password: e.target.value })} />
+                <Input placeholder='username' type='text' required value={data.username} onChange={e => setData({ ...data, username: e.target.value })} />
+                <Input placeholder='picture url' type='url' required value={data.picture} onChange={e => setData({ ...data, picture: e.target.value })} />
+                {disable ?
                     <ButtonDisable>Sign Up</ButtonDisable>
                     : <Button type='submit'>Sign Up</Button>
                 }
