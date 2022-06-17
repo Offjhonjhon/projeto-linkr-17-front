@@ -12,7 +12,7 @@ function Likes() {
 
     async function getAllLikes() {
         try {
-            const {request} = await axios.post("http://localhost:12000/userLikes", { publicationId: 1 });
+            const {request} = await axios.post("http://localhost:4000/userLikes", { publicationId: 1 });
             const {response} = request;
             const object = JSON.parse(response);
 
@@ -42,7 +42,7 @@ function Likes() {
 
     async function likePost() {
         try {
-            const {request} = await axios.post("http://localhost:12000/likes", { publicationId: 1 });
+            const {request} = await axios.post("http://localhost:4000/likes", { publicationId: 1 });
             const {response} = request;
 
             console.log(response)
@@ -72,7 +72,6 @@ function Likes() {
     useEffect(() => {
         setUsersAux([...usersAux, users]);
     }, []);
-
 
     function getTooltipBoxLikes() {
         if (totalLikes === 0) {
