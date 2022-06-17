@@ -1,16 +1,33 @@
 import styled from "styled-components";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect  } from "react";
 import { TiPencil } from "react-icons/ti";
 import { CgTrashEmpty } from "react-icons/cg";
  
 function EditPost() {
     const [active, setActive] = useState(false);
-    const textareaRef = useRef();
-
+    const textareaRef = useRef("");
+    
     function editPost() {
-        textareaRef.current.focus();
         setActive(!active);
-        console.log(textareaRef.current.value)
+    }
+
+    useEffect(() => {
+        if (active) {
+          textareaRef.current.focus();
+          console.log(textareaRef.current.value);
+        }
+      }, [active]);
+
+    function getDescription() {
+        return <p>my description</p>
+    }
+
+    function getTextArea() {
+        return <TextArea active={active} 
+                    type="text" 
+                    ref={textareaRef}
+                    style={{color: '#4C4C4C'}}>
+            </TextArea> 
     }
 
     return (
@@ -19,10 +36,9 @@ function EditPost() {
                 <TiPencil onClick={() => editPost()}/>
                 <CgTrashEmpty/>
             </Icons>
-            <TextArea active={active} 
-                      type="text" 
-                      ref={textareaRef}
-                      style={{color: active ? '#4C4C4C' : '#FFFFFF'}}></TextArea>
+
+            {active ? getTextArea() : getDescription()}
+            
         </Container>
     )
 }
@@ -34,6 +50,15 @@ const Container = styled.div`
         color: #FFFFFF;
         cursor: pointer;
     }
+
+    p {
+        font-family: 'Lato';
+        font-weight: 400;
+        font-size: 17px;
+        line-height: 20px;
+        color: #B7B7B7;
+    }
+
     background-color: #171717;
 `;
 
