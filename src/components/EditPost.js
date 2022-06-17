@@ -7,8 +7,18 @@ function EditPost() {
     const [active, setActive] = useState(false);
     const textareaRef = useRef("");
     
-    function editPost() {
+    function getTextArea() {
         setActive(!active);
+    }
+
+    useEffect(() => {
+        document.addEventListener('keydown', detectKeyDown, true);
+    }, [])
+
+    const detectKeyDown = (e) => {
+        if (e.key === "Escape") {
+            setActive(false);
+        }
     }
 
     useEffect(() => {
@@ -18,26 +28,22 @@ function EditPost() {
         }
       }, [active]);
 
-    function getDescription() {
-        return <p>my description</p>
-    }
-
-    function getTextArea() {
-        return <TextArea active={active} 
-                    type="text" 
-                    ref={textareaRef}
-                    style={{color: '#4C4C4C'}}>
-            </TextArea> 
-    }
 
     return (
         <Container>
             <Icons>
-                <TiPencil onClick={() => editPost()}/>
+                <TiPencil onClick={() => getTextArea()}/>
                 <CgTrashEmpty/>
             </Icons>
 
-            {active ? getTextArea() : getDescription()}
+            {active ? 
+            <TextArea active={active} 
+                      type="text" 
+                      ref={textareaRef}
+                      style={{color: '#4C4C4C'}}>
+            </TextArea> 
+            : 
+            <p>my description</p>}
             
         </Container>
     )
