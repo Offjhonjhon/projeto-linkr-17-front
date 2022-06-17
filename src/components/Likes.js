@@ -1,14 +1,14 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import styled from "styled-components";
 import Tippy from '@tippyjs/react/headless';
 
-
 function Likes() {
     const [icon, setIcon] = useState(false);
     const [totalLikes, settotalLikes] = useState("");
-    let users = [""];
+    const [usersAux, setUsersAux] = useState([]);
+    let users = [];
 
     async function getAllLikes() {
         try {
@@ -69,6 +69,11 @@ function Likes() {
         )
     }
 
+    useEffect(() => {
+        setUsersAux([...usersAux, users]);
+    }, []);
+
+    console.log(usersAux)
     function getTooltipBoxLikes() {
         if (totalLikes === 0) {
             return "";
@@ -82,17 +87,17 @@ function Likes() {
             } else if (totalLikes === 3) {
                 return "Você e outras 2 pessoas";
             } else  {
-                return `Você, ${users[1]} e outras ${users.length - 2} pessoas`;
+                return `Você, ${usersAux[0][0]} e outras ${usersAux[0].length - 1} pessoas`;
             }
         } else {
             if (totalLikes === 1) {
-                return `${users[1]}`;
+                return `${usersAux[0][0]}`;
             } else if (totalLikes === 2) {
-                return `${users[1]} e outra pessoa`;
+                return `${usersAux[0][0]} e outra pessoa`;
             } else if (totalLikes === 3) {
-                return `${users[1]} e outras 2 pessoas`;
+                return `${usersAux[0][0]} e outras 2 pessoas`;
             } else  {
-                return `${users[1]} e outras ${users.length - 2} pessoas`;
+                return `${usersAux[0][0]} e outras ${usersAux[0].length - 1} pessoas`;
             }
         }
     }
@@ -102,7 +107,7 @@ function Likes() {
             {getIcon()}
             <Tippy 
                 render={attrs => (
-                    <Tooltip className="p" {...attrs}>
+                    <Tooltip className="p" placement="bottom" {...attrs}>
                       <p>{getTooltipBoxLikes()}</p>
                       <div className="arrow" data-popper-arrow></div>
                     </Tooltip>
@@ -126,6 +131,8 @@ const Container = styled.div`
     font-size: 11px;
     line-height: 13px;
     margin-bottom: 100px;
+    height: 100px;
+    padding: 10px;
 
     svg {
         width: 20px;
