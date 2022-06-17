@@ -23,7 +23,7 @@ export default function SignUp() {
         setDisable(true);
 
         try {
-            await axios.post('http://localhost:5000/sign-up', data);
+            await axios.post('http://localhost:4000/sign-up', data);
             navigate('/sign-in');
         } catch(e) {
             setDisable(false);
