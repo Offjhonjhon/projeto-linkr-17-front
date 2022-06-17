@@ -1,3 +1,4 @@
+import axios from "axios";
 import styled from "styled-components";
 import { useRef, useState, useEffect  } from "react";
 import { TiPencil } from "react-icons/ti";
@@ -26,8 +27,30 @@ function EditPost() {
           textareaRef.current.focus();
           console.log(textareaRef.current.value);
         }
-      }, [active]);
+    }, [active]);
 
+    const handleUserKeyPress = e => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendUpdate(); 
+        }
+    };
+
+    function sendUpdate() {
+        console.log("send update")
+        console.log(textareaRef.current.value)
+
+        const promise = axios.post("http://localhost:4000/edit-post", {
+            publicationId: 1,
+            description: textareaRef.current.value
+        });
+        promise.then(() => {
+            setActive(false);
+        });
+        promise.catch(() => {
+            alert("Não foi possível salvar as alterações!")
+        })
+    }
 
     return (
         <Container>
@@ -37,11 +60,12 @@ function EditPost() {
             </Icons>
 
             {active ? 
-            <TextArea active={active} 
-                      type="text" 
-                      ref={textareaRef}
-                      style={{color: '#4C4C4C'}}>
-            </TextArea> 
+                    <TextArea active={active} 
+                              type="text" 
+                              ref={textareaRef}
+                              onKeyPress={handleUserKeyPress}
+                              style={{color: '#4C4C4C'}}>
+                    </TextArea> 
             : 
             <p>my description</p>}
             
