@@ -1,9 +1,11 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { DebounceInput } from 'react-debounce-input'
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 
 export default function SearchBar(){
+    const navigate = useNavigate()
     const [search, setSearch] = useState({name: ""})
     const [users, setUsers] = useState([])
 
@@ -19,7 +21,7 @@ export default function SearchBar(){
     return(
         <SearchWindow>
             <SearchForm>
-                <DebounceInput minLength={3} debounceTimeout={300} type="text" placeholder="Search for people" onChange={(e) => {
+                <DebounceInput value={search.name} minLength={3} debounceTimeout={300} type="text" placeholder="Search for people" onChange={(e) => {
                     setSearch({name: e.target.value})
                     }} />
             </SearchForm>
@@ -29,7 +31,11 @@ export default function SearchBar(){
                     {users.length > 0 ?
                         users.map((user,index) => {
                             return(
-                                <SearchProfile key={index}>
+                                <SearchProfile onClick={() => {
+                                    setSearch({name: ""})
+                                    DebounceInput.value = ""
+                                    navigate(`/user/${user.id}`)
+                                    }} key={index}>
                                     <img src={user.avatar} alt="avatar"/>
                                     <p>{user.name}</p>
                                 </SearchProfile>
@@ -66,6 +72,7 @@ const SearchForm = styled.form`
         border-radius: 8px;
         background-color: #FFFFFF;
         font-family: Lato;
+        font-size: 19px;
     }
 `
 
