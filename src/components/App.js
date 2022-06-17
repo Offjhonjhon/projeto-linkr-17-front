@@ -5,7 +5,9 @@ import Likes from "./Likes.js";
 import Header from './Header.js';
 import SignIn from './SignIn.js';
 import SignUp from './SignUp.js';
+import EditPost from './EditPost.js';
 import StateContext from '../contexts/StateContext.js';
+
 
 export default function App() {
     const [visible, setVisible] = useState(true);
@@ -15,6 +17,7 @@ export default function App() {
             <BrowserRouter>
                 <Header />
                 <Routes>
+                    <Route path="/edit-post" element={<EditPost />} />
                     <Route path="/likes" element={<Likes />} />
                     <Route path="/sign-in" element={<SignIn />} />
                     <Route path="/sign-up" element={<SignUp />} />
