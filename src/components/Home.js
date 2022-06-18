@@ -9,7 +9,8 @@ export default function Home({URL_BACK}) {
         avatar: "https://img.olhardigital.com.br/wp-content/uploads/2021/09/Chloe-meme.jpg"
     };
 
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState("Loading");
+
 
     useEffect(() => {
         const promise = axios.get(URL_BACK + "/posts");
@@ -19,11 +20,11 @@ export default function Home({URL_BACK}) {
         });
         
         promise.catch(erro => {
-            console.log("erro: " + erro);
+            alert("An error occured while trying to fetch the posts, please refresh the page");
         });
 
-    }, []);
-    
+    }, [URL_BACK]);
+
 
     const [url, setUrl] = useState("");
     const [text, setText] = useState("");
@@ -36,7 +37,7 @@ export default function Home({URL_BACK}) {
         <>
             <Header></Header>
             <Main>
-                <div class="timeline">timeline</div>
+                <div class="timeline" onClick={() => console.log(posts)}>timeline</div>
                 <div class="publish">
                     <div class="profile-picture">
                         <img src={user.avatar} alt={user.name} />
@@ -49,7 +50,7 @@ export default function Home({URL_BACK}) {
                     </form>
                 </div>
                 {
-                    !posts.length ? <p className="loading">Carregando</p> : posts.map(post => {
+                    posts === "Loading" ? <p className="message">Loading...</p> : posts === "Empty" ? <p className="message">There are no posts yet</p> : posts.map(post => {
                         return (
                             <Post>
                                 <div class="profile-picture">
@@ -58,14 +59,14 @@ export default function Home({URL_BACK}) {
                                 <div class="post-area">
                                     <p class="user-name">{post.name}</p>
                                     <p class="text">{post.text}</p>
-                                    <div class="link-area">
+                                    <a class="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
                                         <div class="link-left">
                                             <div class="title">{post.title}</div>
                                             <div class="description">{post.description}</div>
                                             <div class="url">{post.url}</div>
                                         </div>
                                         <img src={post.image} alt="Post" />
-                                    </div>
+                                    </a>
                                 </div>
                             </Post>
                         );
@@ -218,7 +219,7 @@ const Main = styled.div`
         color: white;
     }
 
-    .loading {
+    .message {
         margin-top: 20px;
     }
 `;
@@ -284,6 +285,7 @@ const Post = styled.div`
         height: 155px;
         border-radius: 11px;
         border: 1px solid #4D4D4D;
+        text-decoration: none;
 
         display: flex;
     }
