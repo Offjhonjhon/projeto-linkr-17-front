@@ -10,6 +10,9 @@ export default function Home({URL_BACK}) {
     };
 
     const [posts, setPosts] = useState("Loading");
+    
+    const [refresh, setRefresh] = useState([]);
+    function refreshTimeline() {setRefresh([])}
 
 
     useEffect(() => {
@@ -23,47 +26,66 @@ export default function Home({URL_BACK}) {
             alert("An error occured while trying to fetch the posts, please refresh the page");
         });
 
-    }, [URL_BACK]);
+    }, [URL_BACK, refresh]);
 
 
     const [url, setUrl] = useState("");
     const [text, setText] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    function publish() {
-        console.log("publish click")
+    function publish(event) {
+        event.preventDefault();
+        setLoading(true);
+
+        const promisse = axios.post(URL_BACK + "/publish", {
+            url: url,
+            text: text
+        })
+
+        promisse.then(res => {
+            setLoading(false);
+            setUrl("");
+            setText("");
+            refreshTimeline();
+        });
+
+        promisse.catch(error => {
+            setLoading(false);
+            alert("Houve um erro ao publicar seu link");
+        });
     }
 
     return (
         <>
             <Header></Header>
             <Main>
-                <div class="timeline" onClick={() => console.log(posts)}>timeline</div>
-                <div class="publish">
-                    <div class="profile-picture">
+                <div className="timeline">timeline</div>
+                <div className="publish">
+                    <div className="profile-picture">
                         <img src={user.avatar} alt={user.name} />
                     </div>
-                    <form class="publish-form" onSubmit={publish}>
+                    <form className="publish-form" onSubmit={publish}>
                         <p>What are you going to share today?</p>
-                        <input class="url" placeholder="http://..." type="url" value={url} onChange={e => setUrl(e.target.value)} />
-                        <textarea class="text" placeholder="Awesome article about #javascript" type="text" value={text} onChange={e => setText(e.target.value)} />
-                        <button type="submit">Publish</button>
+                        <input className="url" placeholder="http://..." type="url" value={url} onChange={e => setUrl(e.target.value)} required disabled={loading}/>
+                        <textarea className="text" placeholder="Awesome article about #javascript" type="text" value={text} onChange={e => setText(e.target.value)} disabled={loading}/>
+                        <button type="submit" disabled={loading}>{loading ? "Publishing..." : "Publish"}</button>
                     </form>
                 </div>
                 {
-                    posts === "Loading" ? <p className="message">Loading...</p> : posts === "Empty" ? <p className="message">There are no posts yet</p> : posts.map(post => {
+                    posts === "Loading" ? <p className="message">Loading...</p> : posts === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
                         return (
-                            <Post>
-                                <div class="profile-picture">
+                            <Post key={index}>
+                                <div className="profile-picture">
                                     <img src={post.avatar} alt={post.name} />
                                 </div>
-                                <div class="post-area">
-                                    <p class="user-name">{post.name}</p>
-                                    <p class="text">{post.text}</p>
-                                    <a class="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
-                                        <div class="link-left">
-                                            <div class="title">{post.title}</div>
-                                            <div class="description">{post.description}</div>
-                                            <div class="url">{post.url}</div>
+                                <div className="post-area">
+                                    <p className="user-name">{post.name}</p>
+                                    <p className="text">{post.text}</p>
+                                    <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
+                                        <div className="link-left">
+                                            <div className="title">{post.title}</div>
+                                            <div className="description">{post.description}</div>
+                                            <div className="url">{post.url}</div>
                                         </div>
                                         <img src={post.image} alt="Post" />
                                     </a>
