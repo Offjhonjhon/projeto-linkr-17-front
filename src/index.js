@@ -11,14 +11,12 @@ import Home from './components/Home.js'
 
 function App() {
 
-    /* const URL_BACK = "https://projeto14-drivenshoes.herokuapp.com"; */
-
-    /* const [token, setToken] = useState(""); */
+    const URL_BACK = "http://localhost:4000";
 
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Home URL_BACK={URL_BACK} />} />
             </Routes>
         </BrowserRouter>
     );

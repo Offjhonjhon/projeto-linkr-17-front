@@ -1,33 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
-export default function Home() {
+export default function Home({URL_BACK}) {
 
     const user = {
         name: "Pieddra Enza",
         avatar: "https://img.olhardigital.com.br/wp-content/uploads/2021/09/Chloe-meme.jpg"
     };
 
-    const posts = [
-        {
-            avatar: "https://www.lance.com.br/files/article_main/uploads/2016/05/23/5743356b7548b.jpeg",
-            name: "Rubens Barrichello",
-            text: "Vocês estão sabendo desse novo vírus? Estão dizendo que começou quando beijaram o batman numa festa. #TeamMarvel",
-            title: "Hubei registra 139 novas mortes por Covid-19; vírus infectou 69 mil no mundo",
-            description: "Novo coronavírus matou 1.666 27 países registraram casos Europa teve neste sábado 1ª morte Doença chegou também à África",
-            url: "https://www.poder360.com.br/internacional/hubei-registra-139-novas-mortes-por-covid-19-virus-infectou-69-mil-no-mundo/",
-            image: "https://static.poder360.com.br/2020/02/coronavirus-foto.jpg"
-        },
-        {
-            avatar: "https://img.olhardigital.com.br/wp-content/uploads/2021/09/Chloe-meme.jpg",
-            name: "Pieddra Enza",
-            text: "Se liga nesse curso toooop",
-            title: "Driven",
-            description: "Formação intensiva em programação web que te prepara em 9 meses para entrar no mercado de tecnologia. Pague só depois de empregado. 100% dos alunos empregados com salário inicial médio de R$5.500",
-            url: "https://www.driven.com.br",
-            image: "https://yt3.ggpht.com/oZCGpPQc5qat2YIzVs_h1LTvrtpV6G--Q2CopkOoAa7d1WvHDohPzWO-vSEnQ4GljcQOO_6QkQ=s900-c-k-c0x00ffffff-no-rj"
-        }
-    ];
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        const promise = axios.get(URL_BACK + "/posts");
+
+        promise.then(answer => {
+            setPosts(answer.data);
+        });
+        
+        promise.catch(erro => {
+            console.log("erro: " + erro);
+        });
+
+    }, []);
+    
 
     const [url, setUrl] = useState("");
     const [text, setText] = useState("");
@@ -52,27 +48,30 @@ export default function Home() {
                         <button type="submit">Publish</button>
                     </form>
                 </div>
-                {posts.map(post => {
-                    return (
-                        <Post>
-                            <div class="profile-picture">
-                                <img src={post.avatar} alt={post.name} />
-                            </div>
-                            <div class="post-area">
-                                <p class="user-name">{post.name}</p>
-                                <p class="text">{post.text}</p>
-                                <div class="link-area">
-                                    <div class="link-left">
-                                        <div class="title">{post.title}</div>
-                                        <div class="description">{post.description}</div>
-                                        <div class="url">{post.url}</div>
-                                    </div>
-                                    <img src={post.image} alt="Post" />
+                {
+                    !posts.length ? <p className="loading">Carregando</p> : posts.map(post => {
+                        return (
+                            <Post>
+                                <div class="profile-picture">
+                                    <img src={post.avatar} alt={post.name} />
                                 </div>
-                            </div>
-                        </Post>
-                    );
-                })}
+                                <div class="post-area">
+                                    <p class="user-name">{post.name}</p>
+                                    <p class="text">{post.text}</p>
+                                    <div class="link-area">
+                                        <div class="link-left">
+                                            <div class="title">{post.title}</div>
+                                            <div class="description">{post.description}</div>
+                                            <div class="url">{post.url}</div>
+                                        </div>
+                                        <img src={post.image} alt="Post" />
+                                    </div>
+                                </div>
+                            </Post>
+                        );
+                    })
+                    
+                }
             </Main>
         </>
     );
@@ -117,6 +116,7 @@ const Main = styled.div`
     }
 
 
+    min-height: calc(100vh - 72px);
     background-color: #333333;
     margin-top: 72px;
     color: white;
@@ -216,6 +216,10 @@ const Main = styled.div`
         font-size: 14px;
         font-weight: 700;
         color: white;
+    }
+
+    .loading {
+        margin-top: 20px;
     }
 `;
 
