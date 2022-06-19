@@ -1,4 +1,4 @@
-
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const trendingHashtags = ['react', 'javaScript', "node"]
@@ -11,7 +11,10 @@ export default function TrendingHashtags() {
             <TrendingHashtagsContainer>
                 {trendingHashtags.map((hashtag, index) => {
                     return (
-                        <TrendingHashtag key={index}>
+                        <TrendingHashtag
+                            key={index}
+                            to={`/hashtag/${hashtag}`}
+                        >
                             {`# ${hashtag}`}
                         </TrendingHashtag>
                     )
@@ -55,10 +58,12 @@ const TrendingHashtagsContainer = styled.div`
     margin-left: 16px;
 `
 
-const TrendingHashtag = styled.p`
+const TrendingHashtag = styled(Link)`
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
+    color: #ffffff;
+    text-decoration: none;
 `
 
 const TrendingLine = styled.hr`

@@ -24,7 +24,7 @@ export default function SignUp() {
 
         try {
             await axios.post('http://localhost:4000/sign-up', data);
-            navigate('/sign-in');
+            navigate('/');
         } catch (e) {
             setDisable(false);
             alert(e.response.data.error);
@@ -46,7 +46,7 @@ export default function SignUp() {
                     <ButtonDisable>Sign Up</ButtonDisable>
                     : <Button type='submit'>Sign Up</Button>
                 }
-                <More onClick={() => navigate('/sign-in')}>Switch back to log in</More>
+                <More onClick={() => navigate('/')}>Switch back to log in</More>
             </Form>
         </Container>
     );
