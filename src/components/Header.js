@@ -5,8 +5,9 @@ import styled from 'styled-components';
 import StateContext from '../contexts/StateContext.js';
 
 export default function Header() {
+    const getData = localStorage.getItem("dados");
+    const { avatar } = JSON.parse(getData);
     const { visible } = useContext(StateContext);
-    const image = 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg';
 
     return visible ? (
         <Container>
@@ -14,7 +15,7 @@ export default function Header() {
                 <Title>linkr</Title>
                 <Block>
                     <Icon><FaAngleDown /></Icon>
-                    <Image src={image}></Image>
+                    <Image src={avatar}></Image>
                 </Block>
             </Nav>
         </Container>

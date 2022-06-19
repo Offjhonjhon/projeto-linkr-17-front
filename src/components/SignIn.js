@@ -21,7 +21,9 @@ export default function SignIn() {
         setDisable(true);
 
         try {
-            await axios.post('http://localhost:4000/sign-in', data);
+            const response = await axios.post('http://localhost:4000/sign-in', data);
+            const serializedData = JSON.stringify(response.data);
+            localStorage.setItem("dados", serializedData);
             navigate('/timeline');
         } catch(e) {
             setDisable(false);

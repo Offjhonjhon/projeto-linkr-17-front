@@ -17,7 +17,6 @@ export default function App() {
         <StateContext.Provider value={{ visible, setVisible }}>
             <BrowserRouter>
                 <Header />
-                <SearchBar />
                 <Routes>
                     <Route path="/" element={<Timeline />} />
                     <Route path="/likes" element={<Likes />} />
@@ -29,3 +28,4 @@ export default function App() {
         </StateContext.Provider>
     );
 }
+//<SearchBar />
