@@ -73,14 +73,13 @@ const Container = styled.div`
     width: 14px;
     height: 14px;
     background-color: #171717;
-    /* margin-top: 100px;
-    margin-bottom: 200px; */
 `;
 
 const ModalStyle = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
     background-color: #333333;
     border: none;
     border-radius: 50px;
@@ -119,13 +118,60 @@ const ModalStyle = styled.div`
     }
 
     .goback {
-            color: #1877F2;
-            background-color: #FFFFFF;
+        color: #1877F2;
+        background-color: #FFFFFF;
     }
 
     .deleteit {
         color: #FFFFFF;
         background-color: #1877F2;
+    }
+
+    @media (max-width: 700px) {
+        width: 400px;
+        height: 200px;
+        padding: 18px 50px 18px 50px;
+
+        .dialog-text {
+            font-size: 24px;
+            width: 280px;
+        } 
+        
+        .buttons {
+            width: 250px;
+            margin: auto;
+            justify-content: space-evenly;
+        }
+
+        button {
+            width: 100px;
+            height: 37px;
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: 500px) {
+        width: 320px;
+        height: 140px;
+        padding: 20px 50px 50px 50px;
+
+        .dialog-text {
+            font-size: 14px;
+            width: 280px;
+            margin-bottom: 20px
+        } 
+        
+        .buttons {
+            width: 180px;
+            margin: auto;
+            justify-content: space-between;
+        }
+
+        button {
+            width: 85px;
+            height: 30px;
+            font-size: 12px;
+        }
     }
 
 
@@ -154,4 +200,14 @@ const DivLoading = styled.div`
     justify-content: center;
     align-items: center;
     color: #ffffff;
+
+    @media (max-width: 700px) {
+        width: 100px;
+        height: 37px;
+    }
+
+    @media (max-width: 500px) {
+        width: 85px;
+        height: 30px;
+    }
 `;
