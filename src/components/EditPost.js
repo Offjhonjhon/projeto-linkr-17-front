@@ -6,6 +6,7 @@ import { CgTrashEmpty } from "react-icons/cg";
  
 function EditPost() {
     const [active, setActive] = useState(false);
+    const [enableTextArea, setEnableTextArea] = useState(false);
     const textareaRef = useRef("");
     
     function getTextArea() {
@@ -29,7 +30,7 @@ function EditPost() {
         }
     }, [active]);
 
-    const handleUserKeyPress = e => {
+    const handleUserKeyPress = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
           sendUpdate(); 
@@ -37,18 +38,19 @@ function EditPost() {
     };
 
     function sendUpdate() {
-        console.log("send update")
-        console.log(textareaRef.current.value)
+        setEnableTextArea(true);
 
         const promise = axios.post("http://localhost:4000/edit-post", {
             publicationId: 1,
             description: textareaRef.current.value
         });
         promise.then(() => {
+            console.log(textareaRef.current.value)
             setActive(false);
         });
         promise.catch(() => {
-            alert("Não foi possível salvar as alterações!")
+            alert("Não foi possível salvar as alterações!");
+            setEnableTextArea(false);
         })
     }
 
@@ -61,6 +63,7 @@ function EditPost() {
 
             {active ? 
                     <TextArea active={active} 
+                              readOnly={enableTextArea}
                               type="text" 
                               ref={textareaRef}
                               onKeyPress={handleUserKeyPress}
