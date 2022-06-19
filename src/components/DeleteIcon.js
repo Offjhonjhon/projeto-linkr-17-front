@@ -1,3 +1,4 @@
+import axios from "axios";
 import Modal from "react-modal";
 import { useState } from "react";
 import styled from "styled-components";
@@ -10,6 +11,17 @@ function DeleteIcon() {
 
     function toggleModal() {
         setIsOpen(!isOpen);
+    }
+
+    async function deletePost() {
+        try {
+            await axios.delete("http://localhost:4000/post-details/delete/2");
+            toggleModal();
+        } catch (e) {
+            console.log(e);
+            toggleModal();
+            alert("Não foi possível excluir o post!");
+        }
     }
 
     return  (
@@ -30,12 +42,12 @@ function DeleteIcon() {
                     Are you sure you want to delete this post?
                 </div>
                 <div className="buttons">
-                    <button className="goback" >No, go back</button>
-                    <button className="deleteit" >Yes, delete it</button>    
+                    <button className="goback" onClick={toggleModal} >No, go back</button>
+                    <button className="deleteit" onClick={deletePost}>Yes, delete it</button>                    
                 </div>
             </Modal>
-        </Container> 
-    )   
+        </Container>    
+    )
 }
 
 export default DeleteIcon;
