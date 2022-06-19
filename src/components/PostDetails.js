@@ -22,9 +22,9 @@ function PostDetails() {
         setEnableTextArea(true);
 
         try {
-            await axios.post("http://localhost:4000/post/edit-post", {
-            publicationId: 1,
-            description: textareaRef.current.value
+            await axios.post("http://localhost:4000/post-details/edit", {
+                publicationId: 1,
+                description: textareaRef.current.value
             });
             console.log(textareaRef.current.value);
             setActive(false);
