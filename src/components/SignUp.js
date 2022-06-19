@@ -169,7 +169,7 @@ const Button = styled.button`
     }
 `;
 
-const ButtonDisable = styled.button`
+const ButtonDisable = styled.div`
     width: 70%;
     height: 8%;
     font-size: 27px;
@@ -177,6 +177,9 @@ const ButtonDisable = styled.button`
     line-height: 40px;
     border-radius: 6px; 
     border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #FFFFFF;
     background: #1877F2;
     font-family: 'Oswald', sans-serif;
