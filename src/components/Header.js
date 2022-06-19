@@ -1,5 +1,5 @@
-import { FaAngleDown } from 'react-icons/fa';
-import { useContext } from 'react';
+import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
+import { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 import StateContext from '../contexts/StateContext.js';
@@ -8,16 +8,18 @@ export default function Header() {
     const getData = localStorage.getItem("dados");
     const { avatar } = JSON.parse(getData);
     const { visible } = useContext(StateContext);
+    const [menu, setMenu] = useState(false);
 
     return visible ? (
         <Container>
             <Nav>
                 <Title>linkr</Title>
-                <Block>
-                    <Icon><FaAngleDown /></Icon>
+                <Block onClick={() => setMenu(!menu)}>
+                    <Icon>{menu ? <FaAngleDown /> : <FaAngleUp />}</Icon>
                     <Image src={avatar}></Image>
                 </Block>
             </Nav>
+            {menu ? <Menu>Logout</Menu> : <></>} 
         </Container>
     ) : <></>;
 }
@@ -66,4 +68,21 @@ const Image = styled.img`
     width: 53px;
     height: 53px;
     border-radius: 27px;
+`;
+
+const Menu = styled.div`
+    top: 72px;
+    right: 0;
+    width: 150px;
+    height: 47px;
+    font-weight: 700;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    font-family: 'Lato';
+    color: #FFFFFF;
+    background: #171717;
+    border-radius: 0px 0px 0px 20px;
 `;

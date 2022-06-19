@@ -6,7 +6,6 @@ import Header from './Header.js';
 import SearchBar from './SearchBar';
 import SignIn from './SignIn.js';
 import SignUp from './SignUp.js';
-import TimeLine from './TimeLine.js';
 import StateContext from '../contexts/StateContext.js';
 import Timeline from '../pages/Timeline.js';
 
@@ -18,11 +17,10 @@ export default function App() {
             <BrowserRouter>
                 <Header />
                 <Routes>
-                    <Route path="/" element={<Timeline />} />
+                    <Route path="/" element={<SignIn />} />
                     <Route path="/likes" element={<Likes />} />
-                    <Route path="/sign-in" element={<SignIn />} />
                     <Route path="/sign-up" element={<SignUp />} />
-                    <Route path="/timeline" element={<TimeLine />} /> 
+                    <Route path="/timeline" element={<Timeline />} /> 
                 </Routes>
             </BrowserRouter>
         </StateContext.Provider>
