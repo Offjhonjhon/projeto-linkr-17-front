@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState } from 'react';
 
 import Likes from "./Likes.js";
@@ -18,10 +18,11 @@ export default function App() {
                 <Header />
                 <SearchBar />
                 <Routes>
-                    <Route path="/" element={<Timeline />} />
+                    <Route path="/" element={<Navigate replace to="sign-in" />} />
                     <Route path="/likes" element={<Likes />} />
                     <Route path="/sign-in" element={<SignIn />} />
                     <Route path="/sign-up" element={<SignUp />} />
+                    <Route path="/timeline" element={<Timeline />} />
                 </Routes>
             </BrowserRouter>
         </StateContext.Provider>
