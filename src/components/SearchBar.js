@@ -30,7 +30,7 @@ export default function SearchBar(){
 
     return visible ? (
         <SearchWindow>
-            <SearchForm>
+            <SearchForm onSubmit={(e) => e.preventDefault()}>
                 <DebounceInput value={search.name} minLength={3} debounceTimeout={300} type="text" placeholder="Search for people" onChange={(e) => {
                     setSearch({name: e.target.value})
                     }} />
