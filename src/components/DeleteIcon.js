@@ -3,24 +3,29 @@ import Modal from "react-modal";
 import { useState } from "react";
 import styled from "styled-components";
 import { CgTrashEmpty } from "react-icons/cg";
+import { ThreeDots } from "react-loader-spinner";
 
 Modal.setAppElement(".root");
 
 function DeleteIcon() {
     const [isOpen, setIsOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     function toggleModal() {
         setIsOpen(!isOpen);
     }
 
     async function deletePost() {
+        setLoading(true);
         try {
             await axios.delete("http://localhost:4000/post-details/delete/2");
+            setLoading(false);
             toggleModal();
         } catch (e) {
             console.log(e);
             toggleModal();
             alert("Não foi possível excluir o post!");
+            setLoading(false);
         }
     }
 
@@ -42,8 +47,15 @@ function DeleteIcon() {
                     Are you sure you want to delete this post?
                 </div>
                 <div className="buttons">
-                    <button className="goback" onClick={toggleModal} >No, go back</button>
-                    <button className="deleteit" onClick={deletePost}>Yes, delete it</button>                    
+                    <button className="goback" onClick={toggleModal} disabled={loading}>No, go back</button>
+                    {loading ? 
+                    <DivLoading>
+                        <ThreeDots color="#FFFFFF" width={50} />
+                    </DivLoading>
+                    :
+                    <button className="deleteit" onClick={deletePost}>Yes, delete it</button>
+                    }
+                    
                 </div>
             </Modal>
         </Container>    
@@ -130,4 +142,16 @@ const OverlayStyle = styled.div`
   bottom: 0;
   z-index: 1;
   background: rgba(255, 255, 255, 0.9);;
+`;
+
+const DivLoading = styled.div`
+    border: none;
+    border-radius: 5px;
+    width: 134px;
+    height: 37px;
+    background-color: #1877F2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
 `;
