@@ -1,34 +1,15 @@
 import axios from "axios";
+import { useState, useRef } from "react";
+import EditIcon from "./EditIcon.js";
 import styled from "styled-components";
-import { useRef, useState, useEffect  } from "react";
-import { TiPencil } from "react-icons/ti";
-import { CgTrashEmpty } from "react-icons/cg";
- 
-function EditPost() {
+import DeleteIcon from "./DeleteIcon.js";
+//import Likes from "./Likes.js";
+
+
+function PostDetails() {
     const [active, setActive] = useState(false);
     const [enableTextArea, setEnableTextArea] = useState(false);
     const textareaRef = useRef("");
-    
-    function getTextArea() {
-        setActive(!active);
-    }
-
-    useEffect(() => {
-        document.addEventListener('keydown', detectKeyDown, true);
-    }, [])
-
-    const detectKeyDown = (e) => {
-        if (e.key === "Escape") {
-            setActive(false);
-        }
-    }
-
-    useEffect(() => {
-        if (active) {
-          textareaRef.current.focus();
-          console.log(textareaRef.current.value);
-        }
-    }, [active]);
 
     const handleUserKeyPress = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
@@ -37,30 +18,32 @@ function EditPost() {
         }
     };
 
-    function sendUpdate() {
+    async function sendUpdate() {
         setEnableTextArea(true);
 
-        const promise = axios.post("http://localhost:4000/edit-post", {
+        try {
+            await axios.post("http://localhost:4000/post/edit-post", {
             publicationId: 1,
             description: textareaRef.current.value
-        });
-        promise.then(() => {
-            console.log(textareaRef.current.value)
+            });
+            console.log(textareaRef.current.value);
             setActive(false);
-        });
-        promise.catch(() => {
+        } catch (e) {
             alert("Não foi possível salvar as alterações!");
             setEnableTextArea(false);
-        })
+        }
     }
 
     return (
         <Container>
             <Icons>
-                <TiPencil onClick={() => getTextArea()}/>
-                <CgTrashEmpty/>
+                <EditIcon active={active} 
+                      setActive={setActive}
+                      enableTextArea={enableTextArea}
+                      setEnableTextArea={setEnableTextArea}
+                      textareaRef={textareaRef}/>            
+                <DeleteIcon />              
             </Icons>
-
             {active ? 
                     <TextArea active={active} 
                               readOnly={enableTextArea}
@@ -71,12 +54,11 @@ function EditPost() {
                     </TextArea> 
             : 
             <p>my description</p>}
-            
-        </Container>
+        </Container> 
     )
 }
 
-export default EditPost;
+export default PostDetails;
 
 const Container = styled.div`
     svg {
@@ -93,6 +75,9 @@ const Container = styled.div`
     }
 
     background-color: #171717;
+    margin-top: 200px;
+    width: 300px;
+    height: 200px;
 `;
 
 const TextArea = styled.textarea`
@@ -104,5 +89,11 @@ const TextArea = styled.textarea`
 `;
 
 const Icons = styled.div`
+    width: 50px;
+    height: 16px;
     display: flex;
+    justify-content: space-evenly;
+    /* position: fixed;
+    top: 22px;
+    right: 23px; */
 `;
