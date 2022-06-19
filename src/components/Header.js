@@ -1,14 +1,21 @@
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import StateContext from '../contexts/StateContext.js';
 
 export default function Header() {
     const getData = localStorage.getItem("dados");
-    const { avatar } = JSON.parse(getData);
+    const { avatar } = getData ? JSON.parse(getData) : '';
     const { visible } = useContext(StateContext);
     const [menu, setMenu] = useState(false);
+    const navigate = useNavigate();
+
+    function logout() {
+        localStorage.removeItem('dados');
+        navigate('/');
+    }
 
     return visible ? (
         <Container>
@@ -19,7 +26,9 @@ export default function Header() {
                     <Image src={avatar}></Image>
                 </Block>
             </Nav>
-            {menu ? <Menu>Logout</Menu> : <></>} 
+            {menu ? 
+                <Menu onClick={logout}>Logout</Menu> 
+            : <></>} 
         </Container>
     ) : <></>;
 }
@@ -68,6 +77,10 @@ const Image = styled.img`
     width: 53px;
     height: 53px;
     border-radius: 27px;
+
+    :hover {
+        cursor: pointer;
+    }
 `;
 
 const Menu = styled.div`
@@ -85,4 +98,8 @@ const Menu = styled.div`
     color: #FFFFFF;
     background: #171717;
     border-radius: 0px 0px 0px 20px;
+
+    :hover {
+        cursor: pointer;
+    }
 `;
