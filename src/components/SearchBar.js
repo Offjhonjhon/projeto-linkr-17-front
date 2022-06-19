@@ -1,27 +1,40 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { DebounceInput } from 'react-debounce-input'
 import { useNavigate } from "react-router-dom"
+import { TailSpin } from "react-loader-spinner"
+import StateContext from '../contexts/StateContext.js'
 import styled from "styled-components"
 
 export default function SearchBar(){
     const navigate = useNavigate()
+    const { visible } = useContext(StateContext)
     const [search, setSearch] = useState({name: ""})
     const [users, setUsers] = useState([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() =>{
+        setLoading(true)
         if(search.name.length >=3){
+            setUsers([])
             axios
             .post("http://localhost:4000/search",search)
             .then(response => {
                 setUsers(response.data)
+                if(response.data.length === 0){
+                    setLoading(false)
+                }
             })
         }
+        else{
+            setUsers([])
+        }
     },[search])
-    return(
+
+    return visible ? (
         <SearchWindow>
-            <SearchForm>
-                <DebounceInput value={search.name} minLength={3} debounceTimeout={300} type="text" placeholder="Search for people" onChange={(e) => {
+            <SearchForm onSubmit={(e) => e.preventDefault()}>
+                <DebounceInput minLength={3} debounceTimeout={300} type="text" placeholder="Search for people" onChange={(e) => {
                     setSearch({name: e.target.value})
                     }} />
             </SearchForm>
@@ -30,24 +43,26 @@ export default function SearchBar(){
                 <UsersProfile>
                     {users.length > 0 ?
                         users.map((user,index) => {
-                            return(
+                            return (
                                 <SearchProfile onClick={() => {
                                     setSearch({name: ""})
                                     DebounceInput.value = ""
                                     navigate(`/user/${user.id}`)
                                     }} key={index}>
                                     <img src={user.avatar} alt="avatar"/>
-                                    <p>{user.name}</p>
+                                    <p>{user.name.length > 20 ? user.name.slice(0, (user.name.length - 20)*-1) + "...": user.name}</p>
+                                    {() => setLoading(false)}
                                 </SearchProfile>
                             )
                         })
-                        : <NotFound>NOT FOUND 404 ;-;</NotFound>
+                        : loading ? <Loader><TailSpin color="black" /></Loader>
+                        : <NotFound> NOT FOUND 404 ;-;</NotFound>
                     }
                 </UsersProfile>
                 : null
             }
         </SearchWindow>
-    )
+    ): <></>
 }
 
 
@@ -60,8 +75,8 @@ const SearchWindow = styled.div`
 `
 
 const SearchForm = styled.form`
-    width: 50vw;
-    height: 5vh;
+    width: 40vw;
+    height: 35px;
     margin-bottom: -10px;
 
     input{
@@ -104,4 +119,10 @@ const UsersProfile = styled.div`
 
 const NotFound = styled.p`
     text-align: center;
+`
+
+const Loader = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
