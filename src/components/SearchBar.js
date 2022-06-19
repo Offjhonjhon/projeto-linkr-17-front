@@ -50,7 +50,7 @@ export default function SearchBar(){
                                     navigate(`/user/${user.id}`)
                                     }} key={index}>
                                     <img src={user.avatar} alt="avatar"/>
-                                    <p>{user.name}</p>
+                                    <p>{user.name.length > 20 ? user.name.slice(0, (user.name.length - 20)*-1) + "...": user.name}</p>
                                     {() => setLoading(false)}
                                 </SearchProfile>
                             )
