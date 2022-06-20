@@ -85,6 +85,9 @@ const SearchForm = styled.form`
     width: 40vw;
     height: 35px;
     margin-bottom: -11px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     @media (max-width: 700px) {
         width: 95vw;
@@ -99,6 +102,10 @@ const SearchForm = styled.form`
         background-color: #FFFFFF;
         font-family: Lato;
         font-size: 19px;
+        background: url("https://static.thenounproject.com/png/101791-200.png") white no-repeat right;;
+        background-size: 25px;
+        background-position: 98%;
+        padding-left: 10px;
     }
 `
 
