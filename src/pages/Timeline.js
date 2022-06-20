@@ -31,11 +31,6 @@ function Timeline() {
 
     const URL_BACK = "http://localhost:4000";
 
-    const user = {
-        name: "Pieddra Enza",
-        avatar: avatar
-    };
-
     const [posts, setPosts] = useState("Loading");
 
     const [refresh, setRefresh] = useState([]);

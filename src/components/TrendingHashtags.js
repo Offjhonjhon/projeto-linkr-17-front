@@ -12,13 +12,14 @@ export default function TrendingHashtags() {
             try {
                 const { data } = await axios.get(`${URL}hashtag/trending-hashtags`);
                 setHashtags(data.map(hashtag => hashtag.tag));
+                console.log(data)
 
             } catch {
                 console.log("error")
             }
         }
         getTrendingHashtags();
-    }, []);
+    }, [URL]);
 
 
     return (
