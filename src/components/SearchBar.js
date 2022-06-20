@@ -72,7 +72,8 @@ const SearchWindow = styled.div`
     left: 50%;
     transform: translateX(-50%);
     border-radius: 8px;
-
+    z-index: 1;
+    
     @media (max-width: 700px) {
         position: absolute;
         top: 80px;
