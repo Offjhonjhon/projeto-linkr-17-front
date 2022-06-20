@@ -110,7 +110,7 @@ function Timeline() {
 
     const [active, setActive] = useState(false);
     const [enableTextArea, setEnableTextArea] = useState(false);
-    const textareaRef = useRef("lili");
+    const textareaRef = useRef("");
     const [publicationId, setPublicationId] = useState("");
 
     const handleUserKeyPress = (e) => {
@@ -175,7 +175,7 @@ function Timeline() {
                                     <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
                                         <img src={post.avatar} alt={post.name} />
                                     </div>
-                                    <Likes postId={post.id} token={token}/>                                    
+                                    <Likes postId={post.postId} token={token}/>                                    
                                 </div>
                                 <div className="post-area">
                                     <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
