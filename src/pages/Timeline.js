@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import StateContext from "../contexts/StateContext.js";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Hashtag from "../components/Hashtag";
 
 
 import TrendingHashtags from '../components/TrendingHashtags';
+
 
 function Timeline() {
     const data = localStorage.getItem("dados");
@@ -13,6 +15,7 @@ function Timeline() {
     const getData = localStorage.getItem("dados");
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { setVisible } = useContext(StateContext);
+    const navigate = useNavigate()
 
     setVisible(true)
 
@@ -115,11 +118,11 @@ function Timeline() {
                     posts === "Loading" ? <p className="message">Loading...</p> : posts === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
                         return (
                             <Post key={index}>
-                                <div className="profile-picture">
+                                <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
                                     <img src={post.avatar} alt={post.name} />
                                 </div>
                                 <div className="post-area">
-                                    <p className="user-name">{post.name}</p>
+                                    <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
                                     <p className="text"><Hashtag>{post.text}</Hashtag></p>
                                     <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
                                         <div className="link-left">

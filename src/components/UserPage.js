@@ -24,9 +24,9 @@ export default function UserPage(){
 
     return( <TimeLinePage>
         <Main>
-            <div className="timeline">timeline</div>
+            <div className="timeline"> {posts === "Loading" ? null : posts.status !== "Empty" ? posts[0].name + "'s posts" : posts.name + "'s posts"}</div>
             {
-                posts === "Loading" ? <p className="message">Loading...</p> : posts === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
+                posts === "Loading" ? <p className="message">Loading...</p> : posts.status === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
                     return (
                         <Post key={index}>
                             <div className="profile-picture">
