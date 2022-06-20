@@ -115,8 +115,14 @@ const SearchProfile = styled.div`
     margin-bottom: 10px;
     margin-left: 17px;
     font-size: 19px;
-    width: 100%;
+    width: 96%;
     height: auto;
+
+    :hover {
+        cursor: pointer;
+        background-color: white;
+        border-radius: 8px;
+    }
     
     img{
         width: 39px;
