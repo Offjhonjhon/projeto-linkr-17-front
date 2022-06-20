@@ -26,6 +26,7 @@ export default function TrendingHashtags() {
 }
 
 const TrendingContainer = styled.div`
+
     margin: 164px 0 0 25px;
     left: 1100px;
     top: 315px;
