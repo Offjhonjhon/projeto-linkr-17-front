@@ -185,8 +185,4 @@ const Tooltip = styled.div`
         content: '';
         transform: rotate(45deg);
     }
-
-    @media (max-width: 611px) {
-        width: 120px;
-    }
 `;
