@@ -1,6 +1,5 @@
 import PageContainer from '../components/PageContainer';
 import TrendingHashtags from '../components/TrendingHashtags';
-import styled from 'styled-components';
 
 function Timeline() {
     const text = 'Teste #react #react-native #sql #materiais'
@@ -24,10 +23,5 @@ function Timeline() {
 
 export default Timeline;
 
-const TesteContainer = styled.div`
-    background-color: #333333;
-    width: 300px;
-    height: 300px;
-`
 
 
