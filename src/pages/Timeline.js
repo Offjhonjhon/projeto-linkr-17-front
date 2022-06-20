@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import StateContext from "../contexts/StateContext.js";
 import styled from "styled-components";
 import axios from "axios";
 import Hashtag from "../components/Hashtag";
@@ -9,7 +10,9 @@ import TrendingHashtags from '../components/TrendingHashtags';
 function Timeline() {
     const data = localStorage.getItem("dados");
     const token = JSON.parse(data).token;
+    const { setVisible } = useContext(StateContext);
 
+    setVisible(true)
 
     const getTags = (text) => {
         const tags = [];
