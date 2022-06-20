@@ -10,6 +10,7 @@ import StateContext from '../contexts/StateContext.js';
 import Timeline from '../pages/Timeline.js';
 import HashtagPosts from '../pages/HashtagPosts.js';
 import Likes from './Likes.js';
+import UserPage from './UserPage.js';
 
 
 
@@ -30,6 +31,7 @@ export default function App() {
                     <Route path="/post-details" element={<PostDetails />} />
                     <Route path="/sign-up" element={<SignUp />} />
                     <Route path="/timeline" element={<Timeline />} />
+                    <Route path="/user/:id" element={<UserPage />} />
                 </Routes>
             </BrowserRouter>
         </StateContext.Provider>
