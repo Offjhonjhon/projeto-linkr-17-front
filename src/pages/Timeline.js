@@ -10,7 +10,6 @@ function Timeline() {
     const data = localStorage.getItem("dados");
     const token = JSON.parse(data).token;
 
-
     const getTags = (text) => {
         const tags = [];
         text.split(" ").forEach(tag => {
@@ -20,7 +19,6 @@ function Timeline() {
         })
         return tags;
     }
-
 
     const URL_BACK = "http://localhost:4000";
 
@@ -65,7 +63,7 @@ function Timeline() {
             publicationCode: publicationCode
         }
 
-        console.log(publication);
+        const tags = getTags(text);
 
         const promisse = axios.post(`${URL_BACK}/publish`, publication, { headers: { Authorization: `Bearer ${token}` } });
 
@@ -80,6 +78,15 @@ function Timeline() {
             setLoading(false);
             alert("Houve um erro ao publicar seu link");
         });
+
+        tags.forEach(tag => {
+            console.log(tag);
+            console.log(publicationCode);
+            axios.post(`${URL_BACK}/hashtag/tag`, {
+                publicationCode: publicationCode,
+                tag: tag
+            });
+        })
     }
 
 
