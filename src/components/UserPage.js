@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Hashtag from "../components/Hashtag";
-import TrendingHashtags from '../components/TrendingHashtags';
+import Hashtag from "./Hashtag";
+import TrendingHashtags from './TrendingHashtags';
 import Likes from "./Likes";
 
 
