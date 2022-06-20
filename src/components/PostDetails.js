@@ -10,6 +10,14 @@ function PostDetails() {
     const [active, setActive] = useState(false);
     const [enableTextArea, setEnableTextArea] = useState(false);
     const textareaRef = useRef("");
+    const data = localStorage.getItem("dados");
+    const userData = JSON.parse(data);
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${userData.token}`
+        }
+    }
 
     const handleUserKeyPress = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
@@ -23,9 +31,10 @@ function PostDetails() {
 
         try {
             await axios.post("http://localhost:4000/post-details/edit", {
-                publicationId: 1,
+                publicationId: 7,
                 description: textareaRef.current.value
-            });
+            }, config);
+
             console.log(textareaRef.current.value);
             setActive(false);
         } catch (e) {
@@ -42,7 +51,7 @@ function PostDetails() {
                       enableTextArea={enableTextArea}
                       setEnableTextArea={setEnableTextArea}
                       textareaRef={textareaRef}/>            
-                <DeleteIcon />              
+                <DeleteIcon config={config}/>              
             </Icons>
             {active ? 
                     <TextArea active={active} 
