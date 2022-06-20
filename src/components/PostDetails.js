@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import EditIcon from "./EditIcon.js";
 import styled from "styled-components";
 import DeleteIcon from "./DeleteIcon.js";
-//import Likes from "./Likes.js";
+import Likes from "./Likes.js";
 
 
 function PostDetails() {
@@ -53,6 +53,7 @@ function PostDetails() {
                       textareaRef={textareaRef}/>            
                 <DeleteIcon config={config}/>              
             </Icons>
+            <Likes />
             {active ? 
                     <TextArea active={active} 
                               readOnly={enableTextArea}
