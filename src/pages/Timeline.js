@@ -94,7 +94,7 @@ function Timeline() {
                 <div className="timeline">timeline</div>
                 <div className="publish">
                     <div className="profile-picture">
-                        <img src={avatar} alt="user-profile" />
+                        <ProfileImage src={avatar} alt="user-profile" />
                     </div>
                     <form className="publish-form" onSubmit={publish}>
                         <p>What are you going to share today?</p>
@@ -206,6 +206,11 @@ const Main = styled.div`
     .profile-picture {
         height: 100px;
         width: 68px;
+
+        @media (max-width: 700px) {
+            width: 0;
+            height: 0;
+        }
     }
 
     .profile-picture > img {
@@ -246,6 +251,7 @@ const Main = styled.div`
         margin-top: 15px;
         font-weight: 300;
         font-size: 15px;
+
     }
 
     .publish-form > .text {
@@ -278,6 +284,12 @@ const Main = styled.div`
         margin-top: 20px;
     }
 `;
+
+const ProfileImage = styled.img`
+     @media (max-width: 700px) {
+        display: none;
+    }
+`
 
 const Post = styled.div`
     min-height: 209px;
