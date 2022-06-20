@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 import StateContext from "../contexts/StateContext.js";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Hashtag from "../components/Hashtag";
-
+import Likes from "../components/Likes.js";
+import DeleteIcon from "../components/DeleteIcon.js";
 
 import TrendingHashtags from '../components/TrendingHashtags';
-
+import EditIcon from "../components/EditIcon.js";
 
 function Timeline() {
     const data = localStorage.getItem("dados");
@@ -30,6 +31,12 @@ function Timeline() {
     }
 
     const URL_BACK = "http://localhost:4000";
+    
+    const config = {
+         headers: { 
+             Authorization: `Bearer ${token}`
+        } 
+    }
 
     const [posts, setPosts] = useState("Loading");
 
@@ -101,7 +108,38 @@ function Timeline() {
         })
     }
 
+    const [active, setActive] = useState(false);
+    const [enableTextArea, setEnableTextArea] = useState(false);
+    const textareaRef = useRef("lili");
+    const [publicationId, setPublicationId] = useState("");
 
+    const handleUserKeyPress = (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendUpdate();
+        }
+    };
+
+    async function sendUpdate() {
+        setEnableTextArea(true);
+
+        try {
+            await axios.post("http://localhost:4000/post/edit", {
+                publicationId,
+                description: textareaRef.current.value
+            }, config);
+
+            console.log(textareaRef.current.value);
+            setActive(false);
+            refreshTimeline();
+        } catch (e) {
+            alert("Não foi possível salvar as alterações!");
+            setEnableTextArea(false);
+        }
+    }
+
+
+    console.log(posts)
     return (
         <TimeLinePage>
             <Main>
@@ -119,14 +157,39 @@ function Timeline() {
                 </div>
                 {
                     posts === "Loading" ? <p className="message">Loading...</p> : posts === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
-                        return (
+                        return (                            
                             <Post key={index}>
-                                <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
-                                    <img src={post.avatar} alt={post.name} />
+                                {post.isFromUser ? 
+                                <Icons>
+                                    <EditIcon active={active}
+                                           setActive={setActive}
+                                           enableTextArea={enableTextArea}
+                                           setEnableTextArea={setEnableTextArea}
+                                           textareaRef={textareaRef}
+                                           setPublicationId={setPublicationId}
+                                           postId={post.postId} />
+                                    <DeleteIcon config={config} postId={post.postId} refreshTimeline={refreshTimeline}/>
+                                </Icons>
+                                : ""}                                
+                                <div className="user-info">
+                                    <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
+                                        <img src={post.avatar} alt={post.name} />
+                                    </div>
+                                    <Likes postId={post.id} token={token}/>                                    
                                 </div>
                                 <div className="post-area">
                                     <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
-                                    <p className="text"><Hashtag>{post.text}</Hashtag></p>
+                                    {active && post.isFromUser ? 
+                                            <TextArea active={active} 
+                                                      readOnly={enableTextArea}
+                                                      type="text" 
+                                                      ref={textareaRef}
+                                                      onKeyPress={handleUserKeyPress}
+                                                      style={{color: '#4C4C4C'}}
+                                                      defaultValue={post.text}>                                 
+                                            </TextArea> 
+                                            : 
+                                            <p className="text"><Hashtag>{post.text}</Hashtag></p>}
                                     <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
                                         <div className="link-left">
                                             <div className="title">{post.title}</div>
@@ -323,11 +386,18 @@ const Post = styled.div`
     border-radius: var(--border-radius);
     background-color: #171717;
     box-shadow: 0px 4px 4px 0px #00000040;
+    position: relative;
 
     display: flex;
 
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
     .profile-picture {
-        height: 100px;
+        height: 80px;
         width: 68px;
     }
 
@@ -428,4 +498,23 @@ const Post = styled.div`
         border-bottom-right-radius: 11px;
         object-fit: cover;
     }
+`;
+
+const Icons = styled.div`
+    width: 50px;
+    height: 16px;
+    display: flex;
+    justify-content: space-evenly;
+    position: absolute;
+    top: 22px;
+    right: 23px;
+`;
+
+const TextArea = styled.textarea`
+    width: calc(var(--width) - 108px);
+    height: 44px;
+    border: none;
+    border-radius: 7px;
+    margin-top: 11px;
+    background-color: ${(props) => (props.active ? '#FFFFFF' : '#171717')}
 `;
