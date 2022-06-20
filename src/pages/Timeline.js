@@ -50,21 +50,25 @@ function Timeline() {
     const [url, setUrl] = useState("");
     const [text, setText] = useState("");
     const [loading, setLoading] = useState(false);
+    const [publicationCode, setPublicationCode] = useState("");
 
     function publish(event) {
         event.preventDefault();
         setLoading(true);
+        setPublicationCode(Date.now().toString());
+        console.log(publicationCode);
 
         const promisse = axios.post(URL_BACK + "/publish", {
             url: url,
             text: text,
-            publicationCode: Date.now()
+            publicationCode: publicationCode
         })
 
         promisse.then(res => {
             setLoading(false);
             setUrl("");
             setText("");
+            setPublicationCode("");
             refreshTimeline();
         });
 
