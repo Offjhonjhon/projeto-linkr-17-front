@@ -8,7 +8,7 @@ import axios from "axios";
 
 export default function TrendingHashtags() {
     const [hashtags, setHashtags] = useState([]);
-    const URL = `http://localhost:5600/`
+    const URL = `http://localhost:4000/`
 
     useEffect(() => {
         async function getTrendingHashtags() {
@@ -46,9 +46,7 @@ export default function TrendingHashtags() {
 }
 
 const TrendingContainer = styled.div`
-    position: absolute;
-    left: 900px;
-    top: 315px;
+    margin: 164px 0 0 25px;
     width: 301px;
     height: 406px;
     background: #171717;
