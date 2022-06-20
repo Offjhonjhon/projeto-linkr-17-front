@@ -21,8 +21,8 @@ function PostDetails() {
 
     const handleUserKeyPress = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          sendUpdate(); 
+            e.preventDefault();
+            sendUpdate();
         }
     };
 
@@ -46,24 +46,24 @@ function PostDetails() {
     return (
         <Container>
             <Icons>
-                <EditIcon active={active} 
-                      setActive={setActive}
-                      enableTextArea={enableTextArea}
-                      setEnableTextArea={setEnableTextArea}
-                      textareaRef={textareaRef}/>            
-                <DeleteIcon config={config}/>              
+                <EditIcon active={active}
+                    setActive={setActive}
+                    enableTextArea={enableTextArea}
+                    setEnableTextArea={setEnableTextArea}
+                    textareaRef={textareaRef} />
+                <DeleteIcon config={config} />
             </Icons>
-            {active ? 
-                    <TextArea active={active} 
-                              readOnly={enableTextArea}
-                              type="text" 
-                              ref={textareaRef}
-                              onKeyPress={handleUserKeyPress}
-                              style={{color: '#4C4C4C'}}>
-                    </TextArea> 
-            : 
-            <p>my description</p>}
-        </Container> 
+            {active ?
+                <TextArea active={active}
+                    readOnly={enableTextArea}
+                    type="text"
+                    ref={textareaRef}
+                    onKeyPress={handleUserKeyPress}
+                    style={{ color: '#4C4C4C' }}>
+                </TextArea>
+                :
+                <p>my description</p>}
+        </Container>
     )
 }
 

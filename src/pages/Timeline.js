@@ -5,8 +5,20 @@ import axios from "axios";
 
 import TrendingHashtags from '../components/TrendingHashtags';
 
-
 function Timeline() {
+
+    const textTags = 'Teste #react #react-native #sql #materiais'
+
+    const getTags = (text) => {
+        const tags = [];
+        text.split(" ").forEach(tag => {
+            if (tag.startsWith("#")) {
+                tags.push(tag.replace("#", ""));
+            }
+        })
+        return tags;
+    }
+
 
     const URL_BACK = "http://localhost:4000";
 
@@ -27,7 +39,7 @@ function Timeline() {
         promise.then(answer => {
             setPosts(answer.data);
         });
-        
+
         promise.catch(erro => {
             alert("An error occured while trying to fetch the posts, please refresh the page");
         });
@@ -38,20 +50,25 @@ function Timeline() {
     const [url, setUrl] = useState("");
     const [text, setText] = useState("");
     const [loading, setLoading] = useState(false);
+    const [publicationCode, setPublicationCode] = useState("");
 
     function publish(event) {
         event.preventDefault();
         setLoading(true);
+        setPublicationCode(Date.now().toString());
+        console.log(publicationCode);
 
         const promisse = axios.post(URL_BACK + "/publish", {
             url: url,
-            text: text
+            text: text,
+            publicationCode: publicationCode
         })
 
         promisse.then(res => {
             setLoading(false);
             setUrl("");
             setText("");
+            setPublicationCode("");
             refreshTimeline();
         });
 
@@ -60,6 +77,7 @@ function Timeline() {
             alert("Houve um erro ao publicar seu link");
         });
     }
+
 
     return (
         <TimeLinePage>
