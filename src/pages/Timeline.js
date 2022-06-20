@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-export default function Home({URL_BACK}) {
+import TrendingHashtags from '../components/TrendingHashtags';
+
+
+function Timeline() {
+
+    const URL_BACK = "http://localhost:4000";
 
     const user = {
         name: "Pieddra Enza",
@@ -10,9 +15,9 @@ export default function Home({URL_BACK}) {
     };
 
     const [posts, setPosts] = useState("Loading");
-    
+
     const [refresh, setRefresh] = useState([]);
-    function refreshTimeline() {setRefresh([])}
+    function refreshTimeline() { setRefresh([]) }
 
 
     useEffect(() => {
@@ -56,8 +61,7 @@ export default function Home({URL_BACK}) {
     }
 
     return (
-        <>
-            <Header></Header>
+        <TimeLinePage>
             <Main>
                 <div className="timeline">timeline</div>
                 <div className="publish">
@@ -66,8 +70,8 @@ export default function Home({URL_BACK}) {
                     </div>
                     <form className="publish-form" onSubmit={publish}>
                         <p>What are you going to share today?</p>
-                        <input className="url" placeholder="http://..." type="url" value={url} onChange={e => setUrl(e.target.value)} required disabled={loading}/>
-                        <textarea className="text" placeholder="Awesome article about #javascript" type="text" value={text} onChange={e => setText(e.target.value)} disabled={loading}/>
+                        <input className="url" placeholder="http://..." type="url" value={url} onChange={e => setUrl(e.target.value)} required disabled={loading} />
+                        <textarea className="text" placeholder="Awesome article about #javascript" type="text" value={text} onChange={e => setText(e.target.value)} disabled={loading} />
                         <button type="submit" disabled={loading}>{loading ? "Publishing..." : "Publish"}</button>
                     </form>
                 </div>
@@ -93,23 +97,18 @@ export default function Home({URL_BACK}) {
                             </Post>
                         );
                     })
-                    
+
                 }
             </Main>
-        </>
+            <TrendingHashtags />
+        </TimeLinePage>
     );
 }
 
-const Header = styled.div`
-    height: 72px;
-    background-color: #151515;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-`;
+export default Timeline;
 
-const Main = styled.div`
+
+const TimeLinePage = styled.div`
 
     @media (min-width: 652px) {
 
@@ -136,14 +135,20 @@ const Main = styled.div`
 
         --width: 100vw;
         --border-radius: 0px;
-    }
 
+    }
 
     min-height: calc(100vh - 72px);
     background-color: #333333;
     margin-top: 72px;
     color: white;
     padding-bottom: 50px;
+
+    display: flex;
+    justify-content: center;
+`;
+
+const Main = styled.div`
 
     display: flex;
     flex-direction: column;

@@ -1,25 +1,8 @@
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-/* import React, { useState, useEffect } from "react"; */
-import React from "react";
-/* ---------------------------------------------------- */
+import App from './components/App.js';
+import "reset-css"
 
-import "./css/reset.css"
+import './css/style.css';
 
-import Home from './components/Home.js'
+ReactDOM.render(<App />, document.querySelector('.root'));
 
-
-function App() {
-
-    const URL_BACK = "http://localhost:4000";
-
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Home URL_BACK={URL_BACK} />} />
-            </Routes>
-        </BrowserRouter>
-    );
-}
-
-ReactDOM.render(<App />, document.querySelector(".root"));
