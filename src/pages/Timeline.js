@@ -17,7 +17,7 @@ function Timeline() {
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { setVisible } = useContext(StateContext);
     const navigate = useNavigate()
-    
+
     setVisible(true)
 
     const getTags = (text) => {
@@ -31,15 +31,12 @@ function Timeline() {
     }
 
     const URL_BACK = "http://localhost:4000";
-<<<<<<< HEAD
-=======
-    
+
     const config = {
-         headers: { 
-             Authorization: `Bearer ${token}`
-        } 
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     }
->>>>>>> 9af338a51553f6794af5bf94f20b47970cb9bb35
 
     const [posts, setPosts] = useState("Loading");
 
@@ -49,7 +46,7 @@ function Timeline() {
 
     useEffect(() => {
         function getTimeline() {
-            const promise = axios.get(URL_BACK + "/posts", { headers: { Authorization: `Bearer ${token}` }});
+            const promise = axios.get(URL_BACK + "/posts", { headers: { Authorization: `Bearer ${token}` } });
 
             promise.then(answer => {
                 setPosts(answer.data);
@@ -60,7 +57,7 @@ function Timeline() {
             });
         }
 
-        if(token) {
+        if (token) {
             getTimeline();
         } else {
             navigate("/sign-in");
@@ -160,39 +157,39 @@ function Timeline() {
                 </div>
                 {
                     posts === "Loading" ? <p className="message">Loading...</p> : posts === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
-                        return (                            
+                        return (
                             <Post key={index}>
-                                {post.isFromUser ? 
-                                <Icons>
-                                    <EditIcon active={active}
-                                           setActive={setActive}
-                                           enableTextArea={enableTextArea}
-                                           setEnableTextArea={setEnableTextArea}
-                                           textareaRef={textareaRef}
-                                           setPublicationId={setPublicationId}
-                                           postId={post.postId} />
-                                    <DeleteIcon config={config} postId={post.postId} refreshTimeline={refreshTimeline}/>
-                                </Icons>
-                                : ""}                                
+                                {post.isFromUser ?
+                                    <Icons>
+                                        <EditIcon active={active}
+                                            setActive={setActive}
+                                            enableTextArea={enableTextArea}
+                                            setEnableTextArea={setEnableTextArea}
+                                            textareaRef={textareaRef}
+                                            setPublicationId={setPublicationId}
+                                            postId={post.postId} />
+                                        <DeleteIcon config={config} postId={post.postId} refreshTimeline={refreshTimeline} />
+                                    </Icons>
+                                    : ""}
                                 <div className="user-info">
                                     <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
                                         <img src={post.avatar} alt={post.name} />
                                     </div>
-                                    <Likes postId={post.id} token={token}/>                                    
+                                    <Likes postId={post.id} token={token} />
                                 </div>
                                 <div className="post-area">
                                     <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
-                                    {active && post.isFromUser ? 
-                                            <TextArea active={active} 
-                                                      readOnly={enableTextArea}
-                                                      type="text" 
-                                                      ref={textareaRef}
-                                                      onKeyPress={handleUserKeyPress}
-                                                      style={{color: '#4C4C4C'}}
-                                                      defaultValue={post.text}>                                 
-                                            </TextArea> 
-                                            : 
-                                            <p className="text"><Hashtag>{post.text}</Hashtag></p>}
+                                    {active && post.isFromUser ?
+                                        <TextArea active={active}
+                                            readOnly={enableTextArea}
+                                            type="text"
+                                            ref={textareaRef}
+                                            onKeyPress={handleUserKeyPress}
+                                            style={{ color: '#4C4C4C' }}
+                                            defaultValue={post.text}>
+                                        </TextArea>
+                                        :
+                                        <p className="text"><Hashtag>{post.text}</Hashtag></p>}
                                     <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
                                         <div className="link-left">
                                             <div className="title">{post.title}</div>
