@@ -236,6 +236,10 @@ const Main = styled.div`
 
         display: flex;
         flex-direction: column;
+
+        @media (max-width: 700px) {
+            width: 100vw;
+        }
     }
 
     .publish-form * {
@@ -260,6 +264,9 @@ const Main = styled.div`
         font-weight: 300;
         font-size: 15px;
 
+        @media (max-width: 700px) {
+            width: 100%;
+        }
     }
 
     .publish-form > .text {
@@ -273,6 +280,10 @@ const Main = styled.div`
         margin-top: 5px;
         font-weight: 300;
         font-size: 15px;
+
+        @media (max-width: 700px) {
+            width: 100%;
+        }
     }
 
     .publish-form > button {
