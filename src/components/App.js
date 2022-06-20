@@ -20,7 +20,7 @@ export default function App() {
                 <SearchBar />
                 <Routes>
                     <Route path="/sign-in" element={<SignIn />} />
-                    <Route path="/" element={<Navigate replace to="sign-in" />} />
+                    <Route path="/" element={<Navigate replace to="timeline" />} />
                     <Route path="/hashtag/:hashtag" element={<HashtagPosts />} />
                     <Route path="/sign-up" element={<SignUp />} />
                     <Route path="/timeline" element={<Timeline />} />

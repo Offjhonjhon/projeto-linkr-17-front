@@ -12,7 +12,7 @@ import EditIcon from "../components/EditIcon.js";
 
 function Timeline() {
     const data = localStorage.getItem("dados");
-    const token = JSON.parse(data).token;
+    const token = data ? JSON.parse(data).token : "";
     const getData = localStorage.getItem("dados");
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { setVisible } = useContext(StateContext);
