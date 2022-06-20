@@ -17,7 +17,7 @@ function Timeline() {
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { setVisible } = useContext(StateContext);
     const navigate = useNavigate()
-
+    
     setVisible(true)
 
     const getTags = (text) => {
@@ -38,11 +38,6 @@ function Timeline() {
         } 
     }
 
-    const user = {
-        name: "Pieddra Enza",
-        avatar: avatar
-    };
-
     const [posts, setPosts] = useState("Loading");
 
     const [refresh, setRefresh] = useState([]);
@@ -50,15 +45,23 @@ function Timeline() {
 
 
     useEffect(() => {
-        const promise = axios.get(URL_BACK + "/posts", { headers: { Authorization: `Bearer ${token}` } });
+        function getTimeline() {
+            const promise = axios.get(URL_BACK + "/posts", { headers: { Authorization: `Bearer ${token}` }});
 
-        promise.then(answer => {
-            setPosts(answer.data);
-        });
+            promise.then(answer => {
+                setPosts(answer.data);
+            });
 
-        promise.catch(error => {
-            alert("An error occured while trying to fetch the posts, please refresh the page");
-        });
+            promise.catch(error => {
+                alert("An error occured while trying to fetch the posts, please refresh the page");
+            });
+        }
+
+        if(token) {
+            getTimeline();
+        } else {
+            navigate("/sign-in");
+        }
 
     }, [URL_BACK, refresh]);
 
