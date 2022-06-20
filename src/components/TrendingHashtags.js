@@ -1,15 +1,32 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-
-const trendingHashtags = ['react', 'javaScript', "node"]
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function TrendingHashtags() {
+    const [hashtags, setHashtags] = useState([]);
+    const URL = `http://localhost:4000/`
+
+    useEffect(() => {
+        async function getTrendingHashtags() {
+            try {
+                const { data } = await axios.get(`${URL}hashtag/trending-hashtags`);
+                setHashtags(data.map(hashtag => hashtag.tag));
+
+            } catch {
+                console.log("error")
+            }
+        }
+        getTrendingHashtags();
+    }, []);
+
+
     return (
         <TrendingContainer>
             <TrendingTitle>trending</TrendingTitle>
             <TrendingLine />
             <TrendingHashtagsContainer>
-                {trendingHashtags.map((hashtag, index) => {
+                {hashtags.map((hashtag, index) => {
                     return (
                         <TrendingHashtag
                             key={index}
@@ -27,8 +44,6 @@ export default function TrendingHashtags() {
 
 const TrendingContainer = styled.div`
     margin: 164px 0 0 25px;
-    left: 1100px;
-    top: 315px;
     width: 301px;
     height: 406px;
     background: #171717;
@@ -51,11 +66,11 @@ const TrendingTitle = styled.h1`
 const TrendingHashtagsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;    
     margin-top: 22px;
     font-family: 'Lato';
     font-size: 19px;
     margin-left: 16px;
+    height: 293px;
 `
 
 const TrendingHashtag = styled(Link)`
@@ -64,6 +79,8 @@ const TrendingHashtag = styled(Link)`
     margin-bottom: 10px;
     color: #ffffff;
     text-decoration: none;
+    letter-spacing: 0.05em;
+    margin-top: 1px;
 `
 
 const TrendingLine = styled.hr`
