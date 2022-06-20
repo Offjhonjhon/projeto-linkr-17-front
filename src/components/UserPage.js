@@ -14,7 +14,7 @@ export default function UserPage(){
     const token = JSON.parse(data).token;
 
     useEffect(() => {
-        const promise = axios.get("http://localhost:4000/user/" + id);
+        const promise = axios.get("https://projeto17-linkr-grupo2-vini.herokuapp.com/user/" + id);
 
         promise.then(answer => {
             setPosts(answer.data);
