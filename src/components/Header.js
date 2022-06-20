@@ -93,7 +93,7 @@ const Menu = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
+    position: fixed;
     font-family: 'Lato';
     color: #FFFFFF;
     background: #171717;
