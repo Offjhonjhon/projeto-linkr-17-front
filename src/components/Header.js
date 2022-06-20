@@ -20,7 +20,7 @@ export default function Header() {
     return visible ? (
         <Container>
             <Nav>
-                <Title>linkr</Title>
+                <Title onClick={() => navigate("/timeline")}>linkr</Title>
                 <Block onClick={() => setMenu(!menu)}>
                     <Icon>{menu ? <FaAngleDown /> : <FaAngleUp />}</Icon>
                     <Image src={avatar}></Image>
