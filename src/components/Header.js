@@ -20,7 +20,7 @@ export default function Header() {
     return visible ? (
         <Container>
             <Nav>
-                <Title>linkr</Title>
+                <Title onClick={() => navigate("/timeline")}>linkr</Title>
                 <Block onClick={() => setMenu(!menu)}>
                     <Icon>{menu ? <FaAngleDown /> : <FaAngleUp />}</Icon>
                     <Image src={avatar}></Image>
@@ -39,6 +39,7 @@ const Container = styled.div`
 `;
 
 const Nav = styled.div`
+    z-index: 1;
     top: 0;
     width: 100vw;
     height: 72px;
@@ -55,6 +56,10 @@ const Title = styled.h1`
     line-height: 54px;
     color: #FFFFFF;
     font-family: 'Passion One', cursive;
+    
+    :hover {
+        cursor: pointer;
+    }
 `;
 
 const Block = styled.div`
@@ -93,11 +98,12 @@ const Menu = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
+    position: fixed;
     font-family: 'Lato';
     color: #FFFFFF;
     background: #171717;
     border-radius: 0px 0px 0px 20px;
+    z-index: 1;
 
     :hover {
         cursor: pointer;

@@ -22,8 +22,8 @@ function PostDetails() {
 
     const handleUserKeyPress = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          sendUpdate(); 
+            e.preventDefault();
+            sendUpdate();
         }
     };
 
@@ -47,12 +47,12 @@ function PostDetails() {
     return (
         <Container>
             <Icons>
-                <EditIcon active={active} 
-                      setActive={setActive}
-                      enableTextArea={enableTextArea}
-                      setEnableTextArea={setEnableTextArea}
-                      textareaRef={textareaRef}/>            
-                <DeleteIcon config={config}/>              
+                <EditIcon active={active}
+                    setActive={setActive}
+                    enableTextArea={enableTextArea}
+                    setEnableTextArea={setEnableTextArea}
+                    textareaRef={textareaRef} />
+                <DeleteIcon config={config} />
             </Icons>
             <Likes />
             {active ? 
