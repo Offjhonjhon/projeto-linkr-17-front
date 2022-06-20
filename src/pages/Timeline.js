@@ -99,8 +99,6 @@ function Timeline() {
         });
 
         tags.forEach(tag => {
-            console.log(tag);
-            console.log(publicationCode);
             axios.post(`${URL_BACK}/hashtag/tag`, {
                 publicationCode: publicationCode,
                 tag: tag
@@ -175,7 +173,7 @@ function Timeline() {
                                     <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
                                         <img src={post.avatar} alt={post.name} />
                                     </div>
-                                    <Likes postId={post.id} token={token} />
+                                    <Likes postId={post.postId} token={token} />
                                 </div>
                                 <div className="post-area">
                                     <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
