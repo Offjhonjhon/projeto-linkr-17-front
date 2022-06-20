@@ -1,11 +1,11 @@
-import axios from "axios";
 import { useEffect  } from "react";
 import { TiPencil } from "react-icons/ti";
 import styled from "styled-components";
 
-function EditIcon({active, setActive, enableTextArea,setEnableTextArea, textareaRef}) {
+function EditIcon({active, setActive, textareaRef, setPublicationId, postId}) {
     function getTextArea() {
         setActive(!active);
+        setPublicationId(postId)
     }
 
     useEffect(() => {

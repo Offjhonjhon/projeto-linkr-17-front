@@ -4,15 +4,21 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import styled from "styled-components";
 import Tippy from '@tippyjs/react/headless';
 
-function Likes() {
+function Likes({ postId, token }) {
     const [icon, setIcon] = useState(false);
     const [totalLikes, settotalLikes] = useState("");
     const [usersAux, setUsersAux] = useState([]);
     let users = [];
 
+    const config = { 
+        headers: { 
+            Authorization: `Bearer ${token}` 
+        }
+    }
+
     async function getAllLikes() {
         try {
-            const {request} = await axios.post("http://localhost:4000/userLikes", { publicationId: 1 });
+            const {request} = await axios.post("http://localhost:4000/userLikes", { publicationId: postId }, config);
             const {response} = request;
             const object = JSON.parse(response);
 
@@ -42,7 +48,7 @@ function Likes() {
 
     async function likePost() {
         try {
-            const {request} = await axios.post("http://localhost:4000/likes", { publicationId: 1 });
+            const {request} = await axios.post("http://localhost:4000/likes", { publicationId: postId }, config);
             const {response} = request;
 
             console.log(response)
@@ -102,7 +108,7 @@ function Likes() {
     }
       
     return (
-        <Container style={{background: "#000"}}> 
+        <Container> 
             {getIcon()}
             <Tippy 
                 placement="bottom"
@@ -122,18 +128,17 @@ export default Likes;
 
 const Container = styled.div`
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
+    
     font-family: 'Lato';
     font-style: normal;
     font-weight: 400;
     font-size: 11px;
     line-height: 13px;
-    margin-bottom: 100px;
-    height: 100px;
-    padding: 10px;
-
+    margin-bottom: 50px;
+    margin-left: 20px;
+    height: 60px;  
 
     svg {
         width: 20px;
