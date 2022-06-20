@@ -9,9 +9,10 @@ import Likes from "./Likes.js";
 function PostDetails() {
     const [active, setActive] = useState(false);
     const [enableTextArea, setEnableTextArea] = useState(false);
-    const textareaRef = useRef("");
+    const textareaRef = useRef("lili");
     const data = localStorage.getItem("dados");
     const userData = JSON.parse(data);
+    const [text, setText] = useState("default value");
 
     const config = {
         headers: {
@@ -60,7 +61,8 @@ function PostDetails() {
                               type="text" 
                               ref={textareaRef}
                               onKeyPress={handleUserKeyPress}
-                              style={{color: '#4C4C4C'}}>
+                              style={{color: '#4C4C4C'}}
+                              defaultValue={text}>                                 
                     </TextArea> 
             : 
             <p>my description</p>}
