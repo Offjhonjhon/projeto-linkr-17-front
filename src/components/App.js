@@ -19,7 +19,7 @@ export default function App() {
         <StateContext.Provider value={{ visible, setVisible }}>
             <BrowserRouter>
                 <Header />
-                <SearchBar />
+                <SearchBar /> 
                 <Routes>
                     <Route path="/sign-in" element={<SignIn />} />
                     <Route path="/" element={<Navigate replace to="sign-in" />} />
@@ -27,7 +27,7 @@ export default function App() {
                     <Route path="/edit-post" element={<EditPost />} />
                     <Route path="/likes" element={<Likes />} />
                     <Route path="/sign-up" element={<SignUp />} />
-                    <Route path="/timeline" element={<Timeline />} />
+                    <Route path="/timeline" element={<Timeline />} /> 
                 </Routes>
             </BrowserRouter>
         </StateContext.Provider>
