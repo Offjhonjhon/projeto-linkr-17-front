@@ -72,12 +72,26 @@ const SearchWindow = styled.div`
     left: 50%;
     transform: translateX(-50%);
     border-radius: 8px;
+    z-index: 1;
+
+    @media (max-width: 700px) {
+        position: absolute;
+        top: 80px;
+        z-index: 0;
+    }
 `
 
 const SearchForm = styled.form`
     width: 40vw;
     height: 35px;
-    margin-bottom: -10px;
+    margin-bottom: -11px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media (max-width: 700px) {
+        width: 95vw;
+    }
 
     input{
         width: 100%;
@@ -88,6 +102,10 @@ const SearchForm = styled.form`
         background-color: #FFFFFF;
         font-family: Lato;
         font-size: 19px;
+        background: url("https://static.thenounproject.com/png/101791-200.png") white no-repeat right;;
+        background-size: 25px;
+        background-position: 98%;
+        padding-left: 10px;
     }
 `
 
@@ -97,8 +115,14 @@ const SearchProfile = styled.div`
     margin-bottom: 10px;
     margin-left: 17px;
     font-size: 19px;
-    width: 100%;
+    width: 96%;
     height: auto;
+
+    :hover {
+        cursor: pointer;
+        background-color: white;
+        border-radius: 8px;
+    }
     
     img{
         width: 39px;
@@ -115,6 +139,10 @@ const UsersProfile = styled.div`
     padding-bottom: 23px;
     height: auto;
     font-family: Lato;
+
+    @media (max-width: 700px) {
+        width: 95vw;
+    }
 `
 
 const NotFound = styled.p`

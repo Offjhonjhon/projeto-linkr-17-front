@@ -1,128 +1,49 @@
-import React, { useEffect, useState, useContext } from "react";
-import StateContext from "../contexts/StateContext.js";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Hashtag from "../components/Hashtag";
-
-
+import Hashtag from '../components/Hashtag';
 import TrendingHashtags from '../components/TrendingHashtags';
+import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
 
 
-function Timeline() {
-    const data = localStorage.getItem("dados");
-    const token = JSON.parse(data).token;
-    const getData = localStorage.getItem("dados");
-    const { avatar } = getData ? JSON.parse(getData) : '';
-    const { setVisible } = useContext(StateContext);
-    const navigate = useNavigate()
-
-    setVisible(true)
-
-    const getTags = (text) => {
-        const tags = [];
-        text.split(" ").forEach(tag => {
-            if (tag.startsWith("#")) {
-                tags.push(tag.replace("#", ""));
-            }
-        })
-        return tags;
-    }
-
-    const URL_BACK = "http://localhost:4000";
-
-    const user = {
-        name: "Pieddra Enza",
-        avatar: avatar
-    };
-
+function HashtagPosts() {
+    const URL = `http://localhost:4000/`
+    const title = useParams().hashtag;
     const [posts, setPosts] = useState("Loading");
 
     const [refresh, setRefresh] = useState([]);
     function refreshTimeline() { setRefresh([]) }
 
-
     useEffect(() => {
-        const promise = axios.get(URL_BACK + "/posts");
-
-        promise.then(answer => {
-            setPosts(answer.data);
-        });
-
-        promise.catch(error => {
-            alert("An error occured while trying to fetch the posts, please refresh the page");
-        });
-
-    }, [URL_BACK, refresh]);
-
-
-    const [url, setUrl] = useState("");
-    const [text, setText] = useState("");
-    const [loading, setLoading] = useState(false);
-
-
-    function publish(event) {
-        event.preventDefault();
-        setLoading(true);
-        const publicationCode = Date.now().toString();
-
-        const publication = {
-            url: url,
-            text: text,
-            publicationCode: publicationCode
+        async function getPosts() {
+            try {
+                const { data } = await axios.get(`${URL}hashtag/${title}`);
+                setPosts(data);
+                console.log(data)
+            }
+            catch {
+                alert("An error occured while trying to fetch the posts, please refresh the page");
+            }
         }
+        getPosts();
 
-        const tags = getTags(text);
+    }, [URL, refresh, title]);
 
-        const promisse = axios.post(`${URL_BACK}/publish`, publication, { headers: { Authorization: `Bearer ${token}` } });
-
-        promisse.then(res => {
-            setLoading(false);
-            setUrl("");
-            setText("");
-            refreshTimeline();
-        });
-
-        promisse.catch(error => {
-            setLoading(false);
-            alert("Houve um erro ao publicar seu link");
-        });
-
-        tags.forEach(tag => {
-            console.log(tag);
-            console.log(publicationCode);
-            axios.post(`${URL_BACK}/hashtag/tag`, {
-                publicationCode: publicationCode,
-                tag: tag
-            });
-        })
-    }
 
 
     return (
         <TimeLinePage>
             <Main>
-                <div className="timeline">timeline</div>
-                <div className="publish">
-                    <div className="profile-picture">
-                        <ProfileImage src={avatar} alt="user-profile" />
-                    </div>
-                    <form className="publish-form" onSubmit={publish}>
-                        <p>What are you going to share today?</p>
-                        <input className="url" placeholder="http://..." type="url" value={url} onChange={e => setUrl(e.target.value)} required disabled={loading} />
-                        <textarea className="text" placeholder="Awesome article about #javascript" type="text" value={text} onChange={e => setText(e.target.value)} disabled={loading} />
-                        <button type="submit" disabled={loading}>{loading ? "Publishing..." : "Publish"}</button>
-                    </form>
-                </div>
+                <div className="timeline"># {title}</div>
                 {
                     posts === "Loading" ? <p className="message">Loading...</p> : posts === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
                         return (
                             <Post key={index}>
-                                <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
+                                <div className="profile-picture">
                                     <img src={post.avatar} alt={post.name} />
                                 </div>
                                 <div className="post-area">
-                                    <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
+                                    <p className="user-name">{post.name}</p>
                                     <p className="text"><Hashtag>{post.text}</Hashtag></p>
                                     <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
                                         <div className="link-left">
@@ -144,7 +65,7 @@ function Timeline() {
     );
 }
 
-export default Timeline;
+export default HashtagPosts;
 
 
 const TimeLinePage = styled.div`
@@ -188,11 +109,10 @@ const TimeLinePage = styled.div`
 `;
 
 const Main = styled.div`
-
+    
     display: flex;
     flex-direction: column;
     align-items: center;
-    
 
     .timeline {
         width: var(--width);
@@ -217,11 +137,6 @@ const Main = styled.div`
     .profile-picture {
         height: 100px;
         width: 68px;
-
-        @media (max-width: 700px) {
-            width: 0;
-            height: 0;
-        }
     }
 
     .profile-picture > img {
@@ -239,10 +154,6 @@ const Main = styled.div`
 
         display: flex;
         flex-direction: column;
-
-        @media (max-width: 700px) {
-            width: 100vw;
-        }
     }
 
     .publish-form * {
@@ -266,10 +177,6 @@ const Main = styled.div`
         margin-top: 15px;
         font-weight: 300;
         font-size: 15px;
-
-        @media (max-width: 700px) {
-            width: 100%;
-        }
     }
 
     .publish-form > .text {
@@ -283,10 +190,6 @@ const Main = styled.div`
         margin-top: 5px;
         font-weight: 300;
         font-size: 15px;
-
-        @media (max-width: 700px) {
-            width: 100%;
-        }
     }
 
     .publish-form > button {
@@ -306,12 +209,6 @@ const Main = styled.div`
         margin-top: 20px;
     }
 `;
-
-const ProfileImage = styled.img`
-     @media (max-width: 700px) {
-        display: none;
-    }
-`
 
 const Post = styled.div`
     min-height: 209px;
