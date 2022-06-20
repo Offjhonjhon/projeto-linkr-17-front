@@ -39,6 +39,7 @@ const Container = styled.div`
 `;
 
 const Nav = styled.div`
+    z-index: 1;
     top: 0;
     width: 100vw;
     height: 72px;
@@ -55,6 +56,10 @@ const Title = styled.h1`
     line-height: 54px;
     color: #FFFFFF;
     font-family: 'Passion One', cursive;
+    
+    :hover {
+        cursor: pointer;
+    }
 `;
 
 const Block = styled.div`

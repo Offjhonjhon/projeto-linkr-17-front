@@ -72,12 +72,21 @@ const SearchWindow = styled.div`
     left: 50%;
     transform: translateX(-50%);
     border-radius: 8px;
+
+    @media (max-width: 700px) {
+        position: absolute;
+        top: 80px;
+    }
 `
 
 const SearchForm = styled.form`
     width: 40vw;
     height: 35px;
-    margin-bottom: -10px;
+    margin-bottom: -11px;
+
+    @media (max-width: 700px) {
+        width: 95vw;
+    }
 
     input{
         width: 100%;
@@ -115,6 +124,10 @@ const UsersProfile = styled.div`
     padding-bottom: 23px;
     height: auto;
     font-family: Lato;
+
+    @media (max-width: 700px) {
+        width: 95vw;
+    }
 `
 
 const NotFound = styled.p`
