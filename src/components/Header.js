@@ -103,6 +103,7 @@ const Menu = styled.div`
     color: #FFFFFF;
     background: #171717;
     border-radius: 0px 0px 0px 20px;
+    z-index: 1;
 
     :hover {
         cursor: pointer;
