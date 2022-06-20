@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import Hashtag from "../components/Hashtag";
 
 
 import TrendingHashtags from '../components/TrendingHashtags';
 
 function Timeline() {
+    const data = localStorage.getItem("dados");
+    const token = JSON.parse(data).token;
 
-    const textTags = 'Teste #react #react-native #sql #materiais'
 
     const getTags = (text) => {
         const tags = [];
@@ -40,7 +42,7 @@ function Timeline() {
             setPosts(answer.data);
         });
 
-        promise.catch(erro => {
+        promise.catch(error => {
             alert("An error occured while trying to fetch the posts, please refresh the page");
         });
 
@@ -50,25 +52,27 @@ function Timeline() {
     const [url, setUrl] = useState("");
     const [text, setText] = useState("");
     const [loading, setLoading] = useState(false);
-    const [publicationCode, setPublicationCode] = useState("");
+
 
     function publish(event) {
         event.preventDefault();
         setLoading(true);
-        setPublicationCode(Date.now().toString());
-        console.log(publicationCode);
+        const publicationCode = Date.now().toString();
 
-        const promisse = axios.post(URL_BACK + "/publish", {
+        const publication = {
             url: url,
             text: text,
             publicationCode: publicationCode
-        })
+        }
+
+        console.log(publication);
+
+        const promisse = axios.post(`${URL_BACK}/publish`, publication, { headers: { Authorization: `Bearer ${token}` } });
 
         promisse.then(res => {
             setLoading(false);
             setUrl("");
             setText("");
-            setPublicationCode("");
             refreshTimeline();
         });
 
@@ -103,7 +107,7 @@ function Timeline() {
                                 </div>
                                 <div className="post-area">
                                     <p className="user-name">{post.name}</p>
-                                    <p className="text">{post.text}</p>
+                                    <p className="text"><Hashtag>{post.text}</Hashtag></p>
                                     <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
                                         <div className="link-left">
                                             <div className="title">{post.title}</div>

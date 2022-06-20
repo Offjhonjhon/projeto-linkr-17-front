@@ -7,7 +7,7 @@ import axios from 'axios';
 
 
 function HashtagPosts() {
-    const URL = `http://localhost:5600/`
+    const URL = `http://localhost:4000/`
     const title = useParams().hashtag;
     const [posts, setPosts] = useState([]);
 
