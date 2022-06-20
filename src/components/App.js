@@ -1,12 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState } from 'react';
 
-import Likes from "./Likes.js";
 import Header from './Header.js';
 import SearchBar from './SearchBar.js';
 import SignIn from './SignIn.js';
 import SignUp from './SignUp.js';
-import EditPost from './EditPost.js';
+import PostDetails from './PostDetails.js';
 import StateContext from '../contexts/StateContext.js';
 import Timeline from '../pages/Timeline.js';
 
@@ -23,8 +22,7 @@ export default function App() {
 
                     <Route path="/sign-in" element={<SignIn />} />
                     <Route path="/" element={<Navigate replace to="sign-in" />} />
-                    <Route path="/edit-post" element={<EditPost />} />
-                    <Route path="/likes" element={<Likes />} />
+                    <Route path="/post-details" element={<PostDetails />} />
                     <Route path="/sign-up" element={<SignUp />} />
                     <Route path="/timeline" element={<Timeline />} /> 
 
