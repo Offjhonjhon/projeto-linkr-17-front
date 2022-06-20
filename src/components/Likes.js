@@ -4,15 +4,21 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import styled from "styled-components";
 import Tippy from '@tippyjs/react/headless';
 
-function Likes() {
+function Likes({ postId, token }) {
     const [icon, setIcon] = useState(false);
     const [totalLikes, settotalLikes] = useState("");
     const [usersAux, setUsersAux] = useState([]);
     let users = [];
 
+    const config = { 
+        headers: { 
+            Authorization: `Bearer ${token}` 
+        }
+    }
+
     async function getAllLikes() {
         try {
-            const {request} = await axios.post("http://localhost:4000/userLikes", { publicationId: 7 });
+            const {request} = await axios.post("http://localhost:4000/userLikes", { publicationId: postId }, config);
             const {response} = request;
             const object = JSON.parse(response);
 
@@ -42,7 +48,7 @@ function Likes() {
 
     async function likePost() {
         try {
-            const {request} = await axios.post("http://localhost:4000/likes", { publicationId: 7 });
+            const {request} = await axios.post("http://localhost:4000/likes", { publicationId: postId }, config);
             const {response} = request;
 
             console.log(response)
@@ -131,9 +137,8 @@ const Container = styled.div`
     font-size: 11px;
     line-height: 13px;
     margin-bottom: 50px;
-    height: 60px;
-    width: 100px;
-    padding: 10px;
+    margin-left: 20px;
+    height: 60px;  
 
     svg {
         width: 20px;
@@ -179,5 +184,9 @@ const Tooltip = styled.div`
         visibility: visible;
         content: '';
         transform: rotate(45deg);
+    }
+
+    @media (max-width: 611px) {
+        width: 120px;
     }
 `;

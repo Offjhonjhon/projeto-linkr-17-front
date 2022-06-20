@@ -1,111 +1,113 @@
-import axios from "axios";
-import { useState, useRef } from "react";
-import EditIcon from "./EditIcon.js";
-import styled from "styled-components";
-import DeleteIcon from "./DeleteIcon.js";
-import Likes from "./Likes.js";
+// import axios from "axios";
+// import { useState, useRef } from "react";
+// import EditIcon from "./EditIcon.js";
+// import styled from "styled-components";
+// import DeleteIcon from "./DeleteIcon.js";
+// import Likes from "./Likes.js";
 
 
-function PostDetails() {
-    const [active, setActive] = useState(false);
-    const [enableTextArea, setEnableTextArea] = useState(false);
-    const textareaRef = useRef("lili");
-    const data = localStorage.getItem("dados");
-    const userData = JSON.parse(data);
-    const [text, setText] = useState("default value");
+// function PostDetails() {
+//     const [active, setActive] = useState(false);
+//     const [enableTextArea, setEnableTextArea] = useState(false);
+//     const textareaRef = useRef("lili");
+//     const [defaultText, setDefaultText] = useState("default value");
 
-    const config = {
-        headers: {
-            Authorization: `Bearer ${userData.token}`
-        }
-    }
+//     const data = localStorage.getItem("dados");
+//     const userData = JSON.parse(data);
 
-    const handleUserKeyPress = (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            sendUpdate();
-        }
-    };
+//     const config = {
+//         headers: {
+//             Authorization: `Bearer ${userData.token}`
+//         }
+//     }
 
-    async function sendUpdate() {
-        setEnableTextArea(true);
+//     const handleUserKeyPress = (e) => {
+//         if (e.key === "Enter" && !e.shiftKey) {
+//             e.preventDefault();
+//             sendUpdate();
+//         }
+//     };
 
-        try {
-            await axios.post("http://localhost:4000/post-details/edit", {
-                publicationId: 7,
-                description: textareaRef.current.value
-            }, config);
+//     async function sendUpdate() {
+//         setEnableTextArea(true);
 
-            console.log(textareaRef.current.value);
-            setActive(false);
-        } catch (e) {
-            alert("Não foi possível salvar as alterações!");
-            setEnableTextArea(false);
-        }
-    }
+//         try {
+//             await axios.post("http://localhost:4000/post-details/edit", {
+//                 publicationId: ,
+//                 description: textareaRef.current.value
+//             }, config);
 
-    return (
-        <Container>
-            <Icons>
-                <EditIcon active={active}
-                    setActive={setActive}
-                    enableTextArea={enableTextArea}
-                    setEnableTextArea={setEnableTextArea}
-                    textareaRef={textareaRef} />
-                <DeleteIcon config={config} />
-            </Icons>
-            <Likes />
-            {active ? 
-                    <TextArea active={active} 
-                              readOnly={enableTextArea}
-                              type="text" 
-                              ref={textareaRef}
-                              onKeyPress={handleUserKeyPress}
-                              style={{color: '#4C4C4C'}}
-                              defaultValue={text}>                                 
-                    </TextArea> 
-            : 
-            <p>my description</p>}
-        </Container> 
-    )
-}
+//             console.log(textareaRef.current.value);
+//             setActive(false);
+//         } catch (e) {
+//             alert("Não foi possível salvar as alterações!");
+//             setEnableTextArea(false);
+//         }
+//     }
 
-export default PostDetails;
+//     return (
+//         <Container>
+//             <Icons>
+//                 <EditIcon active={active}
+//                     setActive={setActive}
+//                     enableTextArea={enableTextArea}
+//                     setEnableTextArea={setEnableTextArea}
+//                     textareaRef={textareaRef} />
+//                 <DeleteIcon config={config} />
+//             </Icons>
+//             <Likes />
+//             {active ? 
+//                     <TextArea active={active} 
+//                               readOnly={enableTextArea}
+//                               type="text" 
+//                               ref={textareaRef}
+//                               onKeyPress={handleUserKeyPress}
+//                               style={{color: '#4C4C4C'}}
+//                               defaultValue={defaultText}>                                 
+//                     </TextArea> 
+//             : 
+//             <p>my description</p>}
+//         </Container> 
+//     )
+// }
 
-const Container = styled.div`
-    svg {
-        color: #FFFFFF;
-        cursor: pointer;
-    }
+// export default PostDetails;
 
-    p {
-        font-family: 'Lato';
-        font-weight: 400;
-        font-size: 17px;
-        line-height: 20px;
-        color: #B7B7B7;
-    }
+// const Container = styled.div`
+//     z-index: 3500;
+//     svg {
+//         color: #FFFFFF;
+//         cursor: pointer;
+//     }
 
-    background-color: #171717;
-    margin-top: 200px;
-    width: 300px;
-    height: 200px;
-`;
+//     p {
+//         font-family: 'Lato';
+//         font-weight: 400;
+//         font-size: 17px;
+//         line-height: 20px;
+//         color: #B7B7B7;
+//     }
 
-const TextArea = styled.textarea`
-    width: 503px;
-    height: 44px;
-    border: none;
-    border-radius: 7px;
-    background-color: ${(props) => (props.active ? '#FFFFFF' : '#171717')}
-`;
+//     background-color: #171717;
+//     margin-top: 200px;
+//     width: 300px;
+//     height: 200px;
+// `;
 
-const Icons = styled.div`
-    width: 50px;
-    height: 16px;
-    display: flex;
-    justify-content: space-evenly;
-    /* position: fixed;
-    top: 22px;
-    right: 23px; */
-`;
+// const TextArea = styled.textarea`
+//     width: 503px;
+//     height: 44px;
+//     border: none;
+//     border-radius: 7px;
+//     background-color: ${(props) => (props.active ? '#FFFFFF' : '#171717')}
+// `;
+
+// const Icons = styled.div`
+//     width: 50px;
+//     height: 16px;
+//     display: flex;
+//     justify-content: space-evenly;
+//     /* position: fixed;
+//     top: 22px;
+//     right: 23px; */
+// `;

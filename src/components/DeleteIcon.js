@@ -7,7 +7,7 @@ import { ThreeDots } from "react-loader-spinner";
 
 Modal.setAppElement(".root");
 
-function DeleteIcon({config}) {
+function DeleteIcon({config, postId, refreshTimeline}) {
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -18,9 +18,10 @@ function DeleteIcon({config}) {
     async function deletePost() {
         setLoading(true);
         try {
-            await axios.delete(`http://localhost:4000/post-details/delete/6`, config);
+            await axios.delete(`http://localhost:4000/post/delete/${postId}`, config);
             setLoading(false);
             toggleModal();
+            refreshTimeline();
         } catch (e) {
             console.log(e);
             toggleModal();
