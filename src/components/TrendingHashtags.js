@@ -47,7 +47,7 @@ export default function TrendingHashtags() {
 
 const TrendingContainer = styled.div`
     position: absolute;
-    left: 1100px;
+    left: 900px;
     top: 315px;
     width: 301px;
     height: 406px;
@@ -71,7 +71,6 @@ const TrendingTitle = styled.h1`
 const TrendingHashtagsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;    
     margin-top: 22px;
     font-family: 'Lato';
     font-size: 19px;
