@@ -26,7 +26,6 @@ function Timeline() {
         return tags;
     }
 
-
     const URL_BACK = "http://localhost:4000";
 
     const user = {
@@ -70,7 +69,7 @@ function Timeline() {
             publicationCode: publicationCode
         }
 
-        console.log(publication);
+        const tags = getTags(text);
 
         const promisse = axios.post(`${URL_BACK}/publish`, publication, { headers: { Authorization: `Bearer ${token}` } });
 
@@ -85,6 +84,15 @@ function Timeline() {
             setLoading(false);
             alert("Houve um erro ao publicar seu link");
         });
+
+        tags.forEach(tag => {
+            console.log(tag);
+            console.log(publicationCode);
+            axios.post(`${URL_BACK}/hashtag/tag`, {
+                publicationCode: publicationCode,
+                tag: tag
+            });
+        })
     }
 
 
