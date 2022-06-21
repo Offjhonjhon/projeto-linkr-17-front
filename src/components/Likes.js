@@ -18,7 +18,7 @@ function Likes({ postId, token }) {
 
     async function getAllLikes() {
         try {
-            const {request} = await axios.post("http://localhost:4000/userLikes", { publicationId: postId }, config);
+            const {request} = await axios.post("https://projeto17-linkr-grupo2-vini.herokuapp.com/userLikes", { publicationId: postId }, config);
             const {response} = request;
             const object = JSON.parse(response);
 
@@ -48,7 +48,7 @@ function Likes({ postId, token }) {
 
     async function likePost() {
         try {
-            const {request} = await axios.post("http://localhost:4000/likes", { publicationId: postId }, config);
+            const {request} = await axios.post("https://projeto17-linkr-grupo2-vini.herokuapp.com/likes", { publicationId: postId }, config);
             const {response} = request;
 
             console.log(response)

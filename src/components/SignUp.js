@@ -23,7 +23,7 @@ export default function SignUp() {
         setDisable(true);
 
         try {
-            await axios.post('http://localhost:4000/sign-up', data);
+            await axios.post('https://projeto17-linkr-grupo2-vini.herokuapp.com/sign-up', data);
             navigate('/sign-in');
         } catch (e) {
             setDisable(false);

@@ -18,7 +18,7 @@ export default function SearchBar(){
         if(search.name.length >=3){
             setUsers([])
             axios
-            .post("http://localhost:4000/search",search)
+            .post("https://projeto17-linkr-grupo2-vini.herokuapp.com/search",search)
             .then(response => {
                 setUsers(response.data)
                 if(response.data.length === 0){
