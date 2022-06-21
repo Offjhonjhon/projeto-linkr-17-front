@@ -168,7 +168,7 @@ function Timeline() {
                                            textareaRef={textareaRef}
                                            setPublicationId={setPublicationId}
                                            postId={post.postId} />
-                                    <DeleteIcon config={config} postId={post.postId} refreshTimeline={refreshTimeline}/>
+                                    <DeleteIcon token={token} postId={post.postId} refreshTimeline={refreshTimeline}/>
                                 </Icons>
                                 : ""}                                
                                 <div className="user-info">

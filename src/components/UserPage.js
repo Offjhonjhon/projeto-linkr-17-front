@@ -1,17 +1,22 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import Hashtag from "./Hashtag";
-import TrendingHashtags from './TrendingHashtags';
-import Likes from "./Likes";
 
+import { useRef, useEffect, useState } from "react";
+import axios from "axios";
+import Hashtag from "../components/Hashtag";
+import TrendingHashtags from '../components/TrendingHashtags';
+import { useParams } from "react-router-dom";
+import DeleteIcon from "./DeleteIcon";
+import EditIcon from "./EditIcon";
+import Likes from "./Likes";
 
 export default function UserPage(){
     const [posts, setPosts] = useState("Loading");
     const { id } = useParams()
     const data = localStorage.getItem("dados");
     const token = JSON.parse(data).token;
+
+    const [refresh, setRefresh] = useState([]);
+    function refreshTimeline() { setRefresh([]) }
 
     useEffect(() => {
         const promise = axios.get("https://projeto17-linkr-grupo2-vini.herokuapp.com/user/" + id);
@@ -25,7 +30,40 @@ export default function UserPage(){
             alert("An error occured while trying to fetch the posts, please refresh the page");
         });
 
-    },[id]);
+    },[id, refresh]);
+
+    const [active, setActive] = useState(false);
+    const [enableTextArea, setEnableTextArea] = useState(false);
+    const textareaRef = useRef("");
+    const [publicationId, setPublicationId] = useState("");
+
+    const handleUserKeyPress = (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendUpdate();
+        }
+    };
+
+    async function sendUpdate() {
+        setEnableTextArea(true);
+
+        try {
+            await axios.post("http://localhost:4000/post/edit", {
+                publicationId,
+                description: textareaRef.current.value
+            }, { 
+                headers: { 
+                    Authorization: `Bearer ${token}` 
+            } });
+
+            console.log(textareaRef.current.value);
+            setActive(false);
+            refreshTimeline();
+        } catch (e) {
+            alert("Não foi possível salvar as alterações!");
+            setEnableTextArea(false);
+        }
+    }
 
     return( <TimeLinePage>
         <Main>
@@ -34,6 +72,16 @@ export default function UserPage(){
                 posts === "Loading" ? <p className="message">Loading...</p> : posts.status === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
                     return (
                         <Post key={index}>
+                            <Icons>
+                                <EditIcon active={active}
+                                          setActive={setActive}
+                                          enableTextArea={enableTextArea}
+                                          setEnableTextArea={setEnableTextArea}
+                                          textareaRef={textareaRef}
+                                          setPublicationId={setPublicationId}
+                                          postId={post.postId} />
+                                <DeleteIcon postId={post.postId} token={token} refreshTimeline={refreshTimeline}/>
+                            </Icons>
                             <div className="profile-picture">
                                 <img src={post.avatar} alt={post.name} />
                                 <Like>
@@ -42,7 +90,17 @@ export default function UserPage(){
                             </div>
                             <div className="post-area">
                                 <p className="user-name">{post.name}</p>
-                                <p className="text"><Hashtag>{post.text}</Hashtag></p>
+                                {active && post.postId === publicationId ? 
+                                    <TextArea active={active} 
+                                    readOnly={enableTextArea}
+                                    type="text" 
+                                    ref={textareaRef}
+                                    onKeyPress={handleUserKeyPress}
+                                    style={{color: '#4C4C4C'}}
+                                    defaultValue={post.text}>                                 
+                                    </TextArea> 
+                                    : 
+                                    <p className="text"><Hashtag>{post.text}</Hashtag></p>}
                                 <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
                                     <div className="link-left">
                                         <div className="title">{post.title}</div>
@@ -219,7 +277,7 @@ const Post = styled.div`
     border-radius: var(--border-radius);
     background-color: #171717;
     box-shadow: 0px 4px 4px 0px #00000040;
-
+    position: relative;
     display: flex;
 
     .profile-picture {
@@ -324,4 +382,23 @@ const Post = styled.div`
         border-bottom-right-radius: 11px;
         object-fit: cover;
     }
+`;
+
+const Icons = styled.div`
+    width: 50px;
+    height: 16px;
+    display: flex;
+    justify-content: space-evenly;
+    position: absolute;
+    top: 22px;
+    right: 23px;
+`;
+
+const TextArea = styled.textarea`
+    width: calc(var(--width) - 108px);
+    height: 44px;
+    border: none;
+    border-radius: 7px;
+    margin-top: 11px;
+    background-color: ${(props) => (props.active ? '#FFFFFF' : '#171717')}
 `;
