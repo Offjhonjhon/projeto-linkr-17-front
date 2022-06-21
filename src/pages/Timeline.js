@@ -30,7 +30,7 @@ function Timeline() {
         return tags;
     }
 
-    const URL_BACK = "http://localhost:4000";
+    const URL_BACK = "https://projeto17-linkr-grupo2-vini.herokuapp.com";
     
     const config = {
          headers: { 
@@ -124,7 +124,7 @@ function Timeline() {
         setEnableTextArea(true);
 
         try {
-            await axios.post("http://localhost:4000/post/edit", {
+            await axios.post("https://projeto17-linkr-grupo2-vini.herokuapp.com/post/edit", {
                 publicationId,
                 description: textareaRef.current.value
             }, config);

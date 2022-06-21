@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 import { useRef, useEffect, useState } from "react";
 import axios from "axios";
 import Hashtag from "../components/Hashtag";
@@ -6,6 +7,7 @@ import TrendingHashtags from '../components/TrendingHashtags';
 import { useParams } from "react-router-dom";
 import DeleteIcon from "./DeleteIcon";
 import EditIcon from "./EditIcon";
+import Likes from "./Likes";
 
 export default function UserPage(){
     const [posts, setPosts] = useState("Loading");
@@ -17,10 +19,11 @@ export default function UserPage(){
     function refreshTimeline() { setRefresh([]) }
 
     useEffect(() => {
-        const promise = axios.get("http://localhost:4000/user/" + id);
+        const promise = axios.get("https://projeto17-linkr-grupo2-vini.herokuapp.com/user/" + id);
 
         promise.then(answer => {
             setPosts(answer.data);
+            console.log(answer.data)
         });
 
         promise.catch(() => {
@@ -81,6 +84,9 @@ export default function UserPage(){
                             </Icons>
                             <div className="profile-picture">
                                 <img src={post.avatar} alt={post.name} />
+                                <Like>
+                                    <Likes postId={post.id} token={token}/>
+                                </Like>
                             </div>
                             <div className="post-area">
                                 <p className="user-name">{post.name}</p>
@@ -155,6 +161,11 @@ const TimeLinePage = styled.div`
     display: flex;
     justify-content: center;
 `;
+
+const Like = styled.div`
+    
+    margin-top: 19px;
+`
 
 const Main = styled.div`
 
