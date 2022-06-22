@@ -1,15 +1,17 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-function FollowButton({ userId }) {
+function FollowButton({ userId, followed, setFollowed }) {
     const data = localStorage.getItem("dados");
     console.log(data)
     const loggedUser = JSON.parse(data).userId;
     const token = JSON.parse(data).token;
     console.log(loggedUser)
 
-    const [followed, setFollowed] = useState(false);
+    const [active, setActive] = useState(false);
+    const navigate = useNavigate();
 
     const config = {
         headers: { 
@@ -18,19 +20,29 @@ function FollowButton({ userId }) {
    }
 
    async function followUser() {
-        try {
-            const response = await axios.post("http://localhost:4000/user/follow", { userPageId: userId }, config);
-            console.log(response.data)
+       setActive(true);
 
-            if (response.data === "followed") {
-                setFollowed(!followed);                
+        try {
+            if (!token) {
+                navigate("/sign-in");
+            } else {
+                const response = await axios.post("http://localhost:4000/user/follow", { userPageId: userId }, config);
+                console.log(response.data)
+    
+                if (response.data === "followed") {
+                    setFollowed(!followed);                
+                }
+    
+                if (response.data === "unfollowed") {
+                    setFollowed(!followed);
+                }  
+    
+                setActive(false);
             }
 
-            if (response.data === "unfollowed") {
-                setFollowed(!followed);
-            }  
         }catch (e) {
-        console.log(e);
+            console.log(e);
+            alert("Não foi possível executar a operação!");
         } 
    }
 
@@ -39,7 +51,8 @@ function FollowButton({ userId }) {
     return (
         <>
             {parseInt(userId) !== loggedUser ? 
-                <Button background={followed ? "#FFFFFF" : "#1877F2"}
+                <Button disabled={active}
+                        background={followed ? "#FFFFFF" : "#1877F2"}
                         fontColor={followed ?  "#1877F2" : "#FFFFFF"}  
                         onClick={followUser}>{followed ? "Unfollow" : "Follow"}</Button>
             : ""}
@@ -56,13 +69,15 @@ const Button = styled.button`
     color: ${(props) => props.fontColor};
     border: none;
     border-radius: 5px;
-    position: relative;
-    top: 90px;
-    left: 610px;
+
     font-family: 'Lato';
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
     line-height: 17px;
     cursor: pointer;
+
+    position: relative;
+    top: 90px;
+    left: 610px;
 `;

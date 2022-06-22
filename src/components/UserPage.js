@@ -65,8 +65,34 @@ export default function UserPage(){
         }
     }
 
+    const [followed, setFollowed] = useState(false);
+
+    async function checkFollowUser() {
+        try {
+            const response = await axios.post("http://localhost:4000/check-follow", {userPageId: id},
+            { 
+                headers: { 
+                    Authorization: `Bearer ${token}` 
+            } });
+
+            if (response.data.status === "not followed") {
+                setFollowed(false);
+            }
+
+            if(response.data.status === "followed") {
+                setFollowed(true);
+            }
+            
+            console.log('checkfollow', response.data)
+            
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    checkFollowUser();
+
     return( <TimeLinePage>
-        <FollowButton userId={parseInt(id)}/>
+        <FollowButton userId={parseInt(id)} followed={followed} setFollowed={setFollowed}/>
         <Main>
             <div className="timeline"> {posts === "Loading" ? null : posts.status !== "Empty" ? posts[0].name + "'s posts" : posts.name + "'s posts"}</div>
             {
