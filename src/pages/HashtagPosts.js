@@ -7,7 +7,7 @@ import axios from 'axios';
 
 
 function HashtagPosts() {
-    const URL = `https://projeto17-linkr-grupo2-vini.herokuapp.com/`
+    const URL = `http://localhost:4000/`
     const title = useParams().hashtag;
     const [posts, setPosts] = useState("Loading");
 

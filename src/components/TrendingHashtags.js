@@ -5,7 +5,7 @@ import axios from "axios";
 
 export default function TrendingHashtags() {
     const [hashtags, setHashtags] = useState([]);
-    const URL = `https://projeto17-linkr-grupo2-vini.herokuapp.com/`
+    const URL = `http://localhost:4000/`
 
     useEffect(() => {
         async function getTrendingHashtags() {

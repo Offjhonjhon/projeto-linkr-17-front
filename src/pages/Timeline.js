@@ -17,6 +17,9 @@ function Timeline() {
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { setVisible } = useContext(StateContext);
     const navigate = useNavigate()
+    console.log(data)
+    console.log(getData)
+    console.log(data.userId)
     
     setVisible(true)
 
@@ -30,7 +33,7 @@ function Timeline() {
         return tags;
     }
 
-    const URL_BACK = "https://projeto17-linkr-grupo2-vini.herokuapp.com";
+    const URL_BACK = "http://localhost:4000";
     
     const config = {
          headers: { 
@@ -124,7 +127,7 @@ function Timeline() {
         setEnableTextArea(true);
 
         try {
-            await axios.post("https://projeto17-linkr-grupo2-vini.herokuapp.com/post/edit", {
+            await axios.post(URL_BACK + "/post/edit", {
                 publicationId,
                 description: textareaRef.current.value
             }, config);
