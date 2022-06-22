@@ -3,6 +3,7 @@ import StateContext from "../contexts/StateContext.js";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { TailSpin } from "react-loader-spinner";
 import Hashtag from "../components/Hashtag";
 import Likes from "../components/Likes.js";
 import DeleteIcon from "../components/DeleteIcon.js";
@@ -30,7 +31,7 @@ function Timeline() {
         return tags;
     }
 
-    const URL_BACK = "https://projeto17-linkr-grupo2-vini.herokuapp.com";
+    const URL_BACK = "http://localhost:4000";
     
     const config = {
          headers: { 
@@ -38,18 +39,53 @@ function Timeline() {
         } 
     }
 
-    const [posts, setPosts] = useState("Loading");
+    const [posts, setPosts] = useState([]);
 
     const [refresh, setRefresh] = useState([]);
     function refreshTimeline() { setRefresh([]) }
 
+    const [currentPage, setCurrentPage] = useState(-1);
+    const loaderRef = useRef(null);
+    const [loadingScroll, setLoadingScroll] = useState("");
+
+    useEffect(() => {
+        const options = {
+            root: null,
+            rootMargin: "20px",
+            threshold: 1.0
+        };
+        
+        const observer = new IntersectionObserver((entities) => {
+            const target = entities[0];
+
+            if (target.isIntersecting) {
+                setCurrentPage(old => old + 1);
+            }
+        }, options);
+
+        if (loaderRef.current) {
+            observer.observe(loaderRef.current);
+        }
+    }, []);
+
 
     useEffect(() => {
         function getTimeline() {
-            const promise = axios.get(URL_BACK + "/posts", { headers: { Authorization: `Bearer ${token}` }});
+            const promise = axios.get(URL_BACK + "/posts/page/" + currentPage, { headers: { Authorization: `Bearer ${token}` }});
+            
+            posts.length === 0 ? setLoadingScroll("Loading...") : setLoadingScroll("Loading more posts...");
 
             promise.then(answer => {
-                setPosts(answer.data);
+                setPosts(old => {
+                    setLoadingScroll("");
+
+                    if (answer.data === "Empty") {
+                        setLoadingScroll("There are no posts yet");
+                        return [...old];
+                    } else {
+                        return [...old, ...answer.data];
+                    }
+                });
             });
 
             promise.catch(error => {
@@ -58,12 +94,12 @@ function Timeline() {
         }
 
         if(token) {
-            getTimeline();
+            if (currentPage >= 0) {getTimeline()}
         } else {
             navigate("/sign-in");
         }
 
-    }, [URL_BACK, refresh]);
+    }, [URL_BACK, refresh, currentPage]);
 
 
     const [url, setUrl] = useState("");
@@ -139,7 +175,6 @@ function Timeline() {
     }
 
 
-    console.log(posts)
     return (
         <TimeLinePage>
             <Main>
@@ -156,7 +191,7 @@ function Timeline() {
                     </form>
                 </div>
                 {
-                    posts === "Loading" ? <p className="message">Loading...</p> : posts === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
+                    posts.map((post, index) => {
                         return (                            
                             <Post key={index}>
                                 {post.isFromUser ? 
@@ -204,6 +239,13 @@ function Timeline() {
                     })
 
                 }
+                <div className="message">
+                    { loadingScroll === "Loading..." || loadingScroll === "Loading more posts..." ?
+                        <TailSpin {...{ color: "#6D6D6D", width: "36px", height: "36px"}}/> :
+                        <div className="loading-scroll"></div>
+                    }
+                    <p ref={loaderRef}>{loadingScroll}</p>
+                </div>
             </Main>
             <TrendingHashtags />
         </TimeLinePage>
@@ -369,7 +411,23 @@ const Main = styled.div`
     }
 
     .message {
-        margin-top: 20px;
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .message > .loading-scroll {
+        width: 36px;
+        height: 36px;
+    }
+
+    .message > p {
+        margin-top: 16px;
+        font-family: 'Lato', sans-serif;
+        font-weight: 400;
+        font-size: 22px;
+        color: #6D6D6D;
     }
 `;
 
