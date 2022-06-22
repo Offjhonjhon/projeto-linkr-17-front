@@ -12,13 +12,14 @@ import TrendingHashtags from '../components/TrendingHashtags';
 import EditIcon from "../components/EditIcon.js";
 
 function Timeline() {
+    const { URL } = useContext(StateContext)
     const data = localStorage.getItem("dados");
     const token = JSON.parse(data).token;
     const getData = localStorage.getItem("dados");
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { setVisible } = useContext(StateContext);
     const navigate = useNavigate()
-    
+
     setVisible(true)
 
     const getTags = (text) => {
@@ -31,12 +32,10 @@ function Timeline() {
         return tags;
     }
 
-    const URL_BACK = "http://localhost:4000";
-    
     const config = {
-         headers: { 
-             Authorization: `Bearer ${token}`
-        } 
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     }
 
     const [posts, setPosts] = useState([]);
@@ -54,7 +53,7 @@ function Timeline() {
             rootMargin: "20px",
             threshold: 1.0
         };
-        
+
         const observer = new IntersectionObserver((entities) => {
             const target = entities[0];
 
@@ -71,8 +70,8 @@ function Timeline() {
 
     useEffect(() => {
         function getTimeline() {
-            const promise = axios.get(URL_BACK + "/posts/page/" + currentPage, { headers: { Authorization: `Bearer ${token}` }});
-            
+            const promise = axios.get(URL + "/posts/page/" + currentPage, { headers: { Authorization: `Bearer ${token}` } });
+
             posts.length === 0 ? setLoadingScroll("Loading...") : setLoadingScroll("Loading more posts...");
 
             promise.then(answer => {
@@ -93,13 +92,13 @@ function Timeline() {
             });
         }
 
-        if(token) {
-            if (currentPage >= 0) {getTimeline()}
+        if (token) {
+            if (currentPage >= 0) { getTimeline() }
         } else {
             navigate("/sign-in");
         }
 
-    }, [URL_BACK, refresh, currentPage]);
+    }, [URL, refresh, currentPage]);
 
 
     const [url, setUrl] = useState("");
@@ -120,7 +119,7 @@ function Timeline() {
 
         const tags = getTags(text);
 
-        const promisse = axios.post(`${URL_BACK}/publish`, publication, { headers: { Authorization: `Bearer ${token}` } });
+        const promisse = axios.post(`${URL}/publish`, publication, { headers: { Authorization: `Bearer ${token}` } });
 
         promisse.then(res => {
             setLoading(false);
@@ -135,9 +134,7 @@ function Timeline() {
         });
 
         tags.forEach(tag => {
-            console.log(tag);
-            console.log(publicationCode);
-            axios.post(`${URL_BACK}/hashtag/tag`, {
+            axios.post(`${URL}/hashtag/tag`, {
                 publicationCode: publicationCode,
                 tag: tag
             });
@@ -192,39 +189,39 @@ function Timeline() {
                 </div>
                 {
                     posts.map((post, index) => {
-                        return (                            
+                        return (
                             <Post key={index}>
-                                {post.isFromUser ? 
-                                <Icons>
-                                    <EditIcon active={active}
-                                           setActive={setActive}
-                                           enableTextArea={enableTextArea}
-                                           setEnableTextArea={setEnableTextArea}
-                                           textareaRef={textareaRef}
-                                           setPublicationId={setPublicationId}
-                                           postId={post.postId} />
-                                    <DeleteIcon token={token} postId={post.postId} refreshTimeline={refreshTimeline}/>
-                                </Icons>
-                                : ""}                                
+                                {post.isFromUser ?
+                                    <Icons>
+                                        <EditIcon active={active}
+                                            setActive={setActive}
+                                            enableTextArea={enableTextArea}
+                                            setEnableTextArea={setEnableTextArea}
+                                            textareaRef={textareaRef}
+                                            setPublicationId={setPublicationId}
+                                            postId={post.postId} />
+                                        <DeleteIcon token={token} postId={post.postId} refreshTimeline={refreshTimeline} />
+                                    </Icons>
+                                    : ""}
                                 <div className="user-info">
                                     <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
                                         <img src={post.avatar} alt={post.name} />
                                     </div>
-                                    <Likes postId={post.postId} token={token}/>                                    
-                                </div>
+                                    <Likes postId={post.postId} token={token} />
+                                </div >
                                 <div className="post-area">
                                     <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
-                                    {active && post.isFromUser ? 
-                                            <TextArea active={active} 
-                                                      readOnly={enableTextArea}
-                                                      type="text" 
-                                                      ref={textareaRef}
-                                                      onKeyPress={handleUserKeyPress}
-                                                      style={{color: '#4C4C4C'}}
-                                                      defaultValue={post.text}>                                 
-                                            </TextArea> 
-                                            : 
-                                            <p className="text"><Hashtag>{post.text}</Hashtag></p>}
+                                    {active && post.isFromUser ?
+                                        <TextArea active={active}
+                                            readOnly={enableTextArea}
+                                            type="text"
+                                            ref={textareaRef}
+                                            onKeyPress={handleUserKeyPress}
+                                            style={{ color: '#4C4C4C' }}
+                                            defaultValue={post.text}>
+                                        </TextArea>
+                                        :
+                                        <p className="text"><Hashtag>{post.text}</Hashtag></p>}
                                     <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
                                         <div className="link-left">
                                             <div className="title">{post.title}</div>
@@ -234,21 +231,21 @@ function Timeline() {
                                         <img src={post.image} alt="Post" />
                                     </a>
                                 </div>
-                            </Post>
+                            </Post >
                         );
                     })
 
                 }
                 <div className="message">
-                    { loadingScroll === "Loading..." || loadingScroll === "Loading more posts..." ?
-                        <TailSpin {...{ color: "#6D6D6D", width: "36px", height: "36px"}}/> :
+                    {loadingScroll === "Loading..." || loadingScroll === "Loading more posts..." ?
+                        <TailSpin {...{ color: "#6D6D6D", width: "36px", height: "36px" }} /> :
                         <div className="loading-scroll"></div>
                     }
                     <p ref={loaderRef}>{loadingScroll}</p>
                 </div>
-            </Main>
+            </Main >
             <TrendingHashtags />
-        </TimeLinePage>
+        </TimeLinePage >
     );
 }
 
