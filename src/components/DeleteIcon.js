@@ -7,9 +7,15 @@ import { ThreeDots } from "react-loader-spinner";
 
 Modal.setAppElement(".root");
 
-function DeleteIcon({config, postId, refreshTimeline}) {
+function DeleteIcon({ postId, refreshTimeline, token}) {
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    const config = {
+        headers: { 
+            Authorization: `Bearer ${token}`
+       } 
+   }
 
     function toggleModal() {
         setIsOpen(!isOpen);
@@ -18,7 +24,7 @@ function DeleteIcon({config, postId, refreshTimeline}) {
     async function deletePost() {
         setLoading(true);
         try {
-            await axios.delete(`http://localhost:4000/post/delete/${postId}`, config);
+            await axios.delete(`https://projeto17-linkr-grupo2-vini.herokuapp.com/post/delete/${postId}`, config);
             setLoading(false);
             toggleModal();
             refreshTimeline();
