@@ -7,7 +7,7 @@ import { ThreeDots } from "react-loader-spinner";
 
 Modal.setAppElement(".root");
 
-function DeleteIcon({ postId, refreshTimeline, token}) {
+function DeleteIcon({postId, refreshTimeline, token}) {
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 

@@ -1,22 +1,39 @@
 import { FaRetweet } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Modal from "react-modal";
 import styled from "styled-components";
 
 Modal.setAppElement(".root");
 
-export default function Reposts({ postId, refreshTimeline, token}) {
+export default function Reposts({postId, refreshTimeline, token}) {
     const [isOpen, setIsOpen] = useState(false);
     const [count, setCount] = useState(0);
+    const config = { 
+        headers: { 
+            Authorization: `Bearer ${token}` 
+        }
+    }
+
+    async function getAllLikes() {
+        const {data} = await axios.get(`http://localhost:4000/reposts/${postId}`, config);
+        setCount(data.count);
+    }
+
+    useEffect(() => getAllLikes(), []);
 
     function toggleModal() {
         setIsOpen(!isOpen);
     }
 
-    function repost() {
-        setCount(count + 1);
-        toggleModal();
-        refreshTimeline();
+    async function repost() {
+        try {
+            await axios.post('http://localhost:4000/reposts', {publicationId: postId}, config);
+            toggleModal();
+            getAllLikes();
+        } catch(e) {
+            console.log(e);
+        }
     }
 
     return (
