@@ -177,7 +177,7 @@ function Timeline() {
                                         <img src={post.avatar} alt={post.name} />
                                     </div>
                                     <Likes postId={post.postId} token={token}/>
-                                    <Reposts postId={post.postId} token={token}/>                                
+                                    <Reposts token={token} postId={post.postId} refreshTimeline={refreshTimeline}/>                                
                                 </div>
                                 <div className="post-area">
                                     <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
