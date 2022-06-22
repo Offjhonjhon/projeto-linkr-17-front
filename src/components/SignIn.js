@@ -6,13 +6,14 @@ import axios from 'axios';
 import StateContext from '../contexts/StateContext.js';
 
 export default function SignIn() {
-    const { setVisible } = useContext(StateContext);
+    const { setVisible, URL } = useContext(StateContext);
     const [disable, setDisable] = useState(false);
     const [data, setData] = useState({
         email: '',
         password: ''
     });
     const navigate = useNavigate();
+    console.log(URL)
 
     setVisible(false);
 
@@ -21,7 +22,7 @@ export default function SignIn() {
         setDisable(true);
 
         try {
-            const response = await axios.post('https://projeto17-linkr-grupo2-vini.herokuapp.com/sign-in', data);
+            const response = await axios.post(`${URL}/sign-in`, data);
             const serializedData = JSON.stringify(response.data);
             localStorage.setItem("dados", serializedData);
             navigate('/timeline');

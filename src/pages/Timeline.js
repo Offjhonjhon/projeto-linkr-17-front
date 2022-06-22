@@ -12,6 +12,7 @@ import TrendingHashtags from '../components/TrendingHashtags';
 import EditIcon from "../components/EditIcon.js";
 
 function Timeline() {
+    const { URL } = useContext(StateContext)
     const data = localStorage.getItem("dados");
     const token = JSON.parse(data).token;
     const getData = localStorage.getItem("dados");
@@ -30,8 +31,6 @@ function Timeline() {
         })
         return tags;
     }
-
-    const URL_BACK = "http://localhost:4000";
 
     const config = {
         headers: {
@@ -71,7 +70,7 @@ function Timeline() {
 
     useEffect(() => {
         function getTimeline() {
-            const promise = axios.get(URL_BACK + "/posts/page/" + currentPage, { headers: { Authorization: `Bearer ${token}` } });
+            const promise = axios.get(URL + "/posts/page/" + currentPage, { headers: { Authorization: `Bearer ${token}` } });
 
             posts.length === 0 ? setLoadingScroll("Loading...") : setLoadingScroll("Loading more posts...");
 
@@ -99,7 +98,7 @@ function Timeline() {
             navigate("/sign-in");
         }
 
-    }, [URL_BACK, refresh, currentPage]);
+    }, [URL, refresh, currentPage]);
 
 
     const [url, setUrl] = useState("");
@@ -120,7 +119,7 @@ function Timeline() {
 
         const tags = getTags(text);
 
-        const promisse = axios.post(`${URL_BACK}/publish`, publication, { headers: { Authorization: `Bearer ${token}` } });
+        const promisse = axios.post(`${URL}/publish`, publication, { headers: { Authorization: `Bearer ${token}` } });
 
         promisse.then(res => {
             setLoading(false);
@@ -135,7 +134,7 @@ function Timeline() {
         });
 
         tags.forEach(tag => {
-            axios.post(`${URL_BACK}/hashtag/tag`, {
+            axios.post(`${URL}/hashtag/tag`, {
                 publicationCode: publicationCode,
                 tag: tag
             });
