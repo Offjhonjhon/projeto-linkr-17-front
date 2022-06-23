@@ -39,6 +39,7 @@ function Timeline() {
     }
 
     const [posts, setPosts] = useState([]);
+    const [lastUpdateTime, setLastUpdateTime] = useState("0");
 
     const [refresh, setRefresh] = useState([]);
     function refreshTimeline() { setRefresh([]) }
@@ -70,7 +71,7 @@ function Timeline() {
 
     useEffect(() => {
         function getTimeline() {
-            const promise = axios.get(URL + "/posts/page/" + currentPage, { headers: { Authorization: `Bearer ${token}` } });
+            const promise = axios.get(URL + "/posts/page/" + currentPage + "/" + lastUpdateTime, { headers: { Authorization: `Bearer ${token}` } });
 
             posts.length === 0 ? setLoadingScroll("Loading...") : setLoadingScroll("Loading more posts...");
 
@@ -82,6 +83,7 @@ function Timeline() {
                         setLoadingScroll("There are no posts yet");
                         return [...old];
                     } else {
+                        if (currentPage === 0) { setLastUpdateTime(answer.data[0].createdAt) }
                         return [...old, ...answer.data];
                     }
                 });
