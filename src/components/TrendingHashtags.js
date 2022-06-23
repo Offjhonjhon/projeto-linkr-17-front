@@ -52,7 +52,7 @@ const TrendingContainer = styled.div`
     border-radius: 16px;
     color: #ffffff;
 
-    @media (max-width: 700px) {
+    @media (max-width: 750px) {
         display: none;
     }
 
