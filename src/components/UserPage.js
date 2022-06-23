@@ -92,9 +92,10 @@ export default function UserPage(){
     checkFollowUser();
 
     return( <TimeLinePage>
-        <FollowButton userId={parseInt(id)} followed={followed} setFollowed={setFollowed}/>
         <Main>
-            <div className="timeline"> {posts === "Loading" ? null : posts.status !== "Empty" ? posts[0].name + "'s posts" : posts.name + "'s posts"}</div>
+            <div className="timeline"> {posts === "Loading" ? null : posts.status !== "Empty" ?<p> {posts[0].name}'s posts</p> :<p>{posts.name}'s posts</p>}
+            <FollowButton userId={parseInt(id)} followed={followed} setFollowed={setFollowed}/>
+            </div>
             {
                 posts === "Loading" ? <p className="message">Loading...</p> : posts.status === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
                     return (
@@ -194,12 +195,19 @@ const Main = styled.div`
     
 
     .timeline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         width: var(--width);
         margin-top: 78px;
         font-family: 'Oswald', sans-serif;
         font-size: 43px;
         font-weight: 700;
         color: white;
+
+        p{
+            width: 50%;
+        }
     }
 
     .publish {

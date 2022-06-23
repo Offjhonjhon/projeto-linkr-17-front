@@ -77,7 +77,14 @@ const Button = styled.button`
     line-height: 17px;
     cursor: pointer;
 
-    position: relative;
-    top: 90px;
-    left: 610px;
+    margin-right: calc(10px - (100%/2));
+    margin-left: 60px;
+
+    @media (max-width: 900px){
+        margin-right: calc(50px - (65%/2));
+    }
+
+    @media (max-width: 750px) {
+        margin-right: 10px;
+    }
 `;
