@@ -24,7 +24,7 @@ function DeleteIcon({ postId, refreshTimeline, token}) {
     async function deletePost() {
         setLoading(true);
         try {
-            await axios.delete(`https://projeto17-linkr-grupo2-vini.herokuapp.com/post/delete/${postId}`, config);
+            await axios.delete(`httphttp://localhost:4000/post/delete/${postId}`, config);
             setLoading(false);
             toggleModal();
             refreshTimeline();

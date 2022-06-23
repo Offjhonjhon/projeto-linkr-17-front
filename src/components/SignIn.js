@@ -21,7 +21,7 @@ export default function SignIn() {
         setDisable(true);
 
         try {
-            const response = await axios.post('https://projeto17-linkr-grupo2-vini.herokuapp.com/sign-in', data);
+            const response = await axios.post('http://localhost:4000/sign-in', data);
             const serializedData = JSON.stringify(response.data);
             localStorage.setItem("dados", serializedData);
             navigate('/timeline');
