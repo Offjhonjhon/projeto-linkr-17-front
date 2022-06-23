@@ -19,7 +19,6 @@ function Timeline() {
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { setVisible } = useContext(StateContext);
     const navigate = useNavigate()
-
     setVisible(true)
 
     const getTags = (text) => {
@@ -157,7 +156,7 @@ function Timeline() {
         setEnableTextArea(true);
 
         try {
-            await axios.post("https://projeto17-linkr-grupo2-vini.herokuapp.com/post/edit", {
+            await axios.post(URL + "/post/edit", {
                 publicationId,
                 description: textareaRef.current.value
             }, config);
