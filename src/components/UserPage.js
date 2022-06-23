@@ -73,7 +73,7 @@ export default function UserPage() {
 
     async function checkFollowUser() {
         try {
-            const response = await axios.post("http://localhost:4000/check-follow", {userPageId: id},
+            const response = await axios.post(`${URL}/check-follow`, {userPageId: id},
             { 
                 headers: { 
                     Authorization: `Bearer ${token}` 
