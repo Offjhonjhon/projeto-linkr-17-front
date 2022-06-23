@@ -7,11 +7,8 @@ import { TailSpin } from "react-loader-spinner";
 import useInterval from 'use-interval';
 import Hashtag from "../components/Hashtag";
 import Likes from "../components/Likes.js";
-import DeleteIcon from "../components/DeleteIcon.js";
 import Reposts from "../components/Reposts.js";
-
 import TrendingHashtags from '../components/TrendingHashtags';
-import EditIcon from "../components/EditIcon.js";
 
 function Timeline() {
     const { URL } = useContext(StateContext)
@@ -165,37 +162,6 @@ function Timeline() {
         })
     }
 
-    const [active, setActive] = useState(false);
-    const [enableTextArea, setEnableTextArea] = useState(false);
-    const textareaRef = useRef("");
-    const [publicationId, setPublicationId] = useState("");
-
-    const handleUserKeyPress = (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            sendUpdate();
-        }
-    };
-
-    async function sendUpdate() {
-        setEnableTextArea(true);
-
-        try {
-            await axios.post(URL + "/post/edit", {
-                publicationId,
-                description: textareaRef.current.value
-            }, config);
-
-            console.log(textareaRef.current.value);
-            setActive(false);
-            refreshTimeline();
-        } catch (e) {
-            alert("Não foi possível salvar as alterações!");
-            setEnableTextArea(false);
-        }
-    }
-
-
     return (
         <TimeLinePage>
             <Main>
@@ -221,18 +187,6 @@ function Timeline() {
                     posts.map((post, index) => {
                         return (
                             <Post key={index}>
-                                {post.isFromUser ?
-                                    <Icons>
-                                        <EditIcon active={active}
-                                            setActive={setActive}
-                                            enableTextArea={enableTextArea}
-                                            setEnableTextArea={setEnableTextArea}
-                                            textareaRef={textareaRef}
-                                            setPublicationId={setPublicationId}
-                                            postId={post.postId} />
-                                        <DeleteIcon token={token} postId={post.postId} refreshTimeline={refreshTimeline} />
-                                    </Icons>
-                                    : ""}
                                 <div className="user-info">
                                     <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
                                         <img src={post.avatar} alt={post.name} />
@@ -242,17 +196,7 @@ function Timeline() {
                                 </div >
                                 <div className="post-area">
                                     <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
-                                    {active && post.isFromUser ?
-                                        <TextArea active={active}
-                                            readOnly={enableTextArea}
-                                            type="text"
-                                            ref={textareaRef}
-                                            onKeyPress={handleUserKeyPress}
-                                            style={{ color: '#4C4C4C' }}
-                                            defaultValue={post.text}>
-                                        </TextArea>
-                                        :
-                                        <p className="text"><Hashtag>{post.text}</Hashtag></p>}
+                                    <p className="text"><Hashtag>{post.text}</Hashtag></p>
                                     <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
                                         <div className="link-left">
                                             <div className="title">{post.title}</div>
