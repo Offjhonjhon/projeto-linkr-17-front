@@ -28,7 +28,7 @@ function FollowButton({ userId, followed, setFollowed }) {
             if (!token) {
                 navigate("/sign-in");
             } else {
-                const response = await axios.post((`${URL}/user/follow`, { userPageId: userId }, config);
+                const response = await axios.post(`${URL}/user/follow`, { userPageId: userId }, config);
                 console.log(response.data)
     
                 if (response.data === "followed") {
