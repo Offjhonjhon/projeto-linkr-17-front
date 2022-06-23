@@ -37,6 +37,7 @@ export default function UserPage() {
     const [enableTextArea, setEnableTextArea] = useState(false);
     const textareaRef = useRef("");
     const [publicationId, setPublicationId] = useState("");
+    const loggedUser = JSON.parse(data).userId;
 
     const handleUserKeyPress = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
@@ -102,6 +103,7 @@ export default function UserPage() {
                 posts === "Loading" ? <p className="message">Loading...</p> : posts.status === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
                     return (
                         <Post key={index}>
+                            {parseInt(loggedUser) === parseInt(post.id) ? 
                             <Icons>
                                 <EditIcon active={active}
                                     setActive={setActive}
@@ -112,10 +114,12 @@ export default function UserPage() {
                                     postId={post.postId} />
                                 <DeleteIcon postId={post.postId} token={token} refreshTimeline={refreshTimeline} />
                             </Icons>
+                            : ""
+                            }
                             <div className="profile-picture">
                                 <img src={post.avatar} alt={post.name} />
                                 <Like>
-                                    <Likes postId={post.id} token={token} />
+                                    <Likes postId={post.postId} token={token} />
                                 </Like>
                             </div>
                             <div className="post-area">
