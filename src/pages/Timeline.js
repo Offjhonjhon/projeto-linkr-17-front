@@ -7,7 +7,7 @@ import { TailSpin } from "react-loader-spinner";
 import Hashtag from "../components/Hashtag";
 import Likes from "../components/Likes.js";
 import DeleteIcon from "../components/DeleteIcon.js";
-import CommentsIcon from "../components/Comments/CommentsIcon.js";
+
 
 import TrendingHashtags from '../components/TrendingHashtags';
 import EditIcon from "../components/EditIcon.js";
@@ -209,7 +209,7 @@ function Timeline() {
                                         <img src={post.avatar} alt={post.name} />
                                     </div>
                                     <Likes postId={post.postId} token={token} />
-                                    <CommentsIcon />
+
                                 </div >
                                 <div className="post-area">
                                     <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
