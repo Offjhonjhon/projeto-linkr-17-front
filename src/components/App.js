@@ -12,9 +12,11 @@ import UserPage from './UserPage.js';
 
 export default function App() {
     const [visible, setVisible] = useState(true);
+    const URL = 'http://localhost:4000';
+    // const URL = 'https://projeto17-linkr-grupo2-vini.herokuapp.com';
 
     return (
-        <StateContext.Provider value={{ visible, setVisible }}>
+        <StateContext.Provider value={{ visible, setVisible, URL }}>
             <BrowserRouter>
                 <Header />
                 <SearchBar />
