@@ -103,7 +103,7 @@ export default function UserPage() {
                 posts === "Loading" ? <p className="message">Loading...</p> : posts.status === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
                     return (
                         <Post key={index}>
-                            {parseInt(loggedUser) === parseInt(post.id) ? 
+                            {parseInt(loggedUser) === parseInt(post.userId) ? 
                             <Icons>
                                 <EditIcon active={active}
                                     setActive={setActive}
