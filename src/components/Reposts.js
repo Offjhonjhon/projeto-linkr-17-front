@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 Modal.setAppElement(".root");
 
-export default function Reposts({postId, refreshTimeline, token}) {
+export default function Reposts({token, postId, Post}) {
     const [isOpen, setIsOpen] = useState(false);
     const [count, setCount] = useState(0);
     const config = { 
