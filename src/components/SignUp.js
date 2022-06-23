@@ -6,7 +6,7 @@ import axios from 'axios';
 import StateContext from '../contexts/StateContext.js';
 
 export default function SignUp() {
-    const { setVisible } = useContext(StateContext);
+    const { setVisible, URL } = useContext(StateContext);
     const [disable, setDisable] = useState(false);
     const [data, setData] = useState({
         email: '',
@@ -23,7 +23,7 @@ export default function SignUp() {
         setDisable(true);
 
         try {
-            await axios.post('http://localhost:4000/sign-up', data);
+            await axios.post(`${URL}/sign-up`, data);
             navigate('/sign-in');
         } catch (e) {
             setDisable(false);
