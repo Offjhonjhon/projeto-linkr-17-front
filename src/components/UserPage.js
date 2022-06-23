@@ -16,8 +16,6 @@ export default function UserPage() {
     const { id } = useParams()
     const data = localStorage.getItem("dados");
     const token = JSON.parse(data).token;
-    
-    console.log('id-userpage', id)
 
     const [refresh, setRefresh] = useState([]);
     function refreshTimeline() { setRefresh([]) }
