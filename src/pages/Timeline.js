@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
+import useInterval from 'use-interval';
 import Hashtag from "../components/Hashtag";
 import Likes from "../components/Likes.js";
 import DeleteIcon from "../components/DeleteIcon.js";
@@ -42,7 +43,13 @@ function Timeline() {
     const [lastUpdateTime, setLastUpdateTime] = useState("0");
 
     const [refresh, setRefresh] = useState([]);
-    function refreshTimeline() { setRefresh([]) }
+    function refreshTimeline() {
+        setPosts([]);
+        setNewPosts(0);
+        setLastUpdateTime("0");
+        setCurrentPage(0);
+        setRefresh([]);
+    }
 
     const [currentPage, setCurrentPage] = useState(-1);
     const loaderRef = useRef(null);
@@ -101,6 +108,21 @@ function Timeline() {
         }
 
     }, [URL, refresh, currentPage]);
+
+    const [newPosts, setNewPosts] = useState(0);
+
+    useInterval(() => {
+
+        const promise = axios.get(URL + "/newposts/" + lastUpdateTime, { headers: { Authorization: `Bearer ${token}` } });
+
+        promise.then(answer => {
+            setNewPosts(answer.data);
+        });
+
+        promise.catch(error => {
+            console.log("An error occured while trying to fetch the posts, please refresh the page");
+        });
+    }, 5000);
 
 
     const [url, setUrl] = useState("");
@@ -189,6 +211,12 @@ function Timeline() {
                         <button type="submit" disabled={loading}>{loading ? "Publishing..." : "Publish"}</button>
                     </form>
                 </div>
+                {!newPosts ? "" :
+                    <div className="timeline-updates" onClick={refreshTimeline}>
+                        <p>{newPosts + " new posts, load more!"}</p>
+                        <ion-icon name="reload-outline"></ion-icon>
+                    </div>
+                }
                 {
                     posts.map((post, index) => {
                         return (
@@ -315,6 +343,7 @@ const Main = styled.div`
         width: var(--width);
         border-radius: var(--border-radius);
         margin-top: 43px;
+        margin-bottom: 24px;
         background-color: white;
         box-shadow: 0px 4px 4px 0px #00000040;
 
@@ -409,6 +438,24 @@ const Main = styled.div`
         color: white;
     }
 
+    .timeline-updates {
+        height: 61px;
+        width: var(--width);
+        border-radius: 16px;
+        background-color: #1877F2;
+        margin-top: 16px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .timeline-updates > p {
+        font-weight: 400;
+        font-size: 16px;
+        margin-right: 14px;
+    }
+
     .message {
         margin-top: 30px;
         display: flex;
@@ -439,7 +486,7 @@ const ProfileImage = styled.img`
 const Post = styled.div`
     min-height: 209px;
     width: var(--width);
-    margin-top: 43px;
+    margin-top: 16px;
     border-radius: var(--border-radius);
     background-color: #171717;
     box-shadow: 0px 4px 4px 0px #00000040;
