@@ -1,21 +1,23 @@
 import axios from "axios";
 import Modal from "react-modal";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styled from "styled-components";
 import { CgTrashEmpty } from "react-icons/cg";
 import { ThreeDots } from "react-loader-spinner";
+import StateContext from "../contexts/StateContext";
 
 Modal.setAppElement(".root");
 
-function DeleteIcon({postId, refreshTimeline, token}) {
+function DeleteIcon({ postId, refreshTimeline, token }) {
+    const { URL } = useContext(StateContext)
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const config = {
-        headers: { 
+        headers: {
             Authorization: `Bearer ${token}`
-       } 
-   }
+        }
+    }
 
     function toggleModal() {
         setIsOpen(!isOpen);
@@ -24,7 +26,7 @@ function DeleteIcon({postId, refreshTimeline, token}) {
     async function deletePost() {
         setLoading(true);
         try {
-            await axios.delete(`https://projeto17-linkr-grupo2-vini.herokuapp.com/post/delete/${postId}`, config);
+            await axios.delete(`${URL}/post/delete/${postId}`, config);
             setLoading(false);
             toggleModal();
             refreshTimeline();
@@ -36,7 +38,7 @@ function DeleteIcon({postId, refreshTimeline, token}) {
         }
     }
 
-    return  (
+    return (
         <Container>
             <CgTrashEmpty onClick={() => toggleModal()} />
             <Modal
@@ -49,23 +51,23 @@ function DeleteIcon({postId, refreshTimeline, token}) {
                 overlayElement={(props, contentElement) => (
                     <OverlayStyle {...props}>{contentElement}</OverlayStyle>
                 )}
-             >
-               <div className="dialog-text">
+            >
+                <div className="dialog-text">
                     Are you sure you want to delete this post?
                 </div>
                 <div className="buttons">
                     <button className="goback" onClick={toggleModal} disabled={loading}>No, go back</button>
-                    {loading ? 
-                    <DivLoading>
-                        <ThreeDots color="#FFFFFF" width={50} />
-                    </DivLoading>
-                    :
-                    <button className="deleteit" onClick={deletePost}>Yes, delete it</button>
+                    {loading ?
+                        <DivLoading>
+                            <ThreeDots color="#FFFFFF" width={50} />
+                        </DivLoading>
+                        :
+                        <button className="deleteit" onClick={deletePost}>Yes, delete it</button>
                     }
-                    
+
                 </div>
             </Modal>
-        </Container>    
+        </Container>
     )
 }
 

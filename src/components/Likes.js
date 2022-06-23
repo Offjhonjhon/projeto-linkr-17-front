@@ -1,33 +1,35 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import styled from "styled-components";
 import Tippy from '@tippyjs/react/headless';
+import StateContext from "../contexts/StateContext";
 
 function Likes({ postId, token }) {
+    const { URL } = useContext(StateContext)
     const [icon, setIcon] = useState(false);
     const [totalLikes, settotalLikes] = useState("");
     const [usersAux, setUsersAux] = useState([]);
     let users = [];
 
-    const config = { 
-        headers: { 
-            Authorization: `Bearer ${token}` 
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
         }
     }
 
     async function getAllLikes() {
         try {
-            const {request} = await axios.post("https://projeto17-linkr-grupo2-vini.herokuapp.com/userLikes", { publicationId: postId }, config);
-            const {response} = request;
+            const { request } = await axios.post(`${URL}/userLikes`, { publicationId: postId }, config);
+            const { response } = request;
             const object = JSON.parse(response);
 
             if (object.allLikes.length > 0) {
                 settotalLikes(object.allLikes.length);
             } else {
                 settotalLikes("");
-            }            
-            
+            }
+
             if (object.userName) {
                 setIcon(true);
             } else {
@@ -38,23 +40,23 @@ function Likes({ postId, token }) {
                 if (item) {
                     users.push(item);
                 }
-            });           
-        }catch(e) {
+            });
+        } catch (e) {
             console.log(e);
         }
-        
+
     }
-    getAllLikes();  
+    getAllLikes();
 
     async function likePost() {
         try {
-            const {request} = await axios.post("https://projeto17-linkr-grupo2-vini.herokuapp.com/likes", { publicationId: postId }, config);
-            const {response} = request;
+            const { request } = await axios.post(`${URL}/likes`, { publicationId: postId }, config);
+            const { response } = request;
 
             console.log(response)
 
             if (response === "likeSuccess") {
-                setIcon(!icon);                
+                setIcon(!icon);
             }
 
             if (response === "deslikeSuccess") {
@@ -67,12 +69,12 @@ function Likes({ postId, token }) {
 
     function getIcon() {
         return icon ? (
-            <FaHeart style={{fill: "#AC0000"}} onClick={likePost}/>
+            <FaHeart style={{ fill: "#AC0000" }} onClick={likePost} />
         )
-        :
-        (
-            <FaRegHeart style={{fill: "#FFFFFF"}} onClick={likePost}/>
-        )
+            :
+            (
+                <FaRegHeart style={{ fill: "#FFFFFF" }} onClick={likePost} />
+            )
     }
 
     useEffect(() => {
@@ -82,8 +84,8 @@ function Likes({ postId, token }) {
     function getTooltipBoxLikes() {
         if (totalLikes === 0) {
             return "";
-        } 
-        
+        }
+
         if (icon) {
             if (totalLikes === 1) {
                 return "Você";
@@ -91,7 +93,7 @@ function Likes({ postId, token }) {
                 return `Você e outra pessoa`;
             } else if (totalLikes === 3) {
                 return "Você e outras 2 pessoas";
-            } else  {
+            } else {
                 return `Você, ${usersAux[0][0]} e outras ${usersAux[0].length - 1} pessoas`;
             }
         } else {
@@ -101,21 +103,21 @@ function Likes({ postId, token }) {
                 return `${usersAux[0][0]} e outra pessoa`;
             } else if (totalLikes === 3) {
                 return `${usersAux[0][0]} e outras 2 pessoas`;
-            } else  {
+            } else {
                 return `${usersAux[0][0]} e outras ${usersAux[0].length - 1} pessoas`;
             }
         }
     }
-      
+
     return (
-        <Container> 
+        <Container>
             {getIcon()}
-            <Tippy 
+            <Tippy
                 placement="bottom"
                 render={attrs => (
                     <Tooltip {...attrs}>
-                      <p>{getTooltipBoxLikes()}</p>
-                      <div className="arrow" data-popper-arrow></div>
+                        <p>{getTooltipBoxLikes()}</p>
+                        <div className="arrow" data-popper-arrow></div>
                     </Tooltip>
                 )} >
                 <p>{totalLikes}{totalLikes > 1 ? " likes" : totalLikes === 1 ? " like" : ""}</p>

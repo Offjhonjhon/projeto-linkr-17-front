@@ -1,15 +1,17 @@
 import styled from "styled-components";
-
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Hashtag from "../components/Hashtag";
 import TrendingHashtags from '../components/TrendingHashtags';
 import { useParams } from "react-router-dom";
 import DeleteIcon from "./DeleteIcon";
 import EditIcon from "./EditIcon";
+import FollowButton from "./FollowButton";
 import Likes from "./Likes";
+import StateContext from "../contexts/StateContext";
 
-export default function UserPage(){
+export default function UserPage() {
+    const { URL } = useContext(StateContext)
     const [posts, setPosts] = useState("Loading");
     const { id } = useParams()
     const data = localStorage.getItem("dados");
@@ -19,18 +21,17 @@ export default function UserPage(){
     function refreshTimeline() { setRefresh([]) }
 
     useEffect(() => {
-        const promise = axios.get("https://projeto17-linkr-grupo2-vini.herokuapp.com/user/" + id);
+        const promise = axios.get(`${URL}/user/` + id);
 
         promise.then(answer => {
             setPosts(answer.data);
-            console.log(answer.data)
         });
 
         promise.catch(() => {
             alert("An error occured while trying to fetch the posts, please refresh the page");
         });
 
-    },[id, refresh]);
+    }, [id, refresh]);
 
     const [active, setActive] = useState(false);
     const [enableTextArea, setEnableTextArea] = useState(false);
@@ -48,13 +49,14 @@ export default function UserPage(){
         setEnableTextArea(true);
 
         try {
-            await axios.post("http://localhost:4000/post/edit", {
+            await axios.post(`${URL}/post/edit`, {
                 publicationId,
                 description: textareaRef.current.value
-            }, { 
-                headers: { 
-                    Authorization: `Bearer ${token}` 
-            } });
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
 
             console.log(textareaRef.current.value);
             setActive(false);
@@ -65,41 +67,69 @@ export default function UserPage(){
         }
     }
 
+    const [followed, setFollowed] = useState(false);
+
+    async function checkFollowUser() {
+        try {
+            const response = await axios.post(`${URL}/check-follow`, {userPageId: id},
+            { 
+                headers: { 
+                    Authorization: `Bearer ${token}` 
+            } });
+
+            if (response.data.status === "not followed") {
+                setFollowed(false);
+            }
+
+            if(response.data.status === "followed") {
+                setFollowed(true);
+            }
+            
+            console.log('checkfollow', response.data)
+            
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    checkFollowUser();
+
     return( <TimeLinePage>
         <Main>
-            <div className="timeline"> {posts === "Loading" ? null : posts.status !== "Empty" ? posts[0].name + "'s posts" : posts.name + "'s posts"}</div>
+            <div className="timeline"> {posts === "Loading" ? null : posts.status !== "Empty" ?<p> {posts[0].name}'s posts</p> :<p>{posts.name}'s posts</p>}
+            <FollowButton userId={parseInt(id)} followed={followed} setFollowed={setFollowed}/>
+            </div>
             {
                 posts === "Loading" ? <p className="message">Loading...</p> : posts.status === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
                     return (
                         <Post key={index}>
                             <Icons>
                                 <EditIcon active={active}
-                                          setActive={setActive}
-                                          enableTextArea={enableTextArea}
-                                          setEnableTextArea={setEnableTextArea}
-                                          textareaRef={textareaRef}
-                                          setPublicationId={setPublicationId}
-                                          postId={post.postId} />
-                                <DeleteIcon postId={post.postId} token={token} refreshTimeline={refreshTimeline}/>
+                                    setActive={setActive}
+                                    enableTextArea={enableTextArea}
+                                    setEnableTextArea={setEnableTextArea}
+                                    textareaRef={textareaRef}
+                                    setPublicationId={setPublicationId}
+                                    postId={post.postId} />
+                                <DeleteIcon postId={post.postId} token={token} refreshTimeline={refreshTimeline} />
                             </Icons>
                             <div className="profile-picture">
                                 <img src={post.avatar} alt={post.name} />
                                 <Like>
-                                    <Likes postId={post.id} token={token}/>
+                                    <Likes postId={post.id} token={token} />
                                 </Like>
                             </div>
                             <div className="post-area">
                                 <p className="user-name">{post.name}</p>
-                                {active && post.postId === publicationId ? 
-                                    <TextArea active={active} 
-                                    readOnly={enableTextArea}
-                                    type="text" 
-                                    ref={textareaRef}
-                                    onKeyPress={handleUserKeyPress}
-                                    style={{color: '#4C4C4C'}}
-                                    defaultValue={post.text}>                                 
-                                    </TextArea> 
-                                    : 
+                                {active && post.postId === publicationId ?
+                                    <TextArea active={active}
+                                        readOnly={enableTextArea}
+                                        type="text"
+                                        ref={textareaRef}
+                                        onKeyPress={handleUserKeyPress}
+                                        style={{ color: '#4C4C4C' }}
+                                        defaultValue={post.text}>
+                                    </TextArea>
+                                    :
                                     <p className="text"><Hashtag>{post.text}</Hashtag></p>}
                                 <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
                                     <div className="link-left">
@@ -116,7 +146,7 @@ export default function UserPage(){
 
             }
         </Main>
-        <TrendingHashtags />
+        <TrendingHashtags />        
     </TimeLinePage>)
 
 }
@@ -162,11 +192,6 @@ const TimeLinePage = styled.div`
     justify-content: center;
 `;
 
-const Like = styled.div`
-    
-    margin-top: 19px;
-`
-
 const Main = styled.div`
 
     display: flex;
@@ -175,12 +200,19 @@ const Main = styled.div`
     
 
     .timeline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         width: var(--width);
         margin-top: 78px;
         font-family: 'Oswald', sans-serif;
         font-size: 43px;
         font-weight: 700;
         color: white;
+
+        p{
+            width: 50%;
+        }
     }
 
     .publish {
@@ -383,6 +415,10 @@ const Post = styled.div`
         object-fit: cover;
     }
 `;
+
+const Like = styled.div`
+    margin-top: 15px;
+`
 
 const Icons = styled.div`
     width: 50px;

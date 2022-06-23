@@ -1,24 +1,26 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import StateContext from "../contexts/StateContext";
 
 export default function TrendingHashtags() {
+    const { URL } = useContext(StateContext);
     const [hashtags, setHashtags] = useState([]);
-    const URL = `https://projeto17-linkr-grupo2-vini.herokuapp.com/`
 
     useEffect(() => {
         async function getTrendingHashtags() {
             try {
-                const { data } = await axios.get(`${URL}hashtag/trending-hashtags`);
+                const { data } = await axios.get(`${URL}/hashtag/trending-hashtags`);
+
                 setHashtags(data.map(hashtag => hashtag.tag));
 
-            } catch {
-                console.log("error")
+            } catch (error) {
+                console.log(error)
             }
         }
         getTrendingHashtags();
-    }, []);
+    }, [URL]);
 
 
     return (
@@ -50,7 +52,7 @@ const TrendingContainer = styled.div`
     border-radius: 16px;
     color: #ffffff;
 
-    @media (max-width: 700px) {
+    @media (max-width: 750px) {
         display: none;
     }
 

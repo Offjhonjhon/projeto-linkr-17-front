@@ -1,23 +1,23 @@
 import Hashtag from '../components/Hashtag';
 import TrendingHashtags from '../components/TrendingHashtags';
 import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import StateContext from '../contexts/StateContext';
 
 
 function HashtagPosts() {
-    const URL = `https://projeto17-linkr-grupo2-vini.herokuapp.com/`
+    const { URL } = useContext(StateContext)
     const title = useParams().hashtag;
     const [posts, setPosts] = useState("Loading");
 
     const [refresh, setRefresh] = useState([]);
-    function refreshTimeline() { setRefresh([]) }
 
     useEffect(() => {
         async function getPosts() {
             try {
-                const { data } = await axios.get(`${URL}hashtag/${title}`);
+                const { data } = await axios.get(`${URL}/hashtag/${title}`);
                 setPosts(data);
                 console.log(data)
             }
