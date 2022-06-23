@@ -20,6 +20,7 @@ function Timeline() {
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { setVisible } = useContext(StateContext);
     const navigate = useNavigate()
+    console.log(token)
 
     setVisible(true)
 
@@ -172,7 +173,6 @@ function Timeline() {
         }
     }
 
-    console.log(posts)
     return (
         <TimeLinePage>
             <Main>
