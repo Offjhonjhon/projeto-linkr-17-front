@@ -7,6 +7,7 @@ import { TailSpin } from "react-loader-spinner";
 import Hashtag from "../components/Hashtag";
 import Likes from "../components/Likes.js";
 import DeleteIcon from "../components/DeleteIcon.js";
+import CommentsIcon from "../components/Comments/CommentsIcon.js";
 
 import TrendingHashtags from '../components/TrendingHashtags';
 import EditIcon from "../components/EditIcon.js";
@@ -157,7 +158,7 @@ function Timeline() {
         setEnableTextArea(true);
 
         try {
-            await axios.post("https://projeto17-linkr-grupo2-vini.herokuapp.com/post/edit", {
+            await axios.post(`${URL}/post/edit`, {
                 publicationId,
                 description: textareaRef.current.value
             }, config);
@@ -171,7 +172,7 @@ function Timeline() {
         }
     }
 
-
+    console.log(posts)
     return (
         <TimeLinePage>
             <Main>
@@ -208,6 +209,7 @@ function Timeline() {
                                         <img src={post.avatar} alt={post.name} />
                                     </div>
                                     <Likes postId={post.postId} token={token} />
+                                    <CommentsIcon />
                                 </div >
                                 <div className="post-area">
                                     <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
@@ -452,8 +454,10 @@ const Post = styled.div`
     }
 
     .profile-picture {
-        height: 80px;
+        height: 75px;
         width: 68px;
+        margin-right: 10px;
+        margin-top: 5px;
     }
 
     .profile-picture > img {
@@ -462,12 +466,13 @@ const Post = styled.div`
         width: 50px;
         border-radius: 25px;
         object-fit: cover;
+        
     }
 
     .post-area {
         height: 100%;
         width: calc(var(--width) - 68px);
-        padding: 20px;
+        padding: 20px 20px 20px 10px;
 
         display: flex;
         flex-direction: column;
