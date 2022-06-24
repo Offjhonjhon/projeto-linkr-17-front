@@ -5,8 +5,8 @@ import styled from "styled-components";
 import StateContext from "../contexts/StateContext";
 
 function FollowButton({ userId, followed, setFollowed }) {
+    const data = localStorage.getItem("data");
     const { URL } = useContext(StateContext)
-    const data = localStorage.getItem("dados");
     console.log(data)
     const loggedUser = JSON.parse(data).userId;
     const token = JSON.parse(data).token;

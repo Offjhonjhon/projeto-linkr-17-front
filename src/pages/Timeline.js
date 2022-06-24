@@ -5,23 +5,30 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
 import useInterval from 'use-interval';
-import Hashtag from "../components/Hashtag";
-import Likes from "../components/Likes.js";
-import CommentsIcon from "../components/Comments/CommentsIcon.js";
-import CommentsBox from "../components/Comments/CommentsBox.js";
-import Reposts from "../components/Reposts.js";
 import TrendingHashtags from '../components/TrendingHashtags';
+import PostComponent from "../components/PostComponent.js";
+import Repost from "../components/Repost.js";
 
 function Timeline() {
     const { URL } = useContext(StateContext)
-    const data = localStorage.getItem("dados");
+    const data = localStorage.getItem("data");
     const token = JSON.parse(data).token;
-    const getData = localStorage.getItem("dados");
+    const getData = localStorage.getItem("data");
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { setVisible } = useContext(StateContext);
-    const navigate = useNavigate()
-    const [chat, setChat] = useState(false);
-
+    const navigate = useNavigate();
+    const [posts, setPosts] = useState([]);
+    const [reposts, setReposts] = useState();
+    const [lastUpdateTime, setLastUpdateTime] = useState("0");
+    const [refresh, setRefresh] = useState([]);
+    const [currentPage, setCurrentPage] = useState(-1);
+    const loaderRef = useRef(null);
+    const [loadingScroll, setLoadingScroll] = useState("");
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
 
     setVisible(true)
 
@@ -35,10 +42,7 @@ function Timeline() {
         return tags;
     }
 
-    const [posts, setPosts] = useState([]);
-    const [lastUpdateTime, setLastUpdateTime] = useState("0");
 
-    const [refresh, setRefresh] = useState([]);
     function refreshTimeline() {
         setPosts([]);
         setNewPosts(0);
@@ -47,9 +51,6 @@ function Timeline() {
         setRefresh([]);
     }
 
-    const [currentPage, setCurrentPage] = useState(-1);
-    const loaderRef = useRef(null);
-    const [loadingScroll, setLoadingScroll] = useState("");
 
     useEffect(() => {
         const options = {
@@ -88,7 +89,7 @@ function Timeline() {
                     } else if (answer.data === "No-followers") {
                         setLoadingScroll("You don't follow anyone yet. Search for new friends!");
                         return [...old];
-                    }else {
+                    } else {
                         if (currentPage === 0) { setLastUpdateTime(answer.data[0].createdAt) }
                         return [...old, ...answer.data];
                     }
@@ -100,8 +101,16 @@ function Timeline() {
             });
         }
 
+        async function getPost() {
+            const {data} = await axios.get(`${URL}/reposts`, config);
+            setReposts(data);
+        }
+
         if (token) {
-            if (currentPage >= 0) { getTimeline() }
+            if (currentPage >= 0) { 
+                getTimeline();
+                getPost();
+            }
         } else {
             navigate("/sign-in");
         }
@@ -188,35 +197,11 @@ function Timeline() {
                 {
                     posts.map((post, index) => {
                         return (
-                            <Post key={index}>
-                                <div className="post-container">
-                                    <div className="user-info">
-                                        <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
-                                            <img src={post.avatar} alt={post.name} />
-                                        </div>
-                                        <Likes postId={post.postId} token={token} />
-                                        <CommentsIcon postId={post.postId} callback={() => setChat(!chat)} />
-                                        <Reposts token={token} postId={post.postId} />
-                                    </div >
-                                    <div className="post-area">
-                                        <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
-                                        <p className="text"><Hashtag>{post.text}</Hashtag></p>
-                                        <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
-                                            <div className="link-left">
-                                                <div className="title">{post.title}</div>
-                                                <div className="description">{post.description}</div>
-                                                <div className="url">{post.url}</div>
-                                            </div>
-                                            <img src={post.image} alt="Post" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <CommentsBox post={post} visibility={chat} avatar={avatar} token={token} />
-                            </Post >
+                            <PostComponent key={index} post={post} />
                         );
                     })
-
                 }
+                <Repost />
                 <div className="message">
                     {loadingScroll === "Loading..." || loadingScroll === "Loading more posts..." ?
                         <TailSpin {...{ color: "#6D6D6D", width: "36px", height: "36px" }} /> :
@@ -232,8 +217,8 @@ function Timeline() {
 
 export default Timeline;
 
-
 const TimeLinePage = styled.div`
+    
 
     @media (min-width: 652px) {
 
@@ -274,11 +259,10 @@ const TimeLinePage = styled.div`
 `;
 
 const Main = styled.div`
-
+    
     display: flex;
     flex-direction: column;
     align-items: center;
-    
 
     .timeline {
         width: var(--width);
@@ -294,7 +278,6 @@ const Main = styled.div`
         width: var(--width);
         border-radius: var(--border-radius);
         margin-top: 43px;
-        margin-bottom: 24px;
         background-color: white;
         box-shadow: 0px 4px 4px 0px #00000040;
 
@@ -304,11 +287,6 @@ const Main = styled.div`
     .profile-picture {
         height: 100px;
         width: 68px;
-
-        @media (max-width: 700px) {
-            width: 0;
-            height: 0;
-        }
     }
 
     .profile-picture > img {
@@ -326,10 +304,6 @@ const Main = styled.div`
 
         display: flex;
         flex-direction: column;
-
-        @media (max-width: 700px) {
-            width: 100vw;
-        }
     }
 
     .publish-form * {
@@ -353,10 +327,6 @@ const Main = styled.div`
         margin-top: 15px;
         font-weight: 300;
         font-size: 15px;
-
-        @media (max-width: 700px) {
-            width: 100%;
-        }
     }
 
     .publish-form > .text {
@@ -370,10 +340,6 @@ const Main = styled.div`
         margin-top: 5px;
         font-weight: 300;
         font-size: 15px;
-
-        @media (max-width: 700px) {
-            width: 100%;
-        }
     }
 
     .publish-form > button {
@@ -389,180 +355,18 @@ const Main = styled.div`
         color: white;
     }
 
-    .timeline-updates {
-        height: 61px;
-        width: var(--width);
-        border-radius: 16px;
-        background-color: #1877F2;
-        margin-top: 16px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .timeline-updates > p {
-        font-weight: 400;
-        font-size: 16px;
-        margin-right: 14px;
-    }
-
     .message {
-        margin-top: 30px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .message > .loading-scroll {
-        width: 36px;
-        height: 36px;
-    }
-
-    .message > p {
-        margin-top: 16px;
-        font-family: 'Lato', sans-serif;
-        font-weight: 400;
-        font-size: 22px;
-        color: #6D6D6D;
+        margin-top: 20px;
     }
 `;
+
+
 
 const ProfileImage = styled.img`
      @media (max-width: 700px) {
         display: none;
     }
 `
-
-const Post = styled.div`
-    display: flex;
-    flex-direction: column;
-    min-height: 209px;
-    width: var(--width);
-    margin-top: 16px;
-    border-radius: var(--border-radius);
-    background-color: #171717;
-    box-shadow: 0px 4px 4px 0px #00000040;
-    position: relative;
-
-    display: flex;
-
-    .post-container {
-        display: flex;
-    }
-
-    .user-info {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .profile-picture {
-        height: 75px;
-        width: 68px;
-        margin-right: 10px;
-        margin-top: 10px;
-    }
-
-    .profile-picture > img {
-        margin: 9px 0 0 18px;
-        height: 50px;
-        width: 50px;
-        border-radius: 25px;
-        object-fit: cover;
-        
-    }
-
-    .post-area {
-        height: 100%;
-        width: calc(var(--width) - 68px);
-        padding: 20px 20px 20px 10px;
-
-        display: flex;
-        flex-direction: column;
-    }
-
-    .post-area * {
-        font-family: 'Lato', sans-serif;
-    }
-
-    .post-area > .user-name {
-        color: white;
-        font-size: 19px;
-        font-weight: 400;
-    }
-
-    .post-area > .text {
-        margin-top: 12px;
-        padding-bottom: 5px;
-        color: #B7B7B7;
-        font-size: 17px;
-        font-weight: 400;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-    }
-
-    .link-area {
-        margin-top: 12px;
-        width: calc(var(--width) - 108px);
-        height: 155px;
-        border-radius: 11px;
-        border: 1px solid #4D4D4D;
-        text-decoration: none;
-
-        display: flex;
-    }
-
-    .link-left {
-        width: calc(0.7 * (var(--width) - 108px));
-        height: 153px;
-        padding: 24px 19px;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .link-left > * {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-    }
-
-    .link-left > .title {
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 19px;
-        color: #CECECE;
-        -webkit-line-clamp: 2;
-    }
-    .link-left > .description {
-        font-weight: 400;
-        font-size: 11px;
-        line-height: 13px;
-        color: #9B9595;
-        -webkit-line-clamp: 3;
-    }
-    .link-left > .url {
-        font-weight: 400;
-        font-size: 11px;
-        line-height: 13px;
-        color: #CECECE;
-        -webkit-line-clamp: 1;
-    }
-
-    .link-area > img {
-        width: calc(0.3 * (var(--width) - 108px));
-        height: 153px;
-        border-top-right-radius: 11px;
-        border-bottom-right-radius: 11px;
-        object-fit: cover;
-    }
-`;
 
 const Icons = styled.div`
     width: 50px;

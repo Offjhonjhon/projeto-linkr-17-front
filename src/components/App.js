@@ -9,6 +9,7 @@ import StateContext from '../contexts/StateContext.js';
 import Timeline from '../pages/Timeline.js';
 import HashtagPosts from '../pages/HashtagPosts.js';
 import UserPage from './UserPage.js';
+import Repost from './Repost.js';
 
 export default function App() {
     const [visible, setVisible] = useState(true);
@@ -26,6 +27,7 @@ export default function App() {
                     <Route path="/hashtag/:hashtag" element={<HashtagPosts />} />
                     <Route path="/sign-up" element={<SignUp />} />
                     <Route path="/timeline" element={<Timeline />} />
+                    <Route path="/reposts" element={<Repost />} />
                     <Route path="/user/:id" element={<UserPage />} />
                 </Routes>
             </BrowserRouter>
