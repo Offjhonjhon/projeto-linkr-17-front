@@ -1,10 +1,12 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import StateContext from "../contexts/StateContext";
 
 function FollowButton({ userId, followed, setFollowed }) {
     const data = localStorage.getItem("data");
+    const { URL } = useContext(StateContext)
     console.log(data)
     const loggedUser = JSON.parse(data).userId;
     const token = JSON.parse(data).token;
@@ -26,7 +28,7 @@ function FollowButton({ userId, followed, setFollowed }) {
             if (!token) {
                 navigate("/sign-in");
             } else {
-                const response = await axios.post("http://localhost:4000/user/follow", { userPageId: userId }, config);
+                const response = await axios.post(`${URL}/user/follow`, { userPageId: userId }, config);
                 console.log(response.data)
     
                 if (response.data === "followed") {
