@@ -30,12 +30,6 @@ function Timeline() {
         return tags;
     }
 
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }
-
     const [posts, setPosts] = useState([]);
     const [lastUpdateTime, setLastUpdateTime] = useState("0");
 
@@ -84,9 +78,12 @@ function Timeline() {
                     setLoadingScroll("");
 
                     if (answer.data === "Empty") {
-                        setLoadingScroll("There are no posts yet");
+                        setLoadingScroll("No posts found from your friends");
                         return [...old];
-                    } else {
+                    } else if (answer.data === "No-followers") {
+                        setLoadingScroll("You don't follow anyone yet. Search for new friends!");
+                        return [...old];
+                    }else {
                         if (currentPage === 0) { setLastUpdateTime(answer.data[0].createdAt) }
                         return [...old, ...answer.data];
                     }
