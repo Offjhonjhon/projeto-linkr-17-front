@@ -45,12 +45,16 @@ export default function TrendingHashtags() {
 }
 
 const TrendingContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    overflow-wrap: break-word;
     margin: 164px 0 0 25px;
     width: 301px;
     height: 406px;
     background: #171717;
     border-radius: 16px;
     color: #ffffff;
+    
 
     @media (max-width: 750px) {
         display: none;
