@@ -9,14 +9,17 @@ import EditIcon from "./EditIcon";
 import FollowButton from "./FollowButton";
 import Likes from "./Likes";
 import StateContext from "../contexts/StateContext";
+import CommentsIcon from "./Comments/CommentsIcon";
+import Reposts from "./Reposts";
+import CommentsBox from "./Comments/CommentsBox";
 
 export default function UserPage() {
     const { URL } = useContext(StateContext)
     const [posts, setPosts] = useState("Loading");
     const { id } = useParams()
     const data = localStorage.getItem("data");
-    const token = JSON.parse(data).token;
-
+    const { token, avatar } = JSON.parse(data);
+    const [chat, setChat] = useState(false);
     const [refresh, setRefresh] = useState([]);
     function refreshTimeline() { setRefresh([]) }
 
@@ -120,6 +123,8 @@ export default function UserPage() {
                                 <img src={post.avatar} alt={post.name} />
                                 <Like>
                                     <Likes postId={post.postId} token={token} />
+                                    <CommentsIcon postId={post.postId} callback={() => setChat(!chat)} refresh={refresh} />
+                                    <Reposts token={token} postId={post.postId} />
                                 </Like>
                             </div>
                             <div className="post-area">
@@ -144,16 +149,25 @@ export default function UserPage() {
                                     <img src={post.image} alt="Post" />
                                 </a>
                             </div>
+                            <CommentsBox
+                            post={post}
+                            visibility={chat}
+                            avatar={avatar}
+                            token={token}
+                            refresh={refresh}
+                            setRefresh={setRefresh} />
                         </Post>
                     );
                 })
 
             }
+            
         </Main>
         <TrendingHashtags />        
     </TimeLinePage>)
 
 }
+
 
 
 const TimeLinePage = styled.div`
@@ -315,6 +329,7 @@ const Post = styled.div`
     box-shadow: 0px 4px 4px 0px #00000040;
     position: relative;
     display: flex;
+    flex-direction: column;
 
     .profile-picture {
         height: 100px;
@@ -333,7 +348,8 @@ const Post = styled.div`
         height: 100%;
         width: calc(var(--width) - 68px);
         padding: 20px;
-
+        margin-left: 80px;
+        margin-top: -100px;
         display: flex;
         flex-direction: column;
     }
@@ -422,6 +438,9 @@ const Post = styled.div`
 
 const Like = styled.div`
     margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `
 
 const Icons = styled.div`
