@@ -10,7 +10,6 @@ export default function Comment({ value, follows }) {
             <UserIcon src={value.avatar} />
             <CommentDiv>
                 <User>
-
                     {author &&
                         <User>{value.name + " "} <Author > •  post’s author</Author></User>}
                     {follow && !author &&
