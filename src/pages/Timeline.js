@@ -172,7 +172,6 @@ function Timeline() {
             });
         })
     }
-    console.log(posts);
 
     return (
         <TimeLinePage>
@@ -218,8 +217,8 @@ function Timeline() {
 
 export default Timeline;
 
-
 const TimeLinePage = styled.div`
+    
 
     @media (min-width: 652px) {
 
@@ -260,11 +259,10 @@ const TimeLinePage = styled.div`
 `;
 
 const Main = styled.div`
-
+    
     display: flex;
     flex-direction: column;
     align-items: center;
-    
 
     .timeline {
         width: var(--width);
@@ -280,7 +278,6 @@ const Main = styled.div`
         width: var(--width);
         border-radius: var(--border-radius);
         margin-top: 43px;
-        margin-bottom: 24px;
         background-color: white;
         box-shadow: 0px 4px 4px 0px #00000040;
 
@@ -290,13 +287,6 @@ const Main = styled.div`
     .profile-picture {
         height: 100px;
         width: 68px;
-    }
-
-    .publish > .profile-picture {
-        @media (max-width: 700px) {
-            width: 0;
-            height: 0;
-        }
     }
 
     .profile-picture > img {
@@ -314,10 +304,6 @@ const Main = styled.div`
 
         display: flex;
         flex-direction: column;
-
-        @media (max-width: 700px) {
-            width: 100vw;
-        }
     }
 
     .publish-form * {
@@ -341,10 +327,6 @@ const Main = styled.div`
         margin-top: 15px;
         font-weight: 300;
         font-size: 15px;
-
-        @media (max-width: 700px) {
-            width: 100%;
-        }
     }
 
     .publish-form > .text {
@@ -358,10 +340,6 @@ const Main = styled.div`
         margin-top: 5px;
         font-weight: 300;
         font-size: 15px;
-
-        @media (max-width: 700px) {
-            width: 100%;
-        }
     }
 
     .publish-form > button {
@@ -377,180 +355,18 @@ const Main = styled.div`
         color: white;
     }
 
-    .timeline-updates {
-        height: 61px;
-        width: var(--width);
-        border-radius: 16px;
-        background-color: #1877F2;
-        margin-top: 16px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .timeline-updates > p {
-        font-weight: 400;
-        font-size: 16px;
-        margin-right: 14px;
-    }
-
     .message {
-        margin-top: 30px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .message > .loading-scroll {
-        width: 36px;
-        height: 36px;
-    }
-
-    .message > p {
-        margin-top: 16px;
-        font-family: 'Lato', sans-serif;
-        font-weight: 400;
-        font-size: 22px;
-        color: #6D6D6D;
+        margin-top: 20px;
     }
 `;
+
+
 
 const ProfileImage = styled.img`
      @media (max-width: 700px) {
         display: none;
     }
 `
-
-const Post = styled.div`
-    display: flex;
-    flex-direction: column;
-    min-height: 209px;
-    width: var(--width);
-    margin-top: 16px;
-    border-radius: var(--border-radius);
-    background-color: #171717;
-    box-shadow: 0px 4px 4px 0px #00000040;
-    position: relative;
-
-    display: flex;
-
-    .post-container {
-        display: flex;
-    }
-
-    .user-info {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .profile-picture {
-        height: 75px;
-        width: 68px;
-        margin-right: 10px;
-        margin-top: 10px;
-    }
-
-    .profile-picture > img {
-        margin: 9px 0 0 18px;
-        height: 50px;
-        width: 50px;
-        border-radius: 25px;
-        object-fit: cover;
-        
-    }
-
-    .post-area {
-        height: 100%;
-        width: calc(var(--width) - 68px);
-        padding: 20px 20px 20px 10px;
-
-        display: flex;
-        flex-direction: column;
-    }
-
-    .post-area * {
-        font-family: 'Lato', sans-serif;
-    }
-
-    .post-area > .user-name {
-        color: white;
-        font-size: 19px;
-        font-weight: 400;
-    }
-
-    .post-area > .text {
-        margin-top: 12px;
-        padding-bottom: 5px;
-        color: #B7B7B7;
-        font-size: 17px;
-        font-weight: 400;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-    }
-
-    .link-area {
-        margin-top: 12px;
-        width: calc(var(--width) - 108px);
-        height: 155px;
-        border-radius: 11px;
-        border: 1px solid #4D4D4D;
-        text-decoration: none;
-
-        display: flex;
-    }
-
-    .link-left {
-        width: calc(0.7 * (var(--width) - 108px));
-        height: 153px;
-        padding: 24px 19px;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .link-left > * {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-    }
-
-    .link-left > .title {
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 19px;
-        color: #CECECE;
-        -webkit-line-clamp: 2;
-    }
-    .link-left > .description {
-        font-weight: 400;
-        font-size: 11px;
-        line-height: 13px;
-        color: #9B9595;
-        -webkit-line-clamp: 3;
-    }
-    .link-left > .url {
-        font-weight: 400;
-        font-size: 11px;
-        line-height: 13px;
-        color: #CECECE;
-        -webkit-line-clamp: 1;
-    }
-
-    .link-area > img {
-        width: calc(0.3 * (var(--width) - 108px));
-        height: 153px;
-        border-top-right-radius: 11px;
-        border-bottom-right-radius: 11px;
-        object-fit: cover;
-    }
-`;
 
 const Icons = styled.div`
     width: 50px;

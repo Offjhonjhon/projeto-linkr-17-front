@@ -13,6 +13,7 @@ export default function CommentsBox({ post, visibility, avatar, token, refresh, 
     const [follows, setFollows] = useState([]);
     const data = localStorage.getItem("dados");
 
+
     useEffect(() => {
         async function getComments() {
             try {
@@ -25,33 +26,36 @@ export default function CommentsBox({ post, visibility, avatar, token, refresh, 
             }
         }
 
-        // async function getFollows() {
-        //     try {
-        //         const data = await axios.get(`${URL}/follow/comments`);
-
-        //         setFollows(data);
-        //         console.log(data)
-        //     }
-        //     catch (error) {
-        //         console.log(error)
-        //         alert("An error occured while trying to fetch the follows, please refresh the page");
-        //     }
-        // }
+        async function getFollows() {
+            try {
+                const { data } = await axios.get(`${URL}/comments/follow`, { headers: { Authorization: `Bearer ${token}` } });
+                listFollows(data)
+            }
+            catch (error) {
+                console.log(error)
+                alert("An error occured while trying to fetch the follows, please refresh the page");
+            }
+        }
 
         getComments();
-        // getFollows();
+        getFollows();
 
     }, [URL, refresh, params, post.postId]);
 
-
+    function listFollows(data) {
+        const followList = data.map(follow => {
+            return follow.followUserId
+        })
+        setFollows(followList)
+    }
 
     return (
         <Box visibility={visibility}>
             <CommentsContainer>
                 {comments.map((comment, index) => (
                     <>
-                        <Comment key={index} value={comment} />
-                        <CommentDivisionBar key={comment.id} />
+                        <Comment key={index} value={comment} follows={follows} />
+                        <CommentDivisionBar key={index + comments.length} />
                     </>
                 ))}
             </CommentsContainer>
