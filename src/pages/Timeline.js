@@ -7,7 +7,6 @@ import { TailSpin } from "react-loader-spinner";
 import useInterval from 'use-interval';
 import Hashtag from "../components/Hashtag";
 import Likes from "../components/Likes.js";
-import DeleteIcon from "../components/DeleteIcon.js";
 import CommentsIcon from "../components/Comments/CommentsIcon.js";
 import CommentsBox from "../components/Comments/CommentsBox.js";
 
