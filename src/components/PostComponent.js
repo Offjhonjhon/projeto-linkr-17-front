@@ -16,6 +16,8 @@ export default function PostComponent({ post }) {
     const [chat, setChat] = useState(false);
     console.log(token)
 
+    console.log(post)
+
     return (
         <Post>
             <div className="post-container">
