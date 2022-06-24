@@ -7,6 +7,7 @@ import { TailSpin } from "react-loader-spinner";
 import useInterval from 'use-interval';
 import TrendingHashtags from '../components/TrendingHashtags';
 import PostComponent from "../components/PostComponent.js";
+import Repost from "../components/Repost.js";
 
 function Timeline() {
     const { URL } = useContext(StateContext)
@@ -17,11 +18,17 @@ function Timeline() {
     const { setVisible } = useContext(StateContext);
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
+    const [reposts, setReposts] = useState();
     const [lastUpdateTime, setLastUpdateTime] = useState("0");
     const [refresh, setRefresh] = useState([]);
     const [currentPage, setCurrentPage] = useState(-1);
     const loaderRef = useRef(null);
     const [loadingScroll, setLoadingScroll] = useState("");
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
 
     setVisible(true)
 
@@ -94,8 +101,16 @@ function Timeline() {
             });
         }
 
+        async function getPost() {
+            const {data} = await axios.get(`${URL}/reposts`, config);
+            setReposts(data);
+        }
+
         if (token) {
-            if (currentPage >= 0) { getTimeline() }
+            if (currentPage >= 0) { 
+                getTimeline();
+                getPost();
+            }
         } else {
             navigate("/sign-in");
         }
@@ -187,6 +202,7 @@ function Timeline() {
                         );
                     })
                 }
+                <Repost />
                 <div className="message">
                     {loadingScroll === "Loading..." || loadingScroll === "Loading more posts..." ?
                         <TailSpin {...{ color: "#6D6D6D", width: "36px", height: "36px" }} /> :
@@ -274,7 +290,9 @@ const Main = styled.div`
     .profile-picture {
         height: 100px;
         width: 68px;
+    }
 
+    .publish > .profile-picture {
         @media (max-width: 700px) {
             width: 0;
             height: 0;
