@@ -23,7 +23,7 @@ export default function SignIn() {
         try {
             const response = await axios.post(`${URL}/sign-in`, data);
             const serializedData = JSON.stringify(response.data);
-            localStorage.setItem("dados", serializedData);
+            localStorage.setItem("data", serializedData);
             navigate('/timeline');
         } catch (e) {
             setDisable(false);
