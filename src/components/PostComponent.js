@@ -10,6 +10,7 @@ import Hashtag from "./Hashtag";
 export default function PostComponent({ post }) {
     const data = localStorage.getItem("dados");
     const { token, avatar } = JSON.parse(data);
+    const [refresh, setRefresh] = useState(false);
 
     const navigate = useNavigate();
     const [chat, setChat] = useState(false);
@@ -22,7 +23,7 @@ export default function PostComponent({ post }) {
                         <img src={post.avatar} alt={post.name} />
                     </div>
                     <Likes postId={post.postId} token={token} />
-                    <CommentsIcon postId={post.postId} callback={() => setChat(!chat)} />
+                    <CommentsIcon postId={post.postId} callback={() => setChat(!chat)} refresh={refresh} />
                     <Reposts token={token} postId={post.postId} />
                 </div >
                 <div className="post-area">
@@ -38,7 +39,13 @@ export default function PostComponent({ post }) {
                     </a>
                 </div>
             </div>
-            <CommentsBox post={post} visibility={chat} avatar={avatar} token={token} />
+            <CommentsBox
+                post={post}
+                visibility={chat}
+                avatar={avatar}
+                token={token}
+                refresh={refresh}
+                setRefresh={setRefresh} />
         </Post >
     )
 }

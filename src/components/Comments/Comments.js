@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 
 export default function Comment({ value }) {
+
     const author = value.userId === value.postAuthor;
 
-    console.log(value.userId)
-    console.log(value.postAuthor)
-    console.log(author);
     return (
         <CommentContainer>
             <UserIcon src={value.avatar} />
