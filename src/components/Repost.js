@@ -1,5 +1,4 @@
 import { FaRetweet } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
@@ -8,7 +7,6 @@ import PostComponent from "./PostComponent";
 import StateContext from "../contexts/StateContext";
 
 export default function Repost() {
-    const navigate = useNavigate();
     const {URL} = useContext(StateContext);
     const getData = localStorage.getItem("dados");
     const {token} = getData ? JSON.parse(getData) : '';
@@ -45,7 +43,7 @@ export default function Repost() {
 }
 
 const Container = styled.div`
-    margin-top: 120px;
+    margin-top: 15px;
 `;
 
 const Page = styled.div`
@@ -64,7 +62,6 @@ const Page = styled.div`
         --border-radius: 0px;
     }
 
-    min-height: 150px;
     background-color: #333333;
     color: white;
     padding-bottom: 50px;
