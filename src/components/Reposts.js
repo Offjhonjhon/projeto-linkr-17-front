@@ -10,7 +10,7 @@ Modal.setAppElement(".root");
 export default function Reposts({ token, postId, Post }) {
     const [isOpen, setIsOpen] = useState(false);
     const [count, setCount] = useState(0);
-    const { URL } = useContext(StateContext)
+    const {URL} = useContext(StateContext);
     const config = {
         headers: {
             Authorization: `Bearer ${token}`
@@ -54,9 +54,9 @@ export default function Reposts({ token, postId, Post }) {
                 <div className="dialog-text">Do you want to re-post this link?</div>
                 <div className="buttons">
                     <button className="goback" onClick={toggleModal}>No, cancel</button>
-                    <button className="deleteit" onClick={repost}>Yes, share!</button>
+                    <button className="repost" onClick={repost}>Yes, share!</button>
                 </div>
-            </Modal>
+            </Modal>   
         </Container>
     );
 }
@@ -132,7 +132,7 @@ const ModalStyle = styled.div`
         background-color: #FFFFFF;
     }
 
-    .deleteit {
+    .repost {
         color: #FFFFFF;
         background-color: #1877F2;
     }
