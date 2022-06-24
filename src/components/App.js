@@ -13,8 +13,7 @@ import Repost from './Repost.js';
 
 export default function App() {
     const [visible, setVisible] = useState(true);
-    const URL = 'http://localhost:4000';
-    // const URL = 'https://projeto17-linkr-grupo2-vini.herokuapp.com';
+    const URL = 'https://projeto17-linkr-grupo2-vini.herokuapp.com';
 
     return (
         <StateContext.Provider value={{ visible, setVisible, URL }}>
