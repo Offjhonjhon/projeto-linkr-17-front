@@ -65,7 +65,7 @@ export default function SearchBar() {
                                     }} key={index}>
                                         <img src={user.avatar} alt="avatar" />
                                         <p>{user.name.length > 20 ? user.name.slice(0, (user.name.length - 20) * -1) + "..." : user.name}</p>
-                                        {user.follow ? <li>follow</li> : null}
+                                        {user.follow ? <li>following</li> : null}
                                         {() => setLoading(false)}
                                     </SearchProfile>
                                 )
