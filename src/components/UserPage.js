@@ -14,10 +14,10 @@ export default function UserPage() {
     const { URL } = useContext(StateContext)
     const [posts, setPosts] = useState("Loading");
     const { id } = useParams()
-    const data = localStorage.getItem("dados");
+    const data = localStorage.getItem("data");
     const token = JSON.parse(data).token;
     
-    console.log('id-userpage', id)
+    console.log(data)
 
     const [refresh, setRefresh] = useState([]);
     function refreshTimeline() { setRefresh([]) }
@@ -33,7 +33,7 @@ export default function UserPage() {
             alert("An error occured while trying to fetch the posts, please refresh the page");
         });
 
-    }, [id, refresh]);
+    }, [id, refresh, URL]);
 
     const [active, setActive] = useState(false);
     const [enableTextArea, setEnableTextArea] = useState(false);

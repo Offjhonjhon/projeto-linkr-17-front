@@ -6,14 +6,14 @@ import styled from 'styled-components';
 import StateContext from '../contexts/StateContext.js';
 
 export default function Header() {
-    const getData = localStorage.getItem("dados");
+    const getData = localStorage.getItem("data");
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { visible } = useContext(StateContext);
     const [menu, setMenu] = useState(false);
     const navigate = useNavigate();
 
     function logout() {
-        localStorage.removeItem('dados');
+        localStorage.removeItem('data');
         navigate('/');
     }
 

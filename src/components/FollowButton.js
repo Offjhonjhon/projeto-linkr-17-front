@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 function FollowButton({ userId, followed, setFollowed }) {
-    const data = localStorage.getItem("dados");
+    const data = localStorage.getItem("data");
     console.log(data)
     const loggedUser = JSON.parse(data).userId;
     const token = JSON.parse(data).token;

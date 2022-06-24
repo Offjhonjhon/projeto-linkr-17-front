@@ -13,9 +13,9 @@ import EditIcon from "../components/EditIcon.js";
 
 function Timeline() {
     const { URL } = useContext(StateContext)
-    const data = localStorage.getItem("dados");
+    const data = localStorage.getItem("data");
     const token = JSON.parse(data).token;
-    const getData = localStorage.getItem("dados");
+    const getData = localStorage.getItem("data");
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { setVisible } = useContext(StateContext);
     const navigate = useNavigate()
