@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Modal from "react-modal";
 import styled from "styled-components";
+import StateContext from "../contexts/StateContext";
 
 Modal.setAppElement(".root");
 
