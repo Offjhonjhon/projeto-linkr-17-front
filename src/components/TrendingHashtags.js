@@ -55,6 +55,7 @@ const TrendingContainer = styled.div`
     border-radius: 16px;
     color: #ffffff;
     
+    
 
     @media (max-width: 750px) {
         display: none;
@@ -77,6 +78,12 @@ const TrendingHashtagsContainer = styled.div`
     font-size: 19px;
     margin-left: 16px;
     height: 293px;
+
+    overflow: scroll;
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
 `
 
 const TrendingHashtag = styled(Link)`
