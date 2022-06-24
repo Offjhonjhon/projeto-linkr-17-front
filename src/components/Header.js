@@ -6,14 +6,14 @@ import styled from 'styled-components';
 import StateContext from '../contexts/StateContext.js';
 
 export default function Header() {
-    const getData = localStorage.getItem("dados");
-    const { avatar } = getData ? JSON.parse(getData) : '';
+    const getData = localStorage.getItem("data");
+    const { avatar, userId } = getData ? JSON.parse(getData) : '';
     const { visible } = useContext(StateContext);
     const [menu, setMenu] = useState(false);
     const navigate = useNavigate();
 
     function logout() {
-        localStorage.removeItem('dados');
+        localStorage.removeItem('data');
         navigate('/');
     }
 
@@ -21,13 +21,16 @@ export default function Header() {
         <Container>
             <Nav>
                 <Title onClick={() => navigate("/timeline")}>linkr</Title>
-                <Block onClick={() => setMenu(!menu)}>
-                    <Icon>{menu ? <FaAngleDown /> : <FaAngleUp />}</Icon>
-                    <Image src={avatar}></Image>
+                <Block>
+                    <Icon onClick={() => setMenu(!menu)}>{menu ? <FaAngleDown /> : <FaAngleUp />}</Icon>
+                    <Image onClick={() => navigate("/user/"+ userId)} src={avatar}></Image>
                 </Block>
             </Nav>
             {menu ? 
-                <Menu onClick={logout}>Logout</Menu> 
+                <Menu onClick={ () => {
+                    logout()
+                    setMenu(!menu)
+                }}>Logout</Menu> 
             : <></>} 
         </Container>
     ) : <></>;

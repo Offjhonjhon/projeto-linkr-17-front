@@ -12,24 +12,38 @@ export default function SearchBar() {
     const [search, setSearch] = useState({ name: "" })
     const [users, setUsers] = useState([])
     const [loading, setLoading] = useState(true)
+    const datas = localStorage.getItem("data");
+    const data = JSON.parse(datas);
+
+    console.log(users)
 
     useEffect(() => {
         setLoading(true)
         if (search.name.length >= 3) {
             setUsers([])
             axios
-                .post(`${URL}/search`, search)
+                .post(`${URL}/search`, {search: search, userId: data.userId})
                 .then(response => {
-                    setUsers(response.data)
                     if (response.data.length === 0) {
                         setLoading(false)
+                    }
+                    else{
+                        response.data.forEach(user => {
+                            if(user.follow){
+                                const splice = response.data.splice(response.data.indexOf(user),1)
+                                response.data.splice(0,0,splice[0])
+                                console.log(response.data)
+                            }
+                        })
+                        console.log(response.data)
+                        setUsers(response.data)
                     }
                 })
         }
         else {
             setUsers([])
         }
-    }, [search])
+    }, [search, URL])
 
     return visible ? (
         <SearchWindow>
@@ -51,6 +65,7 @@ export default function SearchBar() {
                                     }} key={index}>
                                         <img src={user.avatar} alt="avatar" />
                                         <p>{user.name.length > 20 ? user.name.slice(0, (user.name.length - 20) * -1) + "..." : user.name}</p>
+                                        {user.follow ? <li>following</li> : null}
                                         {() => setLoading(false)}
                                     </SearchProfile>
                                 )
@@ -115,7 +130,7 @@ const SearchProfile = styled.div`
     margin-bottom: 10px;
     margin-left: 17px;
     font-size: 19px;
-    width: 96%;
+    width: 90%;
     height: auto;
 
     :hover {
@@ -129,6 +144,11 @@ const SearchProfile = styled.div`
         height: 39px;
         border-radius: 85px;
         margin-right: 12px;
+    }
+
+    li{
+        margin-left: 10px;
+        color: #C5C5C5;
     }
 `
 
