@@ -5,14 +5,15 @@ import axios from "axios";
 import Comment from "./Comments";
 import CommentsPostBar from "./CommentsPostBar";
 
-export default function CommentsBox({ postId, visibility, avatar }) {
+export default function CommentsBox({ post, visibility, avatar, token }) {
     const { URL } = useContext(StateContext);
     const [comments, setComments] = useState([]);
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
         async function getComments() {
             try {
-                const { data } = await axios.get(`${URL}/comments/${postId}`);
+                const { data } = await axios.get(`${URL}/comments/${post.postId}`);
                 setComments(data)
             }
             catch (error) {
@@ -23,27 +24,31 @@ export default function CommentsBox({ postId, visibility, avatar }) {
 
         getComments();
 
-    }, [URL]);
+    }, [URL, refresh]);
 
     return (
-        <CommentsBox>
-            <CommentsContainer visibility={visibility}>
+        <Box visibility={visibility}>
+            <CommentsContainer>
                 {comments.map((comment, index) => (
                     <>
                         <Comment key={index} value={comment} />
                         <CommentDivisionBar key={comment.id} />
                     </>
                 ))}
-                
+
             </CommentsContainer>
-        </CommentsBox>
+            <CommentsPostBar
+                icon={avatar}
+                token={token}
+                postId={post.postId}
+                refresh={() => setRefresh(!refresh)}
+            />
+        </Box>
     );
 }
 
 const CommentsContainer = styled.div`
-    display: ${props => props.visibility ? 'inline' : 'none'};
-    background: #1E1E1E;
-    height: 250px;
+     max-height: 250px;
     overflow: scroll;
     border-radius: 0 0 20px 20px;
     
@@ -55,4 +60,8 @@ const CommentsContainer = styled.div`
 const CommentDivisionBar = styled.hr`
     width: 92%;
     border: 1px solid #353535;
+`
+const Box = styled.div`
+    display: ${props => props.visibility ? 'inline' : 'none'};
+    background: #1E1E1E;
 `

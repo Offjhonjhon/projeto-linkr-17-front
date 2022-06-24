@@ -2,12 +2,19 @@ import { useState, useEffect } from "react";
 import styled from 'styled-components';
 
 export default function Comment({ value }) {
-    console.log(value);
-
+    const data = localStorage.getItem("dados");
+    const userId = JSON.parse(data).userId;
+    const [author, setAuthor] = useState(false);
 
     useEffect(() => {
+        function isAuthor() {
+            if (userId === value.userId) {
+                setAuthor(true);
+            }
+        }
 
-    }, [URL]);
+        isAuthor();
+    })
 
     return (
         <CommentContainer>

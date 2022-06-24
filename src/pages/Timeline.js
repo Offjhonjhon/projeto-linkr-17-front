@@ -9,7 +9,6 @@ import Hashtag from "../components/Hashtag";
 import Likes from "../components/Likes.js";
 import CommentsIcon from "../components/Comments/CommentsIcon.js";
 import CommentsBox from "../components/Comments/CommentsBox.js";
-
 import Reposts from "../components/Reposts.js";
 import TrendingHashtags from '../components/TrendingHashtags';
 
@@ -22,6 +21,7 @@ function Timeline() {
     const { setVisible } = useContext(StateContext);
     const navigate = useNavigate()
     const [chat, setChat] = useState(false);
+
 
     setVisible(true)
 
@@ -214,7 +214,7 @@ function Timeline() {
                                         </a>
                                     </div>
                                 </div>
-                                <CommentsBox postId={post.postId} visibility={chat} avatar={post.avatar} />
+                                <CommentsBox post={post} visibility={chat} avatar={avatar} token={token} />
                             </Post >
                         );
                     })

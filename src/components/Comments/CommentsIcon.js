@@ -33,20 +33,19 @@ export default function CommentsIcon({ postId, callback }) {
 }
 
 const CommentIconContainer = styled.div`
-    margin-left: 7px;
-    margin-right: 5px;
-    width: 67px;
+    margin-left: 5px;
+    width: 75px;
 `
 
 const CommentIcon = styled(AiOutlineComment)`
     font-size: 20px;
     cursor: pointer;
-    margin-left: 23px;
+    margin-left: 27px;
 `
 
 const CommentQuantity = styled.p`
     font-family: 'Lato';
     font-size: 11px;
     line-height: 13px;
-    margin-left: 5px;
+    margin-left: 8px;
 `
