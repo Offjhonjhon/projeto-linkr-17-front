@@ -138,9 +138,8 @@ const Container = styled.div`
     font-weight: 400;
     font-size: 11px;
     line-height: 13px;
-    margin-bottom: 50px;
-    margin-left: 20px;
-    height: 60px;  
+    margin-left: 4px;
+    height: 50px;  
 
     svg {
         width: 20px;

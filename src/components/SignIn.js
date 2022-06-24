@@ -13,7 +13,6 @@ export default function SignIn() {
         password: ''
     });
     const navigate = useNavigate();
-    console.log(URL)
 
     setVisible(false);
 

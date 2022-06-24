@@ -7,6 +7,8 @@ import { TailSpin } from "react-loader-spinner";
 import useInterval from 'use-interval';
 import Hashtag from "../components/Hashtag";
 import Likes from "../components/Likes.js";
+import CommentsIcon from "../components/Comments/CommentsIcon.js";
+import CommentsBox from "../components/Comments/CommentsBox.js";
 import Reposts from "../components/Reposts.js";
 import TrendingHashtags from '../components/TrendingHashtags';
 
@@ -18,6 +20,9 @@ function Timeline() {
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { setVisible } = useContext(StateContext);
     const navigate = useNavigate()
+    const [chat, setChat] = useState(false);
+
+
     setVisible(true)
 
     const getTags = (text) => {
@@ -184,25 +189,29 @@ function Timeline() {
                     posts.map((post, index) => {
                         return (
                             <Post key={index}>
-                                <div className="user-info">
-                                    <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
-                                        <img src={post.avatar} alt={post.name} />
-                                    </div>
-                                    <Likes postId={post.postId} token={token} />
-                                    <Reposts token={token} postId={post.postId} />                                
-                                </div >
-                                <div className="post-area">
-                                    <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
-                                    <p className="text"><Hashtag>{post.text}</Hashtag></p>
-                                    <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
-                                        <div className="link-left">
-                                            <div className="title">{post.title}</div>
-                                            <div className="description">{post.description}</div>
-                                            <div className="url">{post.url}</div>
+                                <div className="post-container">
+                                    <div className="user-info">
+                                        <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
+                                            <img src={post.avatar} alt={post.name} />
                                         </div>
-                                        <img src={post.image} alt="Post" />
-                                    </a>
+                                        <Likes postId={post.postId} token={token} />
+                                        <CommentsIcon postId={post.postId} callback={() => setChat(!chat)} />
+                                        <Reposts token={token} postId={post.postId} />
+                                    </div >
+                                    <div className="post-area">
+                                        <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
+                                        <p className="text"><Hashtag>{post.text}</Hashtag></p>
+                                        <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
+                                            <div className="link-left">
+                                                <div className="title">{post.title}</div>
+                                                <div className="description">{post.description}</div>
+                                                <div className="url">{post.url}</div>
+                                            </div>
+                                            <img src={post.image} alt="Post" />
+                                        </a>
+                                    </div>
                                 </div>
+                                <CommentsBox post={post} visibility={chat} avatar={avatar} token={token} />
                             </Post >
                         );
                     })
@@ -426,6 +435,8 @@ const ProfileImage = styled.img`
 `
 
 const Post = styled.div`
+    display: flex;
+    flex-direction: column;
     min-height: 209px;
     width: var(--width);
     margin-top: 16px;
@@ -436,6 +447,10 @@ const Post = styled.div`
 
     display: flex;
 
+    .post-container {
+        display: flex;
+    }
+
     .user-info {
         display: flex;
         flex-direction: column;
@@ -443,8 +458,10 @@ const Post = styled.div`
     }
 
     .profile-picture {
-        height: 80px;
+        height: 75px;
         width: 68px;
+        margin-right: 10px;
+        margin-top: 10px;
     }
 
     .profile-picture > img {
@@ -453,12 +470,13 @@ const Post = styled.div`
         width: 50px;
         border-radius: 25px;
         object-fit: cover;
+        
     }
 
     .post-area {
         height: 100%;
         width: calc(var(--width) - 68px);
-        padding: 20px;
+        padding: 20px 20px 20px 10px;
 
         display: flex;
         flex-direction: column;

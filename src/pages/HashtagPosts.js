@@ -12,8 +12,6 @@ function HashtagPosts() {
     const title = useParams().hashtag;
     const [posts, setPosts] = useState("Loading");
 
-    const [refresh, setRefresh] = useState([]);
-
     useEffect(() => {
         async function getPosts() {
             try {
@@ -27,7 +25,7 @@ function HashtagPosts() {
         }
         getPosts();
 
-    }, [URL, refresh, title]);
+    }, [URL, title]);
 
 
 
