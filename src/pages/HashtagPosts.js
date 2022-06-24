@@ -5,6 +5,7 @@ import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import StateContext from '../contexts/StateContext';
+import PostComponent from '../components/PostComponent';
 
 
 function HashtagPosts() {
@@ -17,7 +18,7 @@ function HashtagPosts() {
             try {
                 const { data } = await axios.get(`${URL}/hashtag/${title}`);
                 setPosts(data);
-                console.log(data)
+                console.log(data);
             }
             catch {
                 alert("An error occured while trying to fetch the posts, please refresh the page");
@@ -25,10 +26,11 @@ function HashtagPosts() {
         }
         getPosts();
 
+
     }, [URL, title]);
 
 
-
+    console.log(posts)
     return (
         <TimeLinePage>
             <Main>
@@ -36,23 +38,7 @@ function HashtagPosts() {
                 {
                     posts === "Loading" ? <p className="message">Loading...</p> : posts === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
                         return (
-                            <Post key={index}>
-                                <div className="profile-picture">
-                                    <img src={post.avatar} alt={post.name} />
-                                </div>
-                                <div className="post-area">
-                                    <p className="user-name">{post.name}</p>
-                                    <p className="text"><Hashtag>{post.text}</Hashtag></p>
-                                    <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
-                                        <div className="link-left">
-                                            <div className="title">{post.title}</div>
-                                            <div className="description">{post.description}</div>
-                                            <div className="url">{post.url}</div>
-                                        </div>
-                                        <img src={post.image} alt="Post" />
-                                    </a>
-                                </div>
-                            </Post>
+                            <PostComponent key={index} post={post} />
                         );
                     })
 

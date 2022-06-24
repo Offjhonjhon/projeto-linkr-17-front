@@ -4,23 +4,16 @@ import styled from 'styled-components';
 export default function Comment({ value }) {
     const data = localStorage.getItem("dados");
     const userId = JSON.parse(data).userId;
-    const [author, setAuthor] = useState(false);
+    const author = value.userId === value.postAuthor;
 
-    useEffect(() => {
-        function isAuthor() {
-            if (userId === value.userId) {
-                setAuthor(true);
-            }
-        }
-
-        isAuthor();
-    })
-
+    console.log(value.userId)
+    console.log(value.postAuthor)
+    console.log(author);
     return (
         <CommentContainer>
             <UserIcon src={value.avatar} />
             <CommentDiv>
-                <User>{value.name}</User>
+                <User>{author ? <User>{value.name + " "} <Author > •  post’s author</Author></User> : `${value.name}`}</User>
                 <UserText>{value.comment}</UserText>
             </CommentDiv>
         </CommentContainer>
@@ -58,4 +51,7 @@ const UserText = styled.p`
     color: #ACACAC;
 `
 const CommentDiv = styled.div`
+`
+const Author = styled.span`
+    color: #565656;
 `
