@@ -8,6 +8,7 @@ import Hashtag from "../components/Hashtag";
 import Likes from "../components/Likes.js";
 import DeleteIcon from "../components/DeleteIcon.js";
 import CommentsIcon from "../components/Comments/CommentsIcon.js";
+import CommentsBox from "../components/Comments/CommentsBox.js";
 
 import TrendingHashtags from '../components/TrendingHashtags';
 import EditIcon from "../components/EditIcon.js";
@@ -20,7 +21,7 @@ function Timeline() {
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { setVisible } = useContext(StateContext);
     const navigate = useNavigate()
-    console.log(token)
+    const [chat, setChat] = useState(false);
 
     setVisible(true)
 
@@ -209,7 +210,7 @@ function Timeline() {
                                         <img src={post.avatar} alt={post.name} />
                                     </div>
                                     <Likes postId={post.postId} token={token} />
-                                    <CommentsIcon />
+                                    <CommentsIcon postId={post.postId} callback={() => setChat(!chat)} />
                                 </div >
                                 <div className="post-area">
                                     <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
@@ -233,6 +234,7 @@ function Timeline() {
                                         <img src={post.image} alt="Post" />
                                     </a>
                                 </div>
+                                <CommentsBox postId={post.postId} />
                             </Post >
                         );
                     })
@@ -457,7 +459,7 @@ const Post = styled.div`
         height: 75px;
         width: 68px;
         margin-right: 10px;
-        margin-top: 5px;
+        margin-top: 10px;
     }
 
     .profile-picture > img {

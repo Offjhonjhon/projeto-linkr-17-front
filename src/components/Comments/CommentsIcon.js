@@ -4,9 +4,7 @@ import styled from 'styled-components';
 import StateContext from "../../contexts/StateContext";
 import axios from "axios";
 
-
-
-export default function CommentsIcon() {
+export default function CommentsIcon({ postId, callback }) {
     const { URL } = useContext(StateContext);
     const [quantity, setQuantity] = useState(0);
 
@@ -14,7 +12,7 @@ export default function CommentsIcon() {
     useEffect(() => {
         async function getCommentsQuantity() {
             try {
-                const { data } = await axios.get(`${URL}/comments/quantity`);
+                const { data } = await axios.get(`${URL}/comments/count/${postId}`);
                 setQuantity(data)
 
             }
@@ -26,14 +24,12 @@ export default function CommentsIcon() {
 
         getCommentsQuantity();
 
-    }, [URL]);
-
-
+    }, [URL, postId]);
 
     return (
-        <CommentIconContainer>
+        <CommentIconContainer onClick={() => callback()}>
             <CommentIcon />
-            <CommentQuantity>{`${quantity} comments`}</CommentQuantity>
+            <CommentQuantity>{quantity ? `${quantity} comments` : `0 comments`}</CommentQuantity>
         </CommentIconContainer>
     );
 }
@@ -46,7 +42,6 @@ const CommentIconContainer = styled.div`
 
 const CommentIcon = styled(AiOutlineComment)`
     font-size: 20px;
-    margin-top: -12px;
     cursor: pointer;
     margin-left: 23px;
 `

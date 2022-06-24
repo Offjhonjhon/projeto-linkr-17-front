@@ -139,7 +139,7 @@ const Container = styled.div`
     font-size: 11px;
     line-height: 13px;
     margin-left: 4px;
-    height: 60px;  
+    height: 50px;  
 
     svg {
         width: 20px;
