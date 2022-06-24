@@ -6,6 +6,7 @@ import TrendingHashtags from '../components/TrendingHashtags';
 import { useParams } from "react-router-dom";
 import DeleteIcon from "./DeleteIcon";
 import EditIcon from "./EditIcon";
+import FollowButton from "./FollowButton";
 import Likes from "./Likes";
 import StateContext from "../contexts/StateContext";
 
@@ -24,7 +25,6 @@ export default function UserPage() {
 
         promise.then(answer => {
             setPosts(answer.data);
-            console.log(answer.data)
         });
 
         promise.catch(() => {
@@ -37,6 +37,7 @@ export default function UserPage() {
     const [enableTextArea, setEnableTextArea] = useState(false);
     const textareaRef = useRef("");
     const [publicationId, setPublicationId] = useState("");
+    const loggedUser = JSON.parse(data).userId;
 
     const handleUserKeyPress = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
@@ -67,13 +68,42 @@ export default function UserPage() {
         }
     }
 
-    return (<TimeLinePage>
+    const [followed, setFollowed] = useState(false);
+
+    async function checkFollowUser() {
+        try {
+            const response = await axios.post(`${URL}/check-follow`, {userPageId: id},
+            { 
+                headers: { 
+                    Authorization: `Bearer ${token}` 
+            } });
+
+            if (response.data.status === "not followed") {
+                setFollowed(false);
+            }
+
+            if(response.data.status === "followed") {
+                setFollowed(true);
+            }
+            
+            console.log('checkfollow', response.data)
+            
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    checkFollowUser();
+
+    return( <TimeLinePage>
         <Main>
-            <div className="timeline"> {posts === "Loading" ? null : posts.status !== "Empty" ? posts[0].name + "'s posts" : posts.name + "'s posts"}</div>
+            <div className="timeline"> {posts === "Loading" ? null : posts.status !== "Empty" ?<p> {posts[0].name}'s posts</p> :<p>{posts.name}'s posts</p>}
+            <FollowButton userId={parseInt(id)} followed={followed} setFollowed={setFollowed}/>
+            </div>
             {
                 posts === "Loading" ? <p className="message">Loading...</p> : posts.status === "Empty" ? <p className="message">There are no posts yet</p> : posts.map((post, index) => {
                     return (
                         <Post key={index}>
+                            {parseInt(loggedUser) === parseInt(post.userId) ? 
                             <Icons>
                                 <EditIcon active={active}
                                     setActive={setActive}
@@ -84,10 +114,12 @@ export default function UserPage() {
                                     postId={post.postId} />
                                 <DeleteIcon postId={post.postId} token={token} refreshTimeline={refreshTimeline} />
                             </Icons>
+                            : ""
+                            }
                             <div className="profile-picture">
                                 <img src={post.avatar} alt={post.name} />
                                 <Like>
-                                    <Likes postId={post.id} token={token} />
+                                    <Likes postId={post.postId} token={token} />
                                 </Like>
                             </div>
                             <div className="post-area">
@@ -118,7 +150,7 @@ export default function UserPage() {
 
             }
         </Main>
-        <TrendingHashtags />
+        <TrendingHashtags />        
     </TimeLinePage>)
 
 }
@@ -164,11 +196,6 @@ const TimeLinePage = styled.div`
     justify-content: center;
 `;
 
-const Like = styled.div`
-    
-    margin-top: 19px;
-`
-
 const Main = styled.div`
 
     display: flex;
@@ -177,12 +204,19 @@ const Main = styled.div`
     
 
     .timeline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         width: var(--width);
         margin-top: 78px;
         font-family: 'Oswald', sans-serif;
         font-size: 43px;
         font-weight: 700;
         color: white;
+
+        p{
+            width: 50%;
+        }
     }
 
     .publish {
@@ -385,6 +419,10 @@ const Post = styled.div`
         object-fit: cover;
     }
 `;
+
+const Like = styled.div`
+    margin-top: 15px;
+`
 
 const Icons = styled.div`
     width: 50px;

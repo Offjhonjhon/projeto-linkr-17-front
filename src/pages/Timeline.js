@@ -4,14 +4,15 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
+import useInterval from 'use-interval';
 import Hashtag from "../components/Hashtag";
 import Likes from "../components/Likes.js";
 import DeleteIcon from "../components/DeleteIcon.js";
 import CommentsIcon from "../components/Comments/CommentsIcon.js";
 import CommentsBox from "../components/Comments/CommentsBox.js";
 
+import Reposts from "../components/Reposts.js";
 import TrendingHashtags from '../components/TrendingHashtags';
-import EditIcon from "../components/EditIcon.js";
 
 function Timeline() {
     const { URL } = useContext(StateContext)
@@ -42,9 +43,16 @@ function Timeline() {
     }
 
     const [posts, setPosts] = useState([]);
+    const [lastUpdateTime, setLastUpdateTime] = useState("0");
 
     const [refresh, setRefresh] = useState([]);
-    function refreshTimeline() { setRefresh([]) }
+    function refreshTimeline() {
+        setPosts([]);
+        setNewPosts(0);
+        setLastUpdateTime("0");
+        setCurrentPage(0);
+        setRefresh([]);
+    }
 
     const [currentPage, setCurrentPage] = useState(-1);
     const loaderRef = useRef(null);
@@ -73,7 +81,7 @@ function Timeline() {
 
     useEffect(() => {
         function getTimeline() {
-            const promise = axios.get(URL + "/posts/page/" + currentPage, { headers: { Authorization: `Bearer ${token}` } });
+            const promise = axios.get(URL + "/posts/page/" + currentPage + "/" + lastUpdateTime, { headers: { Authorization: `Bearer ${token}` } });
 
             posts.length === 0 ? setLoadingScroll("Loading...") : setLoadingScroll("Loading more posts...");
 
@@ -85,6 +93,7 @@ function Timeline() {
                         setLoadingScroll("There are no posts yet");
                         return [...old];
                     } else {
+                        if (currentPage === 0) { setLastUpdateTime(answer.data[0].createdAt) }
                         return [...old, ...answer.data];
                     }
                 });
@@ -102,6 +111,21 @@ function Timeline() {
         }
 
     }, [URL, refresh, currentPage]);
+
+    const [newPosts, setNewPosts] = useState(0);
+
+    useInterval(() => {
+
+        const promise = axios.get(URL + "/newposts/" + lastUpdateTime, { headers: { Authorization: `Bearer ${token}` } });
+
+        promise.then(answer => {
+            setNewPosts(answer.data);
+        });
+
+        promise.catch(error => {
+            console.log("An error occured while trying to fetch the posts, please refresh the page");
+        });
+    }, 5000);
 
 
     const [url, setUrl] = useState("");
@@ -144,36 +168,6 @@ function Timeline() {
         })
     }
 
-    const [active, setActive] = useState(false);
-    const [enableTextArea, setEnableTextArea] = useState(false);
-    const textareaRef = useRef("");
-    const [publicationId, setPublicationId] = useState("");
-
-    const handleUserKeyPress = (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            sendUpdate();
-        }
-    };
-
-    async function sendUpdate() {
-        setEnableTextArea(true);
-
-        try {
-            await axios.post(`${URL}/post/edit`, {
-                publicationId,
-                description: textareaRef.current.value
-            }, config);
-
-            console.log(textareaRef.current.value);
-            setActive(false);
-            refreshTimeline();
-        } catch (e) {
-            alert("Não foi possível salvar as alterações!");
-            setEnableTextArea(false);
-        }
-    }
-
     return (
         <TimeLinePage>
             <Main>
@@ -189,52 +183,39 @@ function Timeline() {
                         <button type="submit" disabled={loading}>{loading ? "Publishing..." : "Publish"}</button>
                     </form>
                 </div>
+                {!newPosts ? "" :
+                    <div className="timeline-updates" onClick={refreshTimeline}>
+                        <p>{newPosts + " new posts, load more!"}</p>
+                        <ion-icon name="reload-outline"></ion-icon>
+                    </div>
+                }
                 {
                     posts.map((post, index) => {
                         return (
                             <Post key={index}>
-                                {post.isFromUser ?
-                                    <Icons>
-                                        <EditIcon active={active}
-                                            setActive={setActive}
-                                            enableTextArea={enableTextArea}
-                                            setEnableTextArea={setEnableTextArea}
-                                            textareaRef={textareaRef}
-                                            setPublicationId={setPublicationId}
-                                            postId={post.postId} />
-                                        <DeleteIcon token={token} postId={post.postId} refreshTimeline={refreshTimeline} />
-                                    </Icons>
-                                    : ""}
-                                <div className="user-info">
-                                    <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
-                                        <img src={post.avatar} alt={post.name} />
-                                    </div>
-                                    <Likes postId={post.postId} token={token} />
-                                    <CommentsIcon postId={post.postId} callback={() => setChat(!chat)} />
-                                </div >
-                                <div className="post-area">
-                                    <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
-                                    {active && post.isFromUser ?
-                                        <TextArea active={active}
-                                            readOnly={enableTextArea}
-                                            type="text"
-                                            ref={textareaRef}
-                                            onKeyPress={handleUserKeyPress}
-                                            style={{ color: '#4C4C4C' }}
-                                            defaultValue={post.text}>
-                                        </TextArea>
-                                        :
-                                        <p className="text"><Hashtag>{post.text}</Hashtag></p>}
-                                    <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
-                                        <div className="link-left">
-                                            <div className="title">{post.title}</div>
-                                            <div className="description">{post.description}</div>
-                                            <div className="url">{post.url}</div>
+                                <div className="post-container">
+                                    <div className="user-info">
+                                        <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
+                                            <img src={post.avatar} alt={post.name} />
                                         </div>
-                                        <img src={post.image} alt="Post" />
-                                    </a>
+                                        <Likes postId={post.postId} token={token} />
+                                        <CommentsIcon postId={post.postId} callback={() => setChat(!chat)} />
+                                        <Reposts token={token} postId={post.postId} />
+                                    </div >
+                                    <div className="post-area">
+                                        <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
+                                        <p className="text"><Hashtag>{post.text}</Hashtag></p>
+                                        <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
+                                            <div className="link-left">
+                                                <div className="title">{post.title}</div>
+                                                <div className="description">{post.description}</div>
+                                                <div className="url">{post.url}</div>
+                                            </div>
+                                            <img src={post.image} alt="Post" />
+                                        </a>
+                                    </div>
                                 </div>
-                                <CommentsBox postId={post.postId} />
+                                <CommentsBox postId={post.postId} visibility={chat} avatar={post.avatar} />
                             </Post >
                         );
                     })
@@ -317,6 +298,7 @@ const Main = styled.div`
         width: var(--width);
         border-radius: var(--border-radius);
         margin-top: 43px;
+        margin-bottom: 24px;
         background-color: white;
         box-shadow: 0px 4px 4px 0px #00000040;
 
@@ -411,6 +393,24 @@ const Main = styled.div`
         color: white;
     }
 
+    .timeline-updates {
+        height: 61px;
+        width: var(--width);
+        border-radius: 16px;
+        background-color: #1877F2;
+        margin-top: 16px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .timeline-updates > p {
+        font-weight: 400;
+        font-size: 16px;
+        margin-right: 14px;
+    }
+
     .message {
         margin-top: 30px;
         display: flex;
@@ -439,15 +439,21 @@ const ProfileImage = styled.img`
 `
 
 const Post = styled.div`
+    display: flex;
+    flex-direction: column;
     min-height: 209px;
     width: var(--width);
-    margin-top: 43px;
+    margin-top: 16px;
     border-radius: var(--border-radius);
     background-color: #171717;
     box-shadow: 0px 4px 4px 0px #00000040;
     position: relative;
 
     display: flex;
+
+    .post-container {
+        display: flex;
+    }
 
     .user-info {
         display: flex;

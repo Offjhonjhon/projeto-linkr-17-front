@@ -1,24 +1,19 @@
-import { AiOutlineComment } from "react-icons/ai";
 import { useContext, useState, useEffect } from "react";
 import styled from 'styled-components';
 import StateContext from "../../contexts/StateContext";
 import axios from "axios";
+import Comment from "./Comments";
+import CommentsPostBar from "./CommentsPostBar";
 
-
-
-export default function CommentsBox({ postId }) {
+export default function CommentsBox({ postId, visibility, avatar }) {
     const { URL } = useContext(StateContext);
     const [comments, setComments] = useState([]);
-    const [refresh, setRefresh] = useState(false);
-
 
     useEffect(() => {
-        async function getCommentsQuantity() {
+        async function getComments() {
             try {
                 const { data } = await axios.get(`${URL}/comments/${postId}`);
-                console.log(data)
                 setComments(data)
-
             }
             catch (error) {
                 console.log(error)
@@ -26,18 +21,38 @@ export default function CommentsBox({ postId }) {
             }
         }
 
-        getCommentsQuantity();
+        getComments();
 
-    }, [URL, refresh]);
+    }, [URL]);
 
     return (
-        <CommentsContainer>
-
-
-        </CommentsContainer>
+        <CommentsBox>
+            <CommentsContainer visibility={visibility}>
+                {comments.map((comment, index) => (
+                    <>
+                        <Comment key={index} value={comment} />
+                        <CommentDivisionBar key={comment.id} />
+                    </>
+                ))}
+                
+            </CommentsContainer>
+        </CommentsBox>
     );
 }
 
 const CommentsContainer = styled.div`
+    display: ${props => props.visibility ? 'inline' : 'none'};
+    background: #1E1E1E;
+    height: 250px;
+    overflow: scroll;
+    border-radius: 0 0 20px 20px;
+    
+    ::-webkit-scrollbar {
+        display: none;
+    }
+`
 
+const CommentDivisionBar = styled.hr`
+    width: 92%;
+    border: 1px solid #353535;
 `

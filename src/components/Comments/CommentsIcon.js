@@ -8,13 +8,11 @@ export default function CommentsIcon({ postId, callback }) {
     const { URL } = useContext(StateContext);
     const [quantity, setQuantity] = useState(0);
 
-
     useEffect(() => {
         async function getCommentsQuantity() {
             try {
                 const { data } = await axios.get(`${URL}/comments/count/${postId}`);
                 setQuantity(data)
-
             }
             catch (error) {
                 console.log(error)
@@ -45,11 +43,10 @@ const CommentIcon = styled(AiOutlineComment)`
     cursor: pointer;
     margin-left: 23px;
 `
+
 const CommentQuantity = styled.p`
     font-family: 'Lato';
     font-size: 11px;
     line-height: 13px;
     margin-left: 5px;
-  
-
 `
