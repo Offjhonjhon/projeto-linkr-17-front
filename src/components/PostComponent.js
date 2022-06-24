@@ -14,6 +14,7 @@ export default function PostComponent({ post }) {
 
     const navigate = useNavigate();
     const [chat, setChat] = useState(false);
+    console.log(token)
 
     return (
         <Post>

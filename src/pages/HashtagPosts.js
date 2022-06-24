@@ -7,7 +7,6 @@ import axios from 'axios';
 import StateContext from '../contexts/StateContext';
 import PostComponent from '../components/PostComponent';
 
-
 function HashtagPosts() {
     const { URL } = useContext(StateContext)
     const title = useParams().hashtag;
@@ -53,6 +52,7 @@ export default HashtagPosts;
 
 
 const TimeLinePage = styled.div`
+    
 
     @media (min-width: 652px) {
 
