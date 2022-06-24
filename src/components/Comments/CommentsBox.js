@@ -1,14 +1,17 @@
 import { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import StateContext from "../../contexts/StateContext";
 import axios from "axios";
 import Comment from "./Comments";
 import CommentsPostBar from "./CommentsPostBar";
 
-export default function CommentsBox({ post, visibility, avatar, token }) {
+export default function CommentsBox({ post, visibility, avatar, token, refresh, setRefresh }) {
     const { URL } = useContext(StateContext);
+    const [params, setParams] = useState(useNavigate.params);
     const [comments, setComments] = useState([]);
-    const [refresh, setRefresh] = useState(false);
+    const [follows, setFollows] = useState([]);
+    const data = localStorage.getItem("dados");
 
     useEffect(() => {
         async function getComments() {
@@ -22,9 +25,24 @@ export default function CommentsBox({ post, visibility, avatar, token }) {
             }
         }
 
-        getComments();
+        async function getFollows() {
+            try {
+                const data = await axios.get(`${URL}/follow/comments`, { headers: { Authorization: `Bearer ${token}` } });
+                setFollows(data);
+                console.log(data)
+            }
+            catch (error) {
+                console.log(error)
+                alert("An error occured while trying to fetch the follows, please refresh the page");
+            }
+        }
 
-    }, [URL, refresh]);
+        getComments();
+        getFollows();
+
+    }, [URL, refresh, params, post.postId]);
+
+
 
     return (
         <Box visibility={visibility}>
@@ -35,7 +53,6 @@ export default function CommentsBox({ post, visibility, avatar, token }) {
                         <CommentDivisionBar key={comment.id} />
                     </>
                 ))}
-
             </CommentsContainer>
             <CommentsPostBar
                 icon={avatar}

@@ -5,12 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
 import useInterval from 'use-interval';
-import Hashtag from "../components/Hashtag";
-import Likes from "../components/Likes.js";
-import CommentsIcon from "../components/Comments/CommentsIcon.js";
-import CommentsBox from "../components/Comments/CommentsBox.js";
-import Reposts from "../components/Reposts.js";
 import TrendingHashtags from '../components/TrendingHashtags';
+import PostComponent from "../components/PostComponent.js";
 
 function Timeline() {
     const { URL } = useContext(StateContext)
@@ -19,9 +15,13 @@ function Timeline() {
     const getData = localStorage.getItem("data");
     const { avatar } = getData ? JSON.parse(getData) : '';
     const { setVisible } = useContext(StateContext);
-    const navigate = useNavigate()
-    const [chat, setChat] = useState(false);
-
+    const navigate = useNavigate();
+    const [posts, setPosts] = useState([]);
+    const [lastUpdateTime, setLastUpdateTime] = useState("0");
+    const [refresh, setRefresh] = useState([]);
+    const [currentPage, setCurrentPage] = useState(-1);
+    const loaderRef = useRef(null);
+    const [loadingScroll, setLoadingScroll] = useState("");
 
     setVisible(true)
 
@@ -35,10 +35,7 @@ function Timeline() {
         return tags;
     }
 
-    const [posts, setPosts] = useState([]);
-    const [lastUpdateTime, setLastUpdateTime] = useState("0");
 
-    const [refresh, setRefresh] = useState([]);
     function refreshTimeline() {
         setPosts([]);
         setNewPosts(0);
@@ -47,9 +44,6 @@ function Timeline() {
         setRefresh([]);
     }
 
-    const [currentPage, setCurrentPage] = useState(-1);
-    const loaderRef = useRef(null);
-    const [loadingScroll, setLoadingScroll] = useState("");
 
     useEffect(() => {
         const options = {
@@ -88,7 +82,7 @@ function Timeline() {
                     } else if (answer.data === "No-followers") {
                         setLoadingScroll("You don't follow anyone yet. Search for new friends!");
                         return [...old];
-                    }else {
+                    } else {
                         if (currentPage === 0) { setLastUpdateTime(answer.data[0].createdAt) }
                         return [...old, ...answer.data];
                     }
@@ -163,6 +157,7 @@ function Timeline() {
             });
         })
     }
+    console.log(posts);
 
     return (
         <TimeLinePage>
@@ -188,34 +183,9 @@ function Timeline() {
                 {
                     posts.map((post, index) => {
                         return (
-                            <Post key={index}>
-                                <div className="post-container">
-                                    <div className="user-info">
-                                        <div onClick={() => navigate("/user/" + post.id)} className="profile-picture">
-                                            <img src={post.avatar} alt={post.name} />
-                                        </div>
-                                        <Likes postId={post.postId} token={token} />
-                                        <CommentsIcon postId={post.postId} callback={() => setChat(!chat)} />
-                                        <Reposts token={token} postId={post.postId} />
-                                    </div >
-                                    <div className="post-area">
-                                        <p onClick={() => navigate("/user/" + post.id)} className="user-name">{post.name}</p>
-                                        <p className="text"><Hashtag>{post.text}</Hashtag></p>
-                                        <a className="link-area" href={post.url} target="_blank" rel="noopener noreferrer">
-                                            <div className="link-left">
-                                                <div className="title">{post.title}</div>
-                                                <div className="description">{post.description}</div>
-                                                <div className="url">{post.url}</div>
-                                            </div>
-                                            <img src={post.image} alt="Post" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <CommentsBox post={post} visibility={chat} avatar={avatar} token={token} />
-                            </Post >
+                            <PostComponent key={index} post={post} />
                         );
                     })
-
                 }
                 <div className="message">
                     {loadingScroll === "Loading..." || loadingScroll === "Loading more posts..." ?

@@ -1,26 +1,14 @@
-import { useState, useEffect } from "react";
 import styled from 'styled-components';
 
 export default function Comment({ value }) {
-    const data = localStorage.getItem("dados");
-    const userId = JSON.parse(data).userId;
-    const [author, setAuthor] = useState(false);
 
-    useEffect(() => {
-        function isAuthor() {
-            if (userId === value.userId) {
-                setAuthor(true);
-            }
-        }
-
-        isAuthor();
-    })
+    const author = value.userId === value.postAuthor;
 
     return (
         <CommentContainer>
             <UserIcon src={value.avatar} />
             <CommentDiv>
-                <User>{value.name}</User>
+                <User>{author ? <User>{value.name + " "} <Author > •  post’s author</Author></User> : `${value.name}`}</User>
                 <UserText>{value.comment}</UserText>
             </CommentDiv>
         </CommentContainer>
@@ -58,4 +46,7 @@ const UserText = styled.p`
     color: #ACACAC;
 `
 const CommentDiv = styled.div`
+`
+const Author = styled.span`
+    color: #565656;
 `

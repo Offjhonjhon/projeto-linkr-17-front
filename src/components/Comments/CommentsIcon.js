@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import StateContext from "../../contexts/StateContext";
 import axios from "axios";
 
-export default function CommentsIcon({ postId, callback }) {
+export default function CommentsIcon({ postId, callback, refresh }) {
     const { URL } = useContext(StateContext);
     const [quantity, setQuantity] = useState(0);
 
@@ -22,7 +22,7 @@ export default function CommentsIcon({ postId, callback }) {
 
         getCommentsQuantity();
 
-    }, [URL, postId]);
+    }, [URL, postId, refresh]);
 
     return (
         <CommentIconContainer onClick={() => callback()}>
