@@ -40,7 +40,6 @@ function HashtagPosts() {
                             <PostComponent key={index} post={post} />
                         );
                     })
-
                 }
             </Main>
             <TrendingHashtags />

@@ -13,7 +13,6 @@ export default function CommentsBox({ post, visibility, avatar, token, refresh, 
     const [follows, setFollows] = useState([]);
     const data = localStorage.getItem("dados");
 
-
     useEffect(() => {
         async function getComments() {
             try {
