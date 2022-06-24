@@ -7,13 +7,7 @@ import { TailSpin } from "react-loader-spinner";
 import useInterval from 'use-interval';
 import Hashtag from "../components/Hashtag";
 import Likes from "../components/Likes.js";
-<<<<<<< HEAD
-import DeleteIcon from "../components/DeleteIcon.js";
-
-
-=======
 import Reposts from "../components/Reposts.js";
->>>>>>> 5fe740ddb28a2ae94f51f002138dc396e046c537
 import TrendingHashtags from '../components/TrendingHashtags';
 
 function Timeline() {
