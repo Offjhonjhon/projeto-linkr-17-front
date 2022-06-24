@@ -1,9 +1,6 @@
-import { useState, useEffect } from "react";
 import styled from 'styled-components';
 
 export default function Comment({ value }) {
-    const data = localStorage.getItem("dados");
-    const userId = JSON.parse(data).userId;
     const author = value.userId === value.postAuthor;
 
     console.log(value.userId)
